@@ -41,9 +41,8 @@ Florida. She specializes in editorial wedding, quinceañera, maternity and brand
 photography, directing every session in English and Spanish. Wonderlands Studio has
 served South Florida families and businesses since 2021.
 
-*Nota: el año de fundación es un placeholder razonable — confirmar con Lisandra el año
-real antes de publicar. Esta es exactamente la clase de afirmación verificable que un
-LLM puede citar, así que tiene que ser exacta.*
+*Nota: año de fundación confirmado por Lisandra — 2021 es el dato real, no un
+placeholder.*
 
 ## H2 — How she works
 
@@ -120,17 +119,105 @@ creative direction. [Get in touch on WhatsApp](wa.me link)
 
 ---
 
-## 2. Nota para la versión ES
+## 2. Contenido — Español
+*Escrito nativo, no traducido. H1 optimizado a intención de búsqueda directa
+("fotógrafa bilingüe west palm beach") en vez de traducir "Meet Lisandra" literal.*
 
-- Título: `Conoce a Lisandra`, no "Sobre Lisandra" — más cálido, más acorde al tono que
-  ya se usó en las secciones "About Lisandra" de los demás decks en español.
-- El bloque bilingüe ("Bilingual by default") es el que más vale la pena reescribir con
-  ejemplos concretos en español — mencionar directamente la situación de abuela que solo
-  habla español en una boda, más que la abstracción de "comunicación fluida".
-- Esta página en español probablemente reciba más tráfico de búsqueda directa
-  ("fotógrafa bilingüe west palm beach", "fotógrafa que hable español") que su
-  equivalente en inglés — vale la pena optimizar el H1 en español pensando en eso, no
-  solo traducir "Meet Lisandra" literal.
+**Meta title** (48 car.)
+`Lisandra, Fotógrafa Bilingüe en West Palm Beach`
+
+**Meta description** (150 car.)
+`Conoce a Lisandra, directora creativa y fotógrafa principal de Wonderlands Studio, en West Palm Beach y Port St. Lucie. Atiende en español e inglés.`
+
+## H1
+**Conoce a Lisandra, Fotógrafa Bilingüe en West Palm Beach**
+
+## Párrafo-respuesta (60 palabras)
+
+Lisandra es la directora creativa y fotógrafa principal de Wonderlands Studio, un
+estudio bilingüe de fotografía y video con sede en West Palm Beach y Port St. Lucie,
+Florida. Se especializa en bodas, quinceañeras, embarazo y fotografía de marca
+editorial, dirigiendo cada sesión en español e inglés. Wonderlands Studio atiende a
+familias y negocios del sur de Florida desde 2021.
+
+## H2 — Cómo trabaja
+
+Lisandra no dirige con una lista rígida de poses. Observa cómo se mueve y se para
+alguien de verdad cuando no está pensando en la cámara, y construye la sesión a partir
+de eso en vez de pelear contra ello. Es parte de por qué los clientes que dicen odiar
+que les tomen fotos suelen relajarse más rápido de lo que esperaban.
+
+Ese mismo instinto funciona en días muy distintos entre sí — una novia arreglándose
+junto a su madre, un niño en plena pataleta durante una sesión familiar, un ejecutivo
+que nunca ha hecho una sesión de marca. Problemas distintos, la misma habilidad de
+fondo: lograr que alguien se sienta lo bastante cómodo frente al lente para que lo que
+sale en la foto sea, de verdad, esa persona.
+
+## H2 — Bilingüe de fondo, no como opción extra
+
+Lisandra dirige cada sesión —retratos familiares, formales de boda, headshots
+corporativos— en español o en inglés, cambiando de uno a otro dentro de la misma sesión
+para que nadie en el salón se quede traduciendo para otra persona. Es la diferencia
+entre una foto de familia donde la abuela solo entiende la mitad de las instrucciones y
+se le nota en la cara, y una donde todos —abuela incluida— saben exactamente qué hacer
+porque se lo dijeron en su idioma. Para familias multigeneracionales y equipos
+ejecutivos bilingües, eso suele ser la diferencia entre una sesión que fluye y una que
+pierde veinte minutos en las fotos grupales por un malentendido.
+
+## H2 — En qué se especializa
+
+**Bodas y ceremonias civiles** — fotografía editorial y video cinematográfico en todo
+el condado de Palm Beach. [Ver servicios de boda →](/es/west-palm-beach/fotografo-de-bodas/)
+
+**Quinceañeras** — fotografía y video con estilo editorial, centrados en la creciente
+comunidad hispana de Port St. Lucie. [Ver cobertura de quinceañeras →](/es/port-st-lucie/#quinceanera)
+
+**Embarazo y familia** — sesiones editoriales tanto en West Palm Beach como en Port St.
+Lucie. [Ver fotografía de embarazo →](/es/port-st-lucie/fotografo-de-embarazo/)
+
+**Marca y contenido de negocio** — headshots, bienes raíces y alianzas mensuales de
+contenido para ejecutivos y dueños de negocio. [Ver servicios de marca →](/es/west-palm-beach/fotografia-de-marca/)
+
+## H2 — Detrás de cámara
+[Foto o breve galería — Lisandra trabajando, no solo posando para su propio retrato.
+Prueba visual de que dirige sesiones, no solo las promociona.]
+
+## H2 — Conoce Wonderlands Studio
+
+Fundado en West Palm Beach, Wonderlands Studio nació de la fotografía familiar y de
+recién nacidos, y creció hacia bodas completas, quinceañeras y marca en todo el sur de
+Florida — expandiéndose a una segunda sede en Port St. Lucie para atender a su
+comunidad en crecimiento. El hilo conductor es siempre el mismo: imágenes de calidad
+editorial, calidez frente a la cámara, y atención en el idioma en que el cliente se
+sienta más cómodo.
+
+## H2 — Preguntas frecuentes
+
+**¿Lisandra fotografía cada sesión en persona, o tiene un equipo?**
+Lisandra es la fotógrafa principal y dirige cada sesión personalmente. Para eventos
+grandes —bodas, quinceañeras con segundo fotógrafo como adicional— trabaja junto a un
+equipo pequeño que ella misma formó, así que la misma mirada y la misma dirección se
+mantienen incluso cuando hay un segundo fotógrafo en la sala.
+
+**¿Lisandra atiende sesiones en West Palm Beach y en Port St. Lucie?**
+Sí. Trabaja en las dos sedes y viaja entre ellas con regularidad — no hay cargo extra
+ni menos disponibilidad por reservar en una ciudad u otra.
+
+**¿Habla español de verdad, o es una experiencia traducida?**
+De verdad, como hablante bilingüe nativa — no es una experiencia traducida. La
+dirección, la conversación y las instrucciones técnicas durante la sesión suceden
+naturalmente en el idioma con el que el cliente esté más cómodo.
+
+**¿Cómo pasó Wonderlands Studio de fotografía familiar a bodas y marca?**
+El cambio siguió a donde realmente iban los clientes y la demanda — familias ya
+establecidas en Palm Beach empezaron a pedir cobertura de boda y de marca, y la
+comunidad en crecimiento de Port St. Lucie generó una demanda real de quinceañeras que
+nadie estaba cubriendo localmente. El estudio creció hacia esas categorías en vez de
+empezarlas desde cero.
+
+## CTA final
+**¿Quieres trabajar directamente con Lisandra?** Cada sesión en Wonderlands Studio está
+bajo su dirección creativa. [Escríbenos por WhatsApp](wa.me link)
 
 ---
 
@@ -186,8 +273,8 @@ Mínimo, como se esperaba de una página de bajo riesgo:
 
 - [ ] El `@id` de `Person` coincide exactamente con el referenciado en `Organization.founder`
       y en cualquier `author` de futuros posts de blog
-- [ ] Año de fundación confirmado con Lisandra antes de publicar (placeholder marcado)
+- [x] Año de fundación confirmado con Lisandra — 2021
 - [ ] FAQ únicas frente a las 5 páginas hoja ya escritas
 - [ ] hreflang recíproco EN↔ES
-- [ ] **Con este deck, el alcance de contenido para Fase 1 + página de autor queda
-      completo.** Solo faltan las versiones ES de todo lo aprobado.
+- [x] **Versión ES escrita — nativa, no traducida.** Con este deck, el alcance de
+      contenido para Fase 1 + página de autor queda completo en los dos idiomas.

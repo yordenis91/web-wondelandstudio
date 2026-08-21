@@ -50,7 +50,7 @@ If film is what you care about most, start on our [West Palm Beach wedding video
 
 We shoot throughout West Palm Beach and Palm Beach Island with no travel fee: The Breakers, the Flagler Museum, the Norton Museum of Art, the Kravis Center, Grandview Gardens, the Ann Norton Sculpture Gardens, Worth Avenue, Clematis Street and the downtown waterfront. We also cover Palm Beach Gardens, Wellington, Jupiter and Boca Raton.
 
-For weddings north of the county line, see our [Port St. Lucie wedding coverage](/port-st-lucie/wedding-photographer/).
+For weddings north of the county line, see our [Port St. Lucie wedding coverage](/port-st-lucie/#wedding).
 
 ## H2 — Wedding collections and pricing
 
@@ -132,7 +132,7 @@ Si lo que más te importa es el video, entra directamente a [video de bodas en W
 
 Trabajamos en todo West Palm Beach y Palm Beach Island sin cargo por traslado: The Breakers, Flagler Museum, Norton Museum of Art, Kravis Center, Grandview Gardens, Ann Norton Sculpture Gardens, Worth Avenue, Clematis Street y el waterfront del downtown. También cubrimos Palm Beach Gardens, Wellington, Jupiter y Boca Raton.
 
-Si tu boda es más al norte, mira nuestra [cobertura de bodas en Port St. Lucie](/es/port-st-lucie/fotografo-de-bodas/).
+Si tu boda es más al norte, mira nuestra [cobertura de bodas en Port St. Lucie](/es/port-st-lucie/#wedding).
 
 ## H2 — Colecciones y precios
 

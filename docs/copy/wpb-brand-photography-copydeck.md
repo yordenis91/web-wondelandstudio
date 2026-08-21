@@ -179,18 +179,162 @@ message and we'll recommend the right fit, no obligation. [WhatsApp (561) 260-32
 
 ---
 
-## 2. Nota para la versión ES
+## 2. Contenido — Español
+*Escrito nativo, no traducido. "Monthly content partnership" se traduce como "socio de
+contenido mensual", nunca "suscripción". Ejemplos concretos de resultado (agente
+inmobiliario, clínica, restaurante) en vez de lenguaje de "brand identity".*
 
-No traducir. Reescribir con estos ajustes de ángulo:
+**Meta title** (60 car.)
+`Fotógrafo de Marca en West Palm Beach | Wonderlands Studio`
 
-- El público hispano de negocios en Palm Beach responde mejor a **prueba de resultado**
-  que a lenguaje de "brand identity" — usar ejemplos concretos (agente inmobiliario,
-  clínica, restaurante) más que abstracciones de marketing.
-- Traducir "monthly content partnership" como **"socio de contenido mensual"**, nunca
-  "suscripción" — la palabra suscripción activa fricción de compra en clientes de negocio
-  que ya pagan demasiadas suscripciones de software.
-- Las 7 FAQ deben ser distintas a las del inglés en al menos el ángulo, no solo la lengua,
-  igual que en la dupla de bodas.
+**Meta description** (147 car.)
+`Headshots, bienes raíces y fotografía de marca personal en West Palm Beach. Sesiones únicas desde $700 o socio de contenido mensual desde $1,500.`
+
+## H1
+**Fotógrafo de Marca en West Palm Beach, FL**
+
+## Párrafo-respuesta (63 palabras)
+
+Wonderlands Studio produce fotografía de marca para agentes inmobiliarios, ejecutivos y
+dueños de negocio en West Palm Beach. Reserva una sesión única desde $700, o un socio
+de contenido mensual desde $1,500 que te entrega fotos y reels nuevos cada mes sin que
+tengas que organizar la sesión tú mismo. Estudio bilingüe y trabajo en locación. (561)
+260-3245.
+
+## H2 — Dos formas de trabajar con nosotros
+
+La mayoría de los negocios empieza de una de dos maneras: necesitan fotos para algo
+puntual —un headshot nuevo, una propiedad, un lanzamiento— o necesitan un flujo
+constante de contenido y ya están cansados de que su feed se quede en silencio semanas
+enteras. Construimos dos caminos para eso.
+
+**Una sesión única** te da un set completo y pulido para una necesidad específica:
+headshots, una propiedad, un refresh de marca personal. Los archivos son tuyos, no hay
+compromiso continuo, y reservas de nuevo cuando necesites más.
+
+**Un socio de contenido mensual** pone tu contenido en un calendario. Una vez al mes,
+hacemos una tanda nueva de fotos y videos verticales cortos, construidos alrededor de
+lo que tu negocio esté haciendo ese mes —un listado nuevo, un lanzamiento, un detrás de
+cámaras, una historia de cliente contento. Dejas de improvisar qué publicar y empiezas
+a tener una biblioteca de la cual sacar contenido.
+
+## H2 — Para quién es esto
+
+Agentes inmobiliarios que necesitan fotos de listados que no se vean igual a todos los
+demás en el MLS. Ejecutivos y fundadores que necesitan headshots y contenido de
+LinkedIn que se vea actual, no de hace tres años y otro corte de pelo. Dueños de
+negocio locales —clínicas, boutiques, restaurantes, negocios de servicio— que saben que
+necesitan contenido constante y no tienen el tiempo ni el ojo para producirlo ellos
+mismos.
+
+## H2 — Sesiones únicas
+
+*Precio completo. Sin necesidad de suscripción.*
+
+| Sesión | Inversión | Qué incluye |
+|---|---|---|
+| Impulso Visual (Entrada) | $700 | Medio día de sesión, hasta 2 locaciones, galería editada |
+| La Autoridad (Ejecutiva) | $3,500 | Día completo, varios looks, headshots + lifestyle + detalle del local, entrega prioritaria |
+
+Están en extremos opuestos a propósito. Impulso Visual cubre una necesidad puntual —un
+set de headshots, una propiedad. La Autoridad es una producción de marca completa: el
+tipo de sesión que renueva toda tu presencia visual en un solo día.
+
+## H2 — Socio de contenido mensual
+
+*Facturado cada mes. Se cancela con 30 días de aviso. Sin contrato de largo plazo.*
+
+Hay dos líneas de socio de contenido, construidas sobre el mismo ritmo mensual pero con
+un centro de gravedad distinto.
+
+| Línea | Enfoque en foto | Enfoque en video |
+|---|---|---|
+| Entrada | Contenido Social — $500/mes | Contenido Social — $500/mes |
+| **Alianza** | **El Socio de Crecimiento — $1,500/mes** | **Brand Partner — $1,350/mes** |
+| Nivel superior | La Autoridad — $3,500/mes | Cinematic Legacy — $3,200+/mes |
+
+**Enfoque en foto** (El Socio de Crecimiento) te da un mayor volumen de fotografía cada
+mes, con algunos clips cortos de video incluidos — la opción correcta si tu marca
+funciona principalmente con fotos: bienes raíces, e-commerce, negocios de producto.
+
+**Enfoque en video** (Brand Partner) invierte la proporción: los reels y el video corto
+son la mayor parte de la entrega, con fotos de apoyo. Esta es la línea para fundadores
+y negocios de servicio que están construyendo audiencia en Reels y TikTok, donde el
+video es lo que de verdad mueve el algoritmo.
+
+Si estás decidiendo entre las dos: **el video es mejor apuesta para alcance, la foto es
+mejor apuesta para una biblioteca pulida y duradera.** La mayoría de los negocios que
+eligen video siguen recibiendo fotos utilizables de la misma sesión — no estás eligiendo
+tener cero fotos.
+
+[Pide una cotización a la medida por WhatsApp](wa.me link) · [Ver trabajos recientes de marca](/es/portafolio/marca/)
+
+## H2 — Cómo funciona una alianza en la práctica
+
+1. **Llamada inicial.** Conocemos tu negocio, la voz de tu marca y cómo se ve "on
+   brand" para ti antes de la primera sesión.
+2. **Día de sesión mensual.** Programado con anticipación, construido alrededor de lo
+   que esté pasando en tu negocio ese mes — contrataciones nuevas, servicios nuevos, un
+   empujón de temporada.
+3. **Entrega en 3 a 5 días hábiles.** Fotos en alta resolución y tamaño web, video
+   cortado en vertical y listo para publicar.
+4. **Conservas todos los derechos de uso** desde el primer mes.
+5. **Ajusta o pausa cada mes.** ¿No hay sesión este mes porque estás de vacaciones?
+   Avísanos y movemos el calendario — no estás atado a un cronograma rígido.
+
+## H2 — Sobre Lisandra
+[Foto] Lisandra dirige las sesiones de marca de la misma forma en que dirige bodas:
+poner a alguien cómodo frente a una cámara es una habilidad en sí misma, y se nota
+tanto en un headshot como en un retrato de novia. La dirección bilingüe significa que
+un equipo ejecutivo que mezcla personas de habla inglesa y española recibe la misma
+experiencia, en la misma sesión, sin cambiar de fotógrafa. [Conoce más →](/es/sobre-lisandra/)
+
+## H2 — Lo que dicen los clientes
+*[Condicionado a testimonios reales verificados, filtrados por category: branding.]*
+
+## H2 — Preguntas frecuentes
+
+**¿Debería reservar una sesión única o un socio de contenido mensual?**
+Si tienes una necesidad puntual —un headshot nuevo, una propiedad para listar, un
+lanzamiento único— reserva una sesión única. Si publicas seguido y ya te cansaste de
+quedarte sin contenido, o sabes que publicar de forma constante le importa a tu negocio
+y no lo estás haciendo, la alianza mensual se paga sola desde el primer mes en que
+dejas de pensarlo.
+
+**¿Cuál es la diferencia real entre la línea de foto y la de video?**
+Las dos incluyen fotos y video cada mes. La línea de foto pesa más hacia un mayor
+volumen de imágenes fijas con algunos clips de video. La línea de video pesa hacia
+reels y video corto, con menos fotos pero igual de utilizables. Elige según dónde esté
+realmente tu audiencia — LinkedIn y una página web favorecen las fotos, Instagram y
+TikTok favorecen el video.
+
+**¿Puedo cancelar el socio de contenido mensual?**
+Sí, con 30 días de aviso. No hay contrato de largo plazo. La mayoría de los clientes
+que empiezan la alianza mensual se quedan porque el contenido sigue funcionando, no
+porque estén atados.
+
+**¿Trabajan en locación o solo en estudio?**
+Las dos. Los headshots y el trabajo de producto suelen hacerse en nuestro estudio de
+West Palm Beach para una luz consistente; bienes raíces, lifestyle y contenido de
+detrás de cámaras se hacen en locación, en tu negocio.
+
+**¿De quién son las fotos y los videos?**
+Tuyos, desde la entrega. Derechos de uso completos para fines de negocio, sin cargos de
+licencia, sin restricciones sobre dónde los publiques o los uses.
+
+**¿Qué tan rápido recibo el contenido?**
+De 3 a 5 días hábiles para una sesión de alianza mensual. Las sesiones únicas suelen
+entregarse en 1 semana; La Autoridad (nuestra sesión única más grande) en 10 días por
+el mayor volumen de imágenes.
+
+**¿Hacen fotografía de bienes raíces específicamente?**
+Sí — es uno de los usos más comunes de la sesión Impulso Visual y de la alianza con
+enfoque en foto. Listados, exteriores al atardecer y galerías tipo recorrido para el
+MLS y redes sociales.
+
+## CTA final
+**Cuéntanos qué necesita tu marca.** Una sesión o una alianza continua — mándanos un
+mensaje y te recomendamos lo que mejor te queda, sin compromiso. [WhatsApp (561) 260-3245]
 
 ---
 
@@ -301,3 +445,5 @@ Documentado explícitamente para el Bloque 2, así no se descubre a medio constr
 - [ ] `pageType: 'subscription'` seteado en Sanity, no heredado del default de `event`
 - [ ] Sin `Review`/`AggregateRating` hasta reseñas verificadas
 - [ ] hreflang recíproco EN↔ES
+- [x] Versión ES escrita — "socio de contenido mensual", nunca "suscripción"; FAQ con
+      ángulo propio, no traducción de las 7 en inglés
