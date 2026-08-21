@@ -90,7 +90,7 @@ Drone coverage is spectacular at Grandview Gardens or a waterfront reception and
 
 Same with audio: some venues restrict where we can place a recorder during the ceremony, and a few churches limit camera positions entirely. We resolve all of it with your coordinator in the timeline meeting, not on the morning of.
 
-We cover West Palm Beach, Palm Beach, Palm Beach Gardens, Wellington, Jupiter and Boca Raton with no travel fee. North of the county line, see [Port St. Lucie](/port-st-lucie/wedding-photographer/).
+We cover West Palm Beach, Palm Beach, Palm Beach Gardens, Wellington, Jupiter and Boca Raton with no travel fee. North of the county line, see [Port St. Lucie](/port-st-lucie/#wedding).
 
 ## H2 — Recent films
 *[Embeds de video. Autoplay prohibido. Poster estático, `preload="none"`, iframe cargado bajo interacción.]*
@@ -205,7 +205,7 @@ durante la ceremonia, y varias iglesias restringen las posiciones de cámara. To
 resuelve con tu coordinadora en la reunión de cronograma, no la mañana de la boda.
 
 Cubrimos West Palm Beach, Palm Beach, Palm Beach Gardens, Wellington, Jupiter y Boca Raton
-sin cargo por traslado. Más al norte, mira [Port St. Lucie](/es/port-st-lucie/fotografo-de-bodas/).
+sin cargo por traslado. Más al norte, mira [Port St. Lucie](/es/port-st-lucie/#wedding).
 
 ## H2 — Videos recientes
 *[Embeds. Sin autoplay.]*
