@@ -1,0 +1,31 @@
+{
+  "name": "wonderlands-studio",
+  "type": "module",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "check:tokens": "node scripts/check-tokens.ts",
+    "check:tokens:dist": "node scripts/check-tokens.ts --only dist",
+    "check:types": "astro check",
+    "build": "npm run check:tokens && astro build && npm run check:tokens:dist",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^5.15.6",
+    "zod": "^3.25.76"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp"
+    ]
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@types/node": "^26.2.0",
+    "typescript": "^5.9.3"
+  }
+}

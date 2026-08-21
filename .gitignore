@@ -6,3 +6,6 @@ dist/
 
 # Metadata de Windows/WSL al copiar archivos descargados
 *:Zone.Identifier
+
+# Astro
+.astro/
