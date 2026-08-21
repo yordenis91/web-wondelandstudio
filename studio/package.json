@@ -1,0 +1,24 @@
+{
+  "name": "wonderlands-studio-cms",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "sanity dev",
+    "start": "sanity start",
+    "build": "sanity build",
+    "deploy": "sanity deploy",
+    "typegen": "sanity typegen generate"
+  },
+  "dependencies": {
+    "@sanity/vision": "^6.10.1",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "sanity": "^6.10.1",
+    "styled-components": "^6.1.15"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.8",
+    "typescript": "^5.9.3"
+  }
+}
