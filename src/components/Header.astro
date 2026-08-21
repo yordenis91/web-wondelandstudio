@@ -1,0 +1,156 @@
+---
+/**
+ * Cabecera: navegación y selector de idioma.
+ *
+ * El selector no manda a la home del otro idioma — resuelve la página equivalente con
+ * `getAlternate()`. Alguien leyendo la página de fotógrafo de bodas en inglés que pulsa
+ * "ES" aterriza en `/es/west-palm-beach/fotografo-de-bodas/`, no en `/es/`. Perder el
+ * contexto en el cambio de idioma es la forma más rápida de perder la visita.
+ */
+import { getAlternate, getLang, normalizePath, type Lang } from '../i18n/routes.ts';
+import { BUSINESS, getLocation } from '../data/business.ts';
+import { isPending } from '../data/tokens.ts';
+
+interface Props {
+  path: string;
+}
+
+const { path } = Astro.props;
+const canonicalPath = normalizePath(path);
+const lang: Lang = getLang(canonicalPath);
+const other: Lang = lang === 'en' ? 'es' : 'en';
+
+/** El equivalente en el otro idioma. Layout ya falló el build si no existiera. */
+const otherHref = getAlternate(canonicalPath, other) ?? (other === 'en' ? '/' : '/es/');
+
+const NAV = {
+  en: [
+    { href: '/west-palm-beach/', label: 'West Palm Beach' },
+    { href: '/port-st-lucie/', label: 'Port St. Lucie' },
+    { href: '/pricing/', label: 'Pricing' },
+    { href: '/about-lisandra/', label: 'About' },
+  ],
+  es: [
+    { href: '/es/west-palm-beach/', label: 'West Palm Beach' },
+    { href: '/es/port-st-lucie/', label: 'Port St. Lucie' },
+    { href: '/es/precios/', label: 'Precios' },
+    { href: '/es/sobre-lisandra/', label: 'Sobre Lisandra' },
+  ],
+} as const;
+
+const items = NAV[lang];
+const home = lang === 'en' ? '/' : '/es/';
+const phone = getLocation('wpb').phone;
+const showPhone = !isPending(phone.e164) && !isPending(phone.display);
+---
+
+<header class="site-header">
+  <div class="site-header__inner container">
+    <a class="site-header__logo" href={home}>{BUSINESS.legalName}</a>
+
+    <nav aria-label={lang === 'en' ? 'Main' : 'Principal'}>
+      <ul class="site-header__nav">
+        {
+          items.map((item) => {
+            const current = normalizePath(item.href) === canonicalPath;
+            return (
+              <li>
+                <a href={item.href} aria-current={current ? 'page' : undefined}>
+                  {item.label}
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </nav>
+
+    <div class="site-header__aside">
+      {
+        showPhone && (
+          <a class="site-header__phone" href={`tel:${phone.e164}`}>
+            {phone.display}
+          </a>
+        )
+      }
+      {/* `lang` + `hreflang` para que un lector de pantalla anuncie el cambio de idioma. */}
+      <a
+        class="site-header__lang"
+        href={otherHref}
+        lang={other}
+        hreflang={other}
+        rel="alternate"
+      >
+        {other === 'en' ? 'English' : 'Español'}
+      </a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    min-height: var(--header-height);
+    flex-wrap: wrap;
+  }
+
+  .site-header__logo {
+    font-weight: 700;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+
+  .site-header__nav {
+    display: flex;
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    flex-wrap: wrap;
+  }
+
+  .site-header__nav a {
+    font-size: var(--text-small);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-uppercase);
+    text-decoration: none;
+    color: var(--color-fg-muted);
+    transition: color 0.3s ease;
+  }
+
+  .site-header__nav a:hover,
+  .site-header__nav a[aria-current='page'] {
+    color: var(--color-fg);
+  }
+
+  .site-header__aside {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-inline-start: auto;
+  }
+
+  .site-header__phone,
+  .site-header__lang {
+    font-size: var(--text-small);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .site-header__lang {
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-uppercase);
+    color: var(--color-fg-muted);
+    transition: color 0.3s ease;
+  }
+
+  .site-header__lang:hover {
+    color: var(--color-fg);
+  }
+</style>

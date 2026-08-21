@@ -1,0 +1,142 @@
+---
+/**
+ * Layout base: `<head>` completo, canonical, hreflang recíproco y Open Graph.
+ *
+ * La reciprocidad de hreflang (regla 6 de CLAUDE.md) no se comprueba aquí a posteriori:
+ * se deriva. Ambas caras salen de `getAlternate()` sobre el mismo mapa central, así que
+ * es imposible declarar una sin la otra. Si la ruta no está en el mapa, el build falla
+ * con el path concreto — un `hreflang` roto en producción es peor que un build rojo.
+ */
+import { getAlternate, getLang, normalizePath } from '../i18n/routes.ts';
+import { BUSINESS } from '../data/business.ts';
+import { serializeJsonLd, type JsonLdGraph } from '../lib/schema.ts';
+import '../styles/global.css';
+
+interface Props {
+  /** Ruta canónica de esta página, con barra inicial y final. */
+  path: string;
+  title: string;
+  description: string;
+  /** Ruta absoluta o URL de la imagen social. */
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+  noindex?: boolean;
+  jsonLd?: JsonLdGraph;
+}
+
+const {
+  path,
+  title,
+  description,
+  ogImage = '/og-default.jpg',
+  ogType = 'website',
+  noindex = false,
+  jsonLd,
+} = Astro.props;
+
+const canonicalPath = normalizePath(path);
+const lang = getLang(canonicalPath);
+
+const enPath = getAlternate(canonicalPath, 'en');
+const esPath = getAlternate(canonicalPath, 'es');
+
+if (!enPath || !esPath) {
+  throw new Error(
+    `hreflang sin par para "${canonicalPath}": ` +
+      `EN=${enPath ?? 'ausente'} ES=${esPath ?? 'ausente'}. ` +
+      `Toda página declara sus dos caras (CLAUDE.md regla 6) — ` +
+      `añádela a ROUTES en src/i18n/routes.ts.`,
+  );
+}
+
+const abs = (p: string) => `${BUSINESS.siteUrl}${p}`;
+
+const canonicalUrl = abs(canonicalPath);
+const ogImageUrl = ogImage.startsWith('http') ? ogImage : abs(ogImage);
+const ogLocale = lang === 'en' ? 'en_US' : 'es_US';
+const ogLocaleAlt = lang === 'en' ? 'es_US' : 'en_US';
+---
+
+<!doctype html>
+<html lang={lang === 'en' ? 'en-US' : 'es-US'}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <link rel="canonical" href={canonicalUrl} />
+
+    {/* Recíproco por construcción: las dos caras salen del mismo mapa. */}
+    <link rel="alternate" hreflang="en-US" href={abs(enPath)} />
+    <link rel="alternate" hreflang="es-US" href={abs(esPath)} />
+    <link rel="alternate" hreflang="x-default" href={abs(enPath)} />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={BUSINESS.legalName} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:locale:alternate" content={ogLocaleAlt} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    {
+      jsonLd && (
+        <script
+          is:inline
+          type="application/ld+json"
+          set:html={serializeJsonLd(jsonLd)}
+        />
+      )
+    }
+  </head>
+  <body>
+    <a class="skip-link" href="#main">
+      {lang === 'en' ? 'Skip to content' : 'Saltar al contenido'}
+    </a>
+
+    <slot name="header" />
+
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+
+    <slot name="footer" />
+
+    {/*
+      Único JS de la página: un listener delegado para los CTA de WhatsApp. Vive aquí y
+      no en CTAWhatsApp.astro para que exista una sola vez por página en vez de una por
+      botón. No participa en el render del contenido (regla 1 de CLAUDE.md) — el enlace
+      funciona igual sin JS, esto solo añade la señal de analítica.
+    */}
+    <script is:inline>
+      document.addEventListener('click', function (event) {
+        var cta = event.target.closest('[data-wa-cta]');
+        if (!cta) return;
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: 'whatsapp_click',
+          wa_location: cta.getAttribute('data-wa-location') || '',
+          wa_page: window.location.pathname,
+        });
+      });
+    </script>
+  </body>
+</html>

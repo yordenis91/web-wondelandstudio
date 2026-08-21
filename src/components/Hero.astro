@@ -1,0 +1,97 @@
+---
+/**
+ * Hero: imagen, nunca vídeo autoplay (regla 8 de CLAUDE.md).
+ *
+ * La imagen del hero es casi siempre el LCP de la página, así que va con
+ * `fetchpriority="high"` y `loading="eager"` — precargarla es justo lo contrario de lo
+ * que hace falta en el resto de imágenes de la página. En la página de vídeo el hero es
+ * un fotograma fijo tratado como fotografía, con el play como afordancia: sigue siendo
+ * una imagen, y el vídeo solo se monta bajo interacción.
+ */
+interface Props {
+  eyebrow?: string;
+  heading: string;
+  /** Se acentúa la primera parte del H1, como en el sitio actual. */
+  headingAccent?: string;
+  intro?: string;
+  image: { src: string; alt: string; width: number; height: number };
+  /** Fuentes alternativas por formato: AVIF primero, WebP de reserva. */
+  sources?: readonly { srcset: string; type: string }[];
+}
+
+const { eyebrow, heading, headingAccent, intro, image, sources = [] } = Astro.props;
+---
+
+<section class="hero">
+  <picture>
+    {sources.map((source) => <source srcset={source.srcset} type={source.type} />)}
+    <img
+      class="hero__image"
+      src={image.src}
+      alt={image.alt}
+      width={image.width}
+      height={image.height}
+      loading="eager"
+      fetchpriority="high"
+      decoding="async"
+    />
+  </picture>
+
+  <div class="hero__content container">
+    {eyebrow && <span class="eyebrow">{eyebrow}</span>}
+    <h1 class="hero__heading">
+      {headingAccent && <span class="hero__accent">{headingAccent}</span>}
+      {heading}
+    </h1>
+    {intro && <p class="hero__intro">{intro}</p>}
+    <slot />
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    display: grid;
+  }
+
+  /* Imagen y contenido en la misma celda: superpuestos sin position:absolute, así el
+     hero reserva su altura desde el primer pintado y no genera CLS. */
+  .hero > picture,
+  .hero__content {
+    grid-area: 1 / 1;
+  }
+
+  .hero__image {
+    width: 100%;
+    height: 100%;
+    max-height: 78vh;
+    object-fit: cover;
+  }
+
+  .hero__content {
+    position: relative;
+    align-self: end;
+    padding-block: var(--space-8);
+    /* Degradado bajo el texto: garantiza contraste AA sobre cualquier foto, sin
+       apagar la imagen entera con un velo plano. */
+    background: linear-gradient(
+      to top,
+      rgb(10 10 10 / 0.85) 0%,
+      rgb(10 10 10 / 0.55) 55%,
+      rgb(10 10 10 / 0) 100%
+    );
+  }
+
+  .hero__heading {
+    max-width: 20ch;
+  }
+
+  .hero__accent {
+    color: var(--color-accent);
+  }
+
+  .hero__intro {
+    max-width: 60ch;
+    color: var(--color-fg);
+  }
+</style>

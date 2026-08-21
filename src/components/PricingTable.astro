@@ -1,0 +1,153 @@
+---
+/**
+ * Tabla de precios, alimentada por el singleton `pricingCatalog` de Sanity.
+ *
+ * Regla 2 de CLAUDE.md: los precios viven en un único documento. Este componente recibe
+ * entradas ya consultadas y nunca escribe un número — si un precio cambia en Sanity,
+ * cambia aquí, en `/pricing/` y en el JSON-LD a la vez, porque los tres leen del mismo
+ * sitio.
+ *
+ * Tabla HTML semántica de verdad: `<caption>`, `<thead>`, `<th scope="col">` y
+ * `<th scope="row">` para el nombre de la colección. Un lector de pantalla anuncia
+ * "Elopement, Inversión, $1,200" en vez de leer celdas sueltas sin contexto.
+ */
+import type { PricingEntry } from '../lib/queries.ts';
+import type { Lang } from '../i18n/routes.ts';
+
+interface Props {
+  entries: readonly PricingEntry[];
+  lang: Lang;
+  caption: string;
+  /** Colección destacada, por nombre exacto: "La mayoría elige…". */
+  highlight?: string;
+}
+
+const { entries, lang, caption, highlight } = Astro.props;
+
+const L = {
+  en: { collection: 'Collection', investment: 'Investment', coverage: 'Coverage', includes: "What's included", monthly: '/mo', popular: 'Most chosen' },
+  es: { collection: 'Colección', investment: 'Inversión', coverage: 'Cobertura', includes: 'Incluye', monthly: '/mes', popular: 'La más elegida' },
+}[lang];
+
+/** Formato de moneda del sitio: USD, sin decimales — los precios son redondos. */
+const money = new Intl.NumberFormat(lang === 'en' ? 'en-US' : 'es-US', {
+  style: 'currency',
+  currency: 'USD',
+  maximumFractionDigits: 0,
+});
+---
+
+<div class="pricing">
+  <table class="pricing__table">
+    <caption class="pricing__caption">{caption}</caption>
+    <thead>
+      <tr>
+        <th scope="col">{L.collection}</th>
+        <th scope="col">{L.investment}</th>
+        <th scope="col">{L.coverage}</th>
+        <th scope="col">{L.includes}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        entries.map((entry) => {
+          const isHighlight = highlight !== undefined && entry.name === highlight;
+          return (
+            <tr class={isHighlight ? 'is-highlight' : undefined}>
+              <th scope="row">
+                {entry.name}
+                {isHighlight && <span class="pricing__badge">{L.popular}</span>}
+              </th>
+              <td class="pricing__price">
+                {money.format(entry.price)}
+                {entry.billingType === 'monthly' && (
+                  <span class="pricing__unit">{L.monthly}</span>
+                )}
+              </td>
+              <td>{entry.coverage}</td>
+              <td>
+                <ul class="pricing__includes">
+                  {entry.includes.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              </td>
+            </tr>
+          );
+        })
+      }
+    </tbody>
+  </table>
+</div>
+
+<style>
+  /* La tabla desborda en móvil antes que romper el layout de la página; el contenedor
+     hace el scroll y se puede enfocar con teclado para poder desplazarlo sin ratón. */
+  .pricing {
+    overflow-x: auto;
+  }
+
+  .pricing__table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: var(--text-small);
+  }
+
+  .pricing__caption {
+    text-align: left;
+    color: var(--color-fg-muted);
+    padding-block-end: var(--space-2);
+    font-style: italic;
+  }
+
+  .pricing__table th,
+  .pricing__table td {
+    border-block-end: 1px solid var(--color-border);
+    padding: var(--space-2);
+    vertical-align: top;
+  }
+
+  .pricing__table thead th {
+    font-size: var(--text-eyebrow);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-uppercase);
+    color: var(--color-fg-muted);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .pricing__table tbody th {
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .pricing__price {
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .pricing__unit {
+    font-weight: 400;
+    color: var(--color-fg-muted);
+  }
+
+  .pricing__badge {
+    display: block;
+    margin-block-start: var(--space-1);
+    font-size: var(--text-eyebrow);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-uppercase);
+    color: var(--color-accent);
+  }
+
+  .is-highlight {
+    background: var(--color-bg-elevated);
+  }
+
+  .pricing__includes {
+    margin: 0;
+    padding-inline-start: 1.1em;
+  }
+</style>

@@ -1,0 +1,70 @@
+---
+/**
+ * Migas de pan visibles + `BreadcrumbList`.
+ *
+ * El JSON-LD no se emite aquí: lo compone `schema.ts` a nivel de página, para que haya
+ * un solo `<script type="application/ld+json">` por documento con un `@graph` único. Este
+ * componente pinta la navegación visible con el mismo array de datos que alimenta el
+ * grafo, así que lo que ve el usuario y lo que lee Google no pueden divergir.
+ *
+ * `aria-current="page"` en la última miga, que no lleva enlace: es la página actual.
+ */
+import type { BreadcrumbInput } from '../lib/schema.ts';
+import type { Lang } from '../i18n/routes.ts';
+
+interface Props {
+  items: readonly BreadcrumbInput[];
+  lang: Lang;
+}
+
+const { items, lang } = Astro.props;
+const label = lang === 'en' ? 'Breadcrumb' : 'Ruta de navegación';
+---
+
+<nav class="breadcrumbs" aria-label={label}>
+  <ol class="breadcrumbs__list">
+    {
+      items.map((item, index) => {
+        const isLast = index === items.length - 1;
+        return (
+          <li class="breadcrumbs__item">
+            {item.path && !isLast ? (
+              <a href={item.path}>{item.name}</a>
+            ) : (
+              <span aria-current="page">{item.name}</span>
+            )}
+          </li>
+        );
+      })
+    }
+  </ol>
+</nav>
+
+<style>
+  .breadcrumbs {
+    padding-block: var(--space-2);
+  }
+
+  .breadcrumbs__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-1);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--text-small);
+    color: var(--color-fg-muted);
+  }
+
+  /* El separador es decorativo: va en CSS para que no lo lea un lector de pantalla. */
+  .breadcrumbs__item + .breadcrumbs__item::before {
+    content: '/';
+    margin-inline-end: var(--space-1);
+    color: var(--color-border);
+  }
+
+  .breadcrumbs__item [aria-current='page'] {
+    color: var(--color-fg);
+  }
+</style>

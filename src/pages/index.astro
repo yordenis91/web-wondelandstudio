@@ -1,30 +1,78 @@
 ---
-import { getLocation } from '../data/business.ts';
-import '../styles/global.css';
+/**
+ * Home EN.
+ *
+ * Nota de contenido: la home es la única página de Fase 1 sin copy deck aprobado
+ * (docs/PLAN.md §8 la lista en alcance, pero no existe `docs/copy/home-copydeck.md`).
+ * El texto de abajo es provisional y está aquí para que la página compile y se pueda
+ * verificar el sistema de componentes — hay que sustituirlo cuando llegue su deck.
+ */
+import Layout from '../components/Layout.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import AnswerBlock from '../components/AnswerBlock.astro';
+import FAQ from '../components/FAQ.astro';
+import CTAWhatsApp from '../components/CTAWhatsApp.astro';
+import { homePageGraph } from '../lib/schema.ts';
 
-const wpb = getLocation('wpb');
+const path = '/';
+
+const answer =
+  'Wonderlands Studio is a bilingual photography and video studio serving West Palm ' +
+  'Beach and Port St. Lucie, Florida. We cover weddings, quinceañeras, maternity and ' +
+  'brand sessions across South Florida, with collections from $250 for portraits to ' +
+  '$5,500 for full-day wedding coverage. Every session includes professional ' +
+  'retouching. English and Spanish spoken.';
+
+const faqs = [
+  {
+    question: 'Which areas do you cover?',
+    answer:
+      'Palm Beach County from our West Palm Beach studio, and the Port St. Lucie area ' +
+      'from our second location, both with no travel fee for local venues.',
+  },
+  {
+    question: 'Do you work in Spanish?',
+    answer:
+      'Yes, fully. Direction, family group shots and all coordination happen in ' +
+      'Spanish or English as needed, switching within the same session.',
+  },
+];
+
+const jsonLd = homePageGraph({ lang: 'en' });
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap"
-      rel="stylesheet"
+<Layout
+  path={path}
+  title="Wonderlands Studio | Bilingual Photographer in South Florida"
+  description="Bilingual photography and video studio in West Palm Beach and Port St. Lucie. Weddings, quinceañeras, maternity and brand sessions. Transparent pricing."
+  jsonLd={jsonLd}
+>
+  <Header slot="header" path={path} />
+
+  <Hero
+    eyebrow="Photography and video studio"
+    headingAccent="Bilingual"
+    heading="Photographer & Videographer in South Florida"
+    intro="Editorial photography and cinematic film for weddings, families and brands across Palm Beach County and Port St. Lucie."
+    image={{
+      src: '/hero-placeholder.svg',
+      alt: 'Wonderlands Studio photography and video coverage in South Florida',
+      width: 1600,
+      height: 900,
+    }}
+  >
+    <CTAWhatsApp
+      label="Check your date"
+      message="Hi Wonderlands Studio — I would like to check availability."
+      location="home-hero"
+      utm={{ source: 'site', medium: 'hero', campaign: 'home-en' }}
+      variant="fill"
     />
-    <title>Wonderlands Studio</title>
-  </head>
-  <body>
-    <main class="container" style="padding-block: var(--space-8);">
-      <span class="eyebrow">Estudio fotográfico y de video</span>
-      <h1>Wonderlands Studio</h1>
-      <p>Photography and video in South Florida.</p>
-      <a class="button" href={`tel:${wpb.phone.e164}`}>{wpb.phone.display}</a>
-    </main>
-  </body>
-</html>
+  </Hero>
+
+  <div class="container">
+    <AnswerBlock text={answer} />
+    <FAQ faqs={faqs} heading="Frequently asked questions" />
+  </div>
+</Layout>

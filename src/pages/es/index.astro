@@ -1,0 +1,76 @@
+---
+/**
+ * Home ES.
+ *
+ * Misma nota que la home EN: no existe copy deck de home todavía (docs/PLAN.md §8 la
+ * incluye en el alcance de Fase 1, pero `docs/copy/` no tiene el suyo). El texto es
+ * provisional y hay que sustituirlo — escrito nativo, no traducido, cuando llegue.
+ */
+import Layout from '../../components/Layout.astro';
+import Header from '../../components/Header.astro';
+import Hero from '../../components/Hero.astro';
+import AnswerBlock from '../../components/AnswerBlock.astro';
+import FAQ from '../../components/FAQ.astro';
+import CTAWhatsApp from '../../components/CTAWhatsApp.astro';
+import { homePageGraph } from '../../lib/schema.ts';
+
+const path = '/es/';
+
+const answer =
+  'Wonderlands Studio es un estudio bilingüe de fotografía y video en West Palm Beach ' +
+  'y Port St. Lucie, Florida. Cubrimos bodas, quinceañeras, embarazo y sesiones de ' +
+  'marca en todo el sur de Florida, con colecciones desde $250 para retratos hasta ' +
+  '$5,500 para cobertura de boda de día completo. Todas incluyen retoque profesional.';
+
+const faqs = [
+  {
+    question: '¿Qué zonas cubren?',
+    answer:
+      'El condado de Palm Beach desde nuestro estudio de West Palm Beach, y la zona de ' +
+      'Port St. Lucie desde nuestra segunda sede, ambas sin cargo por traslado local.',
+  },
+  {
+    question: '¿Atienden en español?',
+    answer:
+      'Completamente. La dirección, las fotos de familia y toda la coordinación se ' +
+      'hacen en español o en inglés según haga falta, dentro de la misma sesión.',
+  },
+];
+
+const jsonLd = homePageGraph({ lang: 'es' });
+---
+
+<Layout
+  path={path}
+  title="Wonderlands Studio | Fotógrafo Bilingüe en el Sur de Florida"
+  description="Estudio bilingüe de fotografía y video en West Palm Beach y Port St. Lucie. Bodas, quinceañeras, embarazo y sesiones de marca. Precios claros."
+  jsonLd={jsonLd}
+>
+  <Header slot="header" path={path} />
+
+  <Hero
+    eyebrow="Estudio de fotografía y video"
+    headingAccent="Bilingüe"
+    heading="Fotógrafo y Videógrafo en el Sur de Florida"
+    intro="Fotografía editorial y video cinematográfico para bodas, familias y marcas en el condado de Palm Beach y Port St. Lucie."
+    image={{
+      src: '/hero-placeholder.svg',
+      alt: 'Cobertura de fotografía y video de Wonderlands Studio en el sur de Florida',
+      width: 1600,
+      height: 900,
+    }}
+  >
+    <CTAWhatsApp
+      label="Consulta tu fecha"
+      message="Hola Wonderlands Studio — quisiera consultar disponibilidad."
+      location="home-hero"
+      utm={{ source: 'site', medium: 'hero', campaign: 'home-es' }}
+      variant="fill"
+    />
+  </Hero>
+
+  <div class="container">
+    <AnswerBlock text={answer} />
+    <FAQ faqs={faqs} heading="Preguntas frecuentes" />
+  </div>
+</Layout>

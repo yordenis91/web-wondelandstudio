@@ -1,0 +1,55 @@
+---
+/**
+ * CTA de WhatsApp con mensaje pre-escrito y seguimiento.
+ *
+ * Los UTM viajan dentro del **texto** del mensaje, no en la query de `wa.me`. WhatsApp
+ * descarta los parámetros de la URL, así que un `?utm_source=` ahí no llega a ninguna
+ * parte: lo único que sobrevive hasta la bandeja de Lisandra es el propio texto. Esa
+ * decisión ya vive en `getWhatsAppLink()` — aquí solo se consume.
+ *
+ * El evento de `dataLayer` lo dispara un listener delegado que vive en `Layout.astro`,
+ * uno por página en vez de uno por botón. Este componente solo marca el enlace con
+ * `data-wa-cta`. El enlace funciona igual sin JavaScript: la analítica es un añadido,
+ * nunca un requisito para que el CTA sirva.
+ */
+import { getWhatsAppLink, type WhatsAppUtm } from '../data/business.ts';
+
+interface Props {
+  /** Texto del botón. */
+  label: string;
+  /** Mensaje que aparece ya escrito en WhatsApp. */
+  message: string;
+  utm?: WhatsAppUtm;
+  /** Dónde está este CTA en la página: `hero`, `pricing`, `footer`… Va al dataLayer. */
+  location: string;
+  variant?: 'outline' | 'fill';
+}
+
+const { label, message, utm, location, variant = 'outline' } = Astro.props;
+
+const href = getWhatsAppLink(message, utm);
+---
+
+<a
+  class:list={['button', variant === 'fill' && 'button--fill']}
+  href={href}
+  data-wa-cta
+  data-wa-location={location}
+  rel="noopener"
+  target="_blank"
+>
+  {label}
+  <span class="visually-hidden">(WhatsApp)</span>
+</a>
+
+<style>
+  .button--fill {
+    background: var(--color-accent);
+    color: var(--color-accent-fg);
+  }
+
+  .button--fill:hover {
+    background: transparent;
+    color: var(--color-fg);
+  }
+</style>

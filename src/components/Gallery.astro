@@ -1,0 +1,133 @@
+---
+/**
+ * Galería responsiva con lazy loading.
+ *
+ * Implementa el patrón definido en docs/DESIGN_PLAN.md §1.2: en la grilla de portafolio
+ * las fotos están en escala de grises y recuperan el color al pasar por encima o al
+ * recibir foco. Es el único color vivo del sitio fuera del acento, y vive en la
+ * fotografía en vez de en la interfaz — el gesto opuesto a los tres defaults de diseño
+ * que CLAUDE.md prohíbe.
+ *
+ * 100% CSS, cero JS: la imagen ya está pintada y decodificada antes de la interacción,
+ * así que el filtro no toca LCP ni CLS.
+ *
+ * En táctil el patrón se desactiva por completo (`@media (hover: hover)`) — sin ratón
+ * no hay gesto de descubrimiento, y dejar las fotos en gris sería una pérdida sin
+ * contrapartida. Es la opción A de DESIGN_PLAN §1.2.
+ */
+interface GalleryImage {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  sources?: readonly { srcset: string; type: string }[];
+  href?: string;
+}
+
+interface Props {
+  images: readonly GalleryImage[];
+  heading?: string;
+  /** `true` en las grillas de portafolio; `false` en la galería de una página hoja. */
+  discoverColor?: boolean;
+}
+
+const { images, heading, discoverColor = false } = Astro.props;
+---
+
+<section class="gallery">
+  {heading && <h2>{heading}</h2>}
+
+  <ul class:list={['gallery__grid', discoverColor && 'gallery__grid--discover']}>
+    {
+      images.map((image, index) => (
+        <li class="gallery__item">
+          {image.href ? (
+            <a href={image.href} class="gallery__link">
+              <picture>
+                {(image.sources ?? []).map((s) => (
+                  <source srcset={s.srcset} type={s.type} />
+                ))}
+                <img
+                  src={image.src}
+                  alt={image.alt}
+                  width={image.width}
+                  height={image.height}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
+            </a>
+          ) : (
+            /* La primera fila suele estar sobre el pliegue: cargarla perezosamente la
+               retrasa sin ganar nada, así que solo el resto va en `lazy`. */
+            <picture>
+              {(image.sources ?? []).map((s) => (
+                <source srcset={s.srcset} type={s.type} />
+              ))}
+              <img
+                src={image.src}
+                alt={image.alt}
+                width={image.width}
+                height={image.height}
+                loading={index < 3 ? 'eager' : 'lazy'}
+                decoding="async"
+              />
+            </picture>
+          )}
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .gallery {
+    padding-block: var(--space-6);
+  }
+
+  .gallery__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .gallery__item {
+    margin: 0;
+  }
+
+  /* `width`/`height` en el `<img>` + `aspect-ratio` aquí: el hueco queda reservado
+     desde el primer pintado, así la carga perezosa no desplaza nada (CLS). */
+  .gallery__item img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+
+  .gallery__link {
+    display: block;
+  }
+
+  /* Descubrimiento de color — solo donde hay un puntero real que pueda hacer hover. */
+  @media (hover: hover) {
+    .gallery__grid--discover img {
+      filter: grayscale(100%);
+      transition: filter 400ms ease;
+    }
+
+    .gallery__grid--discover .gallery__item:hover img,
+    .gallery__grid--discover .gallery__link:focus-visible img {
+      filter: grayscale(0%);
+    }
+  }
+
+  /* Quien pide menos movimiento igualmente ve el color: se quita la transición, no el
+     cambio de estado. */
+  @media (prefers-reduced-motion: reduce) {
+    .gallery__grid--discover img {
+      transition: none;
+    }
+  }
+</style>
