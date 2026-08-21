@@ -1,0 +1,58 @@
+/**
+ * Design tokens — extraídos de la identidad visual real del sitio actual
+ * (fondo casi negro, acento dorado #c48f56, Montserrat, botones de esquina recta),
+ * no del theme de WordPress que los implementa. Ver docs/PLAN.md para el resto
+ * del modelo; este archivo es solo el vocabulario visual.
+ *
+ * Un solo acento (--color-accent), usado con disciplina — no repartido por
+ * decenas de selectores como en el sitio de origen.
+ */
+
+:root {
+  /* Color — evidencia: body.site-dark { background:#000 }, acento #c48f56 en
+     botones/bordes/texto de marca en todo el style.css original */
+  --color-bg: #0a0a0a;
+  --color-bg-elevated: #141414;
+  --color-fg: #f5f2ee;
+  --color-fg-muted: #a8a8a8;
+  --color-border: #2a2a2a;
+
+  --color-accent: #c48f56;
+  --color-accent-fg: #0a0a0a;
+
+  /* Tipografía — Montserrat, escala evidenciada en h1..h6 del CSS original
+     (60/48/36/30/24/18px desktop, 48/36/30/24/18/16px mobile), convertida a
+     clamp() para no depender de un breakpoint fijo */
+  --font-sans: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
+
+  --text-h1: clamp(3rem, 2.5rem + 2vw, 3.75rem);
+  --text-h2: clamp(2.25rem, 1.85rem + 1.5vw, 3rem);
+  --text-h3: clamp(1.875rem, 1.65rem + 0.8vw, 2.25rem);
+  --text-h4: clamp(1.5rem, 1.35rem + 0.6vw, 1.875rem);
+  --text-h5: clamp(1.125rem, 1rem + 0.5vw, 1.5rem);
+  --text-eyebrow: 0.8125rem; /* 13px — el label uppercase pequeño sobre el H1 */
+  --text-body: 1rem;
+  --text-small: 0.875rem;
+
+  --leading-tight: 1.2;
+  --leading-normal: 1.5;
+
+  --tracking-uppercase: 0.08em; /* nav y botones en mayúsculas */
+
+  /* Espaciado — escala de 8px */
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2rem;
+  --space-6: 3rem;
+  --space-8: 4rem;
+  --space-12: 6rem;
+
+  /* Forma — esquinas rectas en toda la interfaz (evidencia: .button-style1
+     { border-radius: 0 }), consistente con "editorial, no cursi" */
+  --radius: 0;
+
+  /* Layout */
+  --content-max: 1170px;
+  --header-height: 88px;
+}
