@@ -1,0 +1,20 @@
+---
+import { getLocation } from '../data/business.ts';
+
+const wpb = getLocation('wpb');
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Wonderlands Studio</title>
+  </head>
+  <body>
+    <h1>Wonderlands Studio</h1>
+    <p>Photography and video in South Florida.</p>
+    <p><a href={`tel:${wpb.phone.e164}`}>{wpb.phone.display}</a></p>
+  </body>
+</html>
