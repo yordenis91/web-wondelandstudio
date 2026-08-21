@@ -192,10 +192,9 @@ for local venues.
 `943 SE Brookedge Avenue E, Port Saint Lucie, FL 34983`
 [Get directions] · `{{PSL_PHONE_772}}`
 
-*Nota: si esta dirección queda oculta en Google Business Profile por ser domicilio
-particular (como se discutió), la página web puede o no mostrarla en texto visible —
-decisión pendiente de Lisandra. El JSON-LD la lleva de todos modos para consistencia de
-`LocalBusiness`, independientemente de lo que se muestre en pantalla.*
+*Decisión confirmada por Lisandra: la dirección se muestra en texto visible en la
+página, igual que en West Palm Beach. El JSON-LD la lleva también, para consistencia de
+`LocalBusiness`.*
 
 ## H2 — Recent work in Port St. Lucie
 *[Grid filtrado por city: psl.]*
@@ -220,19 +219,146 @@ confirm availability the same day. [WhatsApp `{{PSL_PHONE_772}}`]
 
 ---
 
-## 4. Nota para las versiones ES
+## 4. Contenido — West Palm Beach (Español)
 
-- Ambos hubs se escriben nativos, no traducidos, igual regla que los decks anteriores.
-- El hub de PSL en español probablemente sea la página más importante del sitio para el
-  público hispano — vale la pena que su párrafo-respuesta lidere con quinceañeras, no con
-  maternidad, aunque maternidad sea el único `status: active` de momento. El orden de
-  aparición de las cards no tiene que ser el orden de disponibilidad.
-- Las etiquetas *(coming soon)* / *"página en construcción"* deben decir algo accionable,
-  no solo "próximamente" — el WhatsApp de respaldo es lo que evita perder al visitante.
+## H1
+**Fotógrafo y Videógrafo en West Palm Beach, FL**
+
+## Párrafo-respuesta (59 palabras)
+
+Wonderlands Studio es un estudio bilingüe de fotografía y video con sede en West Palm
+Beach, Florida, que atiende todo el condado de Palm Beach. Nos especializamos en
+bodas, contenido de marca y negocio, y sesiones familiares, con colecciones desde $250
+para retratos hasta $5,500 para cobertura de boda de día completo. Cada sesión incluye
+retoque profesional. Atendemos en español e inglés. (561) 260-3245.
+
+## H2 — Qué cubrimos en West Palm Beach
+
+**Bodas y ceremonias civiles** — desde $1,200
+Fotografía editorial y video cinematográfico para bodas en el condado de Palm Beach, un
+solo equipo para las dos cosas. [Ver fotografía de boda →](/es/west-palm-beach/fotografo-de-bodas/) ·
+[Ver video de boda →](/es/west-palm-beach/videografo-de-bodas/)
+
+**Marca y contenido de negocio** — desde $700
+Headshots, bienes raíces y fotografía de marca personal, como sesión única o como
+alianza mensual de contenido. [Ver servicios de marca →](/es/west-palm-beach/fotografia-de-marca/)
+
+**Producción de video** — desde $550 *(próximamente)*
+Video comercial, entrevistas y producción de contenido para redes sociales.
+*Página en construcción — [consulta disponibilidad por WhatsApp](wa.me link) mientras tanto.*
+
+**Quinceañeras** — desde $1,500 *(próximamente)*
+Fotografía y video para la celebración de Quince. Nuestro enfoque de quinceañeras es
+hoy más fuerte en Port St. Lucie — [ver cobertura de quinceañeras allá →](/es/port-st-lucie/#quinceanera).
+
+**Embarazo y familia** — desde $350
+Sesiones familiares, de embarazo y de retrato en nuestro estudio o en locación.
+*Página en construcción — [consulta disponibilidad por WhatsApp](wa.me link) mientras tanto.*
+
+## H2 — Dónde trabajamos en el condado de Palm Beach
+
+The Breakers, el Flagler Museum, el Norton Museum of Art, el Kravis Center, Grandview
+Gardens, Worth Avenue, Clematis Street y el waterfront del downtown — más Palm Beach
+Gardens, Wellington, Jupiter y Boca Raton, todo sin cargo por traslado.
+
+## H2 — Nuestro estudio en West Palm Beach
+
+Dirección, horario y una foto del espacio real. Con climatización e iluminación
+cinematográfica, optimizado tanto para sesiones de recién nacidos como para headshots.
+
+`{{WPB_STREET_ADDRESS}}, West Palm Beach, FL {{WPB_POSTAL_CODE}}`
+[Cómo llegar] · [(561) 260-3245]
+
+## H2 — Trabajos recientes en West Palm Beach
+*[Grid de portafolio filtrado por city: wpb.]*
+
+## H2 — Preguntas frecuentes
+
+**¿Tienen un estudio físico en West Palm Beach?**
+Sí, nuestro estudio está en West Palm Beach y también trabajamos en locación en todo el
+condado de Palm Beach, sin cargo por traslado.
+
+**¿Qué servicios ofrecen específicamente en West Palm Beach?**
+Bodas y contenido de marca y negocio son nuestro enfoque principal en este mercado.
+También cubrimos sesiones familiares, de embarazo y de retrato, y quinceañeras bajo
+pedido.
+
+**¿También trabajan en Port St. Lucie?**
+Sí — Port St. Lucie es nuestra segunda sede, con su propio estudio y un enfoque en
+quinceañeras, embarazo y familia. [Ver servicios en Port St. Lucie →](/es/port-st-lucie/)
+
+## CTA final
+**¿No sabes qué servicio te conviene?** Cuéntanos qué estás planeando y te guiamos a la
+página correcta — o respondemos tus preguntas directamente. [WhatsApp (561) 260-3245]
 
 ---
 
-## 5. JSON-LD
+## 5. Contenido — Port St. Lucie (Español)
+
+*El párrafo-respuesta lidera con quinceañeras, no con embarazo, aunque embarazo sea el
+único `status: active` de momento — es la página más relevante del sitio para el
+público hispano, y el orden de aparición de las cards no tiene que ser el orden de
+disponibilidad.*
+
+## H1
+**Fotógrafo y Videógrafo en Port St. Lucie, FL**
+
+## Párrafo-respuesta (58 palabras)
+
+Wonderlands Studio atiende Port St. Lucie, Florida, desde nuestro estudio en 943 SE
+Brookedge Avenue E, con un enfoque en quinceañeras para la creciente comunidad hispana
+de la zona, además de embarazo y familia. Las colecciones de embarazo empiezan en $500.
+También cubrimos bodas en Tradition y St. Lucie West. Estudio bilingüe. `{{PSL_PHONE_772}}`.
+
+## H2 — Qué cubrimos en Port St. Lucie
+
+**Quinceañeras** — desde $1,500 *(próximamente)*
+Fotografía y video para la celebración de Quince, pensados para la comunidad hispana de
+Port St. Lucie. *Página en construcción — [consulta por WhatsApp](wa.me link) mientras
+tanto.*
+
+**Embarazo y familia** — desde $500
+Sesiones editoriales de embarazo y familia en nuestro estudio de Port St. Lucie o en
+locación. [Ver fotografía de embarazo →](/es/port-st-lucie/fotografo-de-embarazo/)
+
+**Bodas y ceremonias civiles** — desde $1,200 *(próximamente)*
+Cobertura completa de boda en Tradition y St. Lucie West.
+*Página en construcción — [consulta por WhatsApp](wa.me link) mientras tanto.*
+
+## H2 — Dónde trabajamos en Port St. Lucie
+
+Tradition Square, St. Lucie West y los alrededores de Port St. Lucie — sin cargo por
+traslado en locaciones locales.
+
+## H2 — Nuestro estudio en Port St. Lucie
+
+`943 SE Brookedge Avenue E, Port Saint Lucie, FL 34983`
+[Cómo llegar] · `{{PSL_PHONE_772}}`
+
+## H2 — Trabajos recientes en Port St. Lucie
+*[Grid filtrado por city: psl.]*
+
+## H2 — Preguntas frecuentes
+
+**¿Dónde queda exactamente su estudio en Port St. Lucie?**
+Estamos en Port St. Lucie, atendiendo Tradition, St. Lucie West y los alrededores.
+Escríbenos para la dirección exacta al reservar.
+
+**¿Atienden a la comunidad hispana en Port St. Lucie?**
+Sí — nuestra sede de Port St. Lucie es completamente bilingüe y las quinceañeras son
+uno de nuestros enfoques principales aquí, junto con embarazo y familia.
+
+**¿También pueden cubrir una boda en West Palm Beach?**
+Sí — West Palm Beach es nuestro mercado principal de bodas, con colecciones y precios
+completos. [Ver bodas en West Palm Beach →](/es/west-palm-beach/fotografo-de-bodas/)
+
+## CTA final
+**¿Planeando una sesión en Port St. Lucie?** Escríbenos en español o inglés y
+confirmamos disponibilidad el mismo día. [WhatsApp `{{PSL_PHONE_772}}`]
+
+---
+
+## 6. JSON-LD
 
 Los hubs cargan el `PhotographyBusiness` completo (no solo lo referencian por `@id` como
 hacen las páginas hoja) más un `ItemList` de los servicios activos — **nunca** de los
@@ -271,7 +397,7 @@ misma fuente de verdad que decide qué card es clickeable en el HTML.
 
 ---
 
-## 6. Lo que este deck le agrega al modelo
+## 7. Lo que este deck le agrega al modelo
 
 - **`servicePage.pageType`** gana un tercer valor: `'hub'`, sumado a `event` y
   `subscription` del deck de branding.
@@ -288,7 +414,7 @@ misma fuente de verdad que decide qué card es clickeable en el HTML.
 
 ---
 
-## 7. Checklist
+## 8. Checklist
 
 - [ ] Ninguna card `planned` tiene `<a href>` a una URL que no existe — o va al ancla del
       hub o va a WhatsApp, nunca a un link roto
@@ -296,5 +422,7 @@ misma fuente de verdad que decide qué card es clickeable en el HTML.
 - [ ] El bloque de venues no se copia palabra por palabra al de la página hoja de boda —
       se resume, no se duplica verbatim (riesgo de contenido duplicado interno)
 - [ ] hreflang recíproco EN↔ES en ambos hubs
-- [ ] El link desde el deck de boda WPB a PSL se actualiza para apuntar a
-      `/port-st-lucie/#wedding` en vez de a una URL de página hoja inexistente
+- [x] El link desde el deck de boda WPB a PSL se actualizó para apuntar a
+      `/port-st-lucie/#wedding` — corregido en ambos decks de boda (foto y video), EN y ES
+- [x] Versiones ES de ambos hubs escritas — nativas, no traducidas
+- [x] Dirección de PSL: decisión confirmada por Lisandra, se muestra en texto visible

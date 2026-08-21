@@ -207,45 +207,42 @@ Con los cinco `pageType` validados y Fase 1 completa en copy EN, ya no queda nad
 bloquee arquitectura. Todo lo que sigue es contenido en español, verificación de datos
 con Lisandra, o decisiones de negocio.
 
-- **Verificar el año de fundación del estudio.** El deck de `/about-lisandra/` usa
-  "since 2021" como placeholder — es una afirmación factual que un LLM puede citar,
-  así que necesita el dato real antes de publicar, no una fecha razonable.
-- **Confirmación de Lisandra sobre el drone.** El deck de video WPB afirma operación
-  licenciada de drone; si no hay Part 107 + LAANC vigente, esa sección se reescribe antes
-  de publicar.
-- **Decisión de Lisandra sobre visibilidad de la dirección de PSL.** El deck de hub la
-  deja condicionada: JSON-LD siempre la lleva, el texto visible en pantalla depende de si
-  se oculta en Google Business Profile por ser domicilio particular.
-- **Versiones ES de los siete decks existentes.** Ninguna se ha escrito todavía — se
-  hacen después de aprobar cada versión EN, igual que se hizo con la dupla de boda.
-- **Corrección pendiente en el deck de boda WPB ya entregado:** el link a
-  `/port-st-lucie/wedding-photographer/` debe cambiar a `/port-st-lucie/#wedding` antes
-  de implementarse (ver sección 3.4).
-- **Verificar consistencia del `@id` de `Person`** entre el deck de boda WPB (donde se
-  referencia por primera vez en `Organization.founder`) y el deck de `/about-lisandra/`
-  (donde se declara completo). Ver sección 6.
+- [x] **Año de fundación del estudio: confirmado — 2021.** Ya no es placeholder en
+  `docs/copy/about-lisandra-copydeck.md`.
+- [x] **Confirmación de Lisandra sobre el drone: sí, licencia vigente.** El deck de
+  video WPB ya afirmaba operación licenciada sin condicionarla — queda validado tal
+  como está, no requirió reescritura.
+- [x] **Decisión de Lisandra sobre visibilidad de la dirección de PSL: se muestra en
+  texto visible.** Resuelto en `docs/copy/city-hubs-copydeck.md` — misma dirección en
+  pantalla y en JSON-LD, sin condición.
+- [x] **Versiones ES de los siete copy decks: escritas.** Nativas, no traducidas, cada
+  una con su propio ángulo y FAQ. Con esto, Fase 1 queda completa en EN y ES.
+- [x] **Corrección de link ya aplicada:** el link a `/port-st-lucie/wedding-photographer/`
+  se corrigió a `/port-st-lucie/#wedding` en los cuatro lugares donde aparecía (deck de
+  boda foto y video, EN y ES) — ver sección 3.4.
+- [x] **Consistencia del `@id` de `Person` verificada.** `wpb-wedding-photographer-copydeck.md`
+  (campo `founder` de `Organization`) y `about-lisandra-copydeck.md` (declaración
+  completa) usan ambos
+  `https://wonderlandsstudio.com/about-lisandra/#lisandra`, carácter por carácter.
 
 ---
 
 ## 8. Orden recomendado de lo que queda
 
-**Fase 1 está completa en copy EN — las 4 páginas [Alto], `/pricing/`, los 2 hubs y
-`/about-lisandra/` tienen deck aprobado.** Lo que sigue ya no es descubrimiento de
-modelo, es producción de contenido y verificación:
+**Fase 1 está completa en copy EN y ES — las 4 páginas [Alto], `/pricing/`, los 2 hubs y
+`/about-lisandra/` tienen deck aprobado en los dos idiomas.** Los cuatro puntos que
+bloqueaban el Bloque 2 quedaron resueltos:
 
-1. Aplicar la corrección de link pendiente (sección 7) en el deck de boda WPB, antes de
-   que Claude Code lea los siete decks en el Bloque 2.
-2. Verificar con Lisandra: año de fundación, estado de la licencia de drone, y decisión
-   sobre la dirección visible de PSL — los tres bloqueantes de contenido, no de código.
-3. Versiones ES de los siete decks EN ya aprobados (boda foto, boda video, branding,
-   hubs de ciudad, pricing, maternidad PSL, about-lisandra).
-4. Con las versiones ES listas, el Bloque 2 (Sanity) y el Bloque 5 (primera página real)
-   pueden ejecutarse sobre el alcance completo de Fase 1 de una sola vez, en vez de
-   iterar página por página como se hizo durante el descubrimiento del modelo.
+1. [x] Corrección de link aplicada en los cuatro decks de boda afectados (sección 7).
+2. [x] Verificado con Lisandra: fundación en 2021, licencia de drone vigente, dirección
+   de PSL visible en pantalla.
+3. [x] Versiones ES de los siete decks EN escritas — nativas, no traducidas.
+4. [x] `@id` de `Person` verificado consistente entre los dos decks que lo usan.
 
-**El Bloque 2 (Sanity) ya puede ejecutarse en Claude Code sin riesgo de encontrar un
-campo no previsto en el modelo.** Los cinco `pageType` están probados, la matriz de
-`status` resuelve el ruteo entre fases, y el patrón de entidades compartidas por `@id`
-(`Organization`, `PhotographyBusiness` por ciudad, `Person`) cubre todo lo que el sitio
-necesita declarar en JSON-LD. Lo que queda en esta lista es contenido y verificación,
-no arquitectura.
+**El Bloque 2 (Sanity) ya puede ejecutarse en Claude Code sin ningún bloqueante de
+contenido.** Los cinco `pageType` están probados, la matriz de `status` resuelve el
+ruteo entre fases, el patrón de entidades compartidas por `@id` (`Organization`,
+`PhotographyBusiness` por ciudad, `Person`) cubre todo lo que el sitio necesita declarar
+en JSON-LD, y los siete copy decks tienen contenido completo en EN y ES. Siguiente paso:
+Bloque 2 (schemas de Sanity) y Bloque 5 (primera página real) sobre el alcance completo
+de Fase 1.

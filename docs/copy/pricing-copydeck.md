@@ -168,17 +168,141 @@ collection — no pressure, no obligation. [WhatsApp (561) 260-3245]
 
 ---
 
-## 2. Nota para la versión ES
+## 2. Contenido — Español
+*Escrito nativo, no traducido. Título corto ("Precios") para rankear mejor la query
+literal en español.*
 
-- Título: `Precios`, no "Precios y Paquetes" — más corto rankea mejor para la query
-  literal "precios fotógrafo west palm beach".
-- La sección "Por qué la diferencia de precio foto→video es tan chica" es la que más
-  vale la pena que suene distinta en español: en el público hispano de PSL, el freno de
-  compra es el monto total más que la lógica de "premium asequible" — enfatizar el precio
-  final antes que la estrategia detrás.
-- FAQ de esta página en español: **no reutilizar** ninguna de las FAQ ya escritas en
-  boda, video o branding — regla de siempre, y aquí es más fácil romperla por accidente
-  porque el contenido de precios se solapa entre páginas por naturaleza.
+**Meta title** (30 car.)
+`Precios | Wonderlands Studio`
+
+**Meta description** (144 car.)
+`Precios completos de bodas, quinceañeras, embarazo, familia y fotografía de marca en West Palm Beach y Port St. Lucie. Sin cargos ocultos.`
+
+## H1
+**Precios**
+
+## Párrafo-respuesta (63 palabras)
+
+Wonderlands Studio publica precios completos para cada servicio: colecciones de boda
+desde $1,200 hasta $5,500, quinceañeras desde $950 hasta $3,200, embarazo desde $500,
+sesiones familiares desde $350, y marca desde $700 por sesión única o de $500 a $3,500
+al mes. Todos los precios incluyen retoque profesional y galería privada. Sin cargos
+ocultos en locaciones del condado de Palm Beach o Port St. Lucie.
+
+## H2 — Cómo leer esta página
+
+Cada colección de abajo muestra exactamente qué incluye — horas, entregables,
+adicionales. Los precios son los mismos si reservas en West Palm Beach o en Port St.
+Lucie; solo el traslado fuera de nuestras dos zonas de cobertura cambia el número, y eso
+siempre se cotiza por separado y por escrito antes de reservar.
+
+## H2 — Bodas y ceremonias civiles
+*(`pageType: event` — tabla de tiers en escalera, reusa `PricingTable.astro`)*
+
+| Colección | Precio | Cobertura | Incluye |
+|---|---|---|---|
+| Elopement / Civil | $1,200 | 3 horas | Solo fotografía |
+| The Essential Story | $1,850 | 6 horas | Fotografía + video corto |
+| The Full Experience | $2,950 | 8 horas | Fotografía + video cine + drone + reel |
+| The Tradition | $3,800 | 8 horas | Todo lo anterior + segundo fotógrafo + álbum |
+| The Luxury Collection | $5,500 | 10 horas | Fotografía + video extendido + álbum premium |
+
+[Detalles completos de boda →](/es/west-palm-beach/fotografo-de-bodas/)
+
+## H2 — Quinceañeras
+
+| Colección | Precio | Cobertura | Incluye |
+|---|---|---|---|
+| Momento Real | $950 | Evento de 4h | Solo fotografía |
+| Quince de Ensueño | $1,500 | Pre-sesión + evento de 6h | Fotografía + video corto |
+| Experiencia Real | $2,300 | Pre-sesión + evento de 8h | Fotografía + video cine + drone + reel |
+| Colección Realeza | $3,200 | Pre-sesión + evento de 10h | Fotografía + video + álbum + segundo fotógrafo |
+
+*Nuestra cobertura de quinceañeras es hoy más fuerte en Port St. Lucie.*
+[Detalles de quinceañeras →](/es/port-st-lucie/#quinceanera)
+
+## H2 — Embarazo y Familia
+
+| Sesión | Precio | Incluye |
+|---|---|---|
+| Embarazo — Esencia de Vida | $500 | Sesión editorial de embarazo |
+| Embarazo — Raíces Eternas | $1,450 | Foto + video + sesión de seguimiento |
+| Recién nacido | desde $450 | Sesión en estudio o a domicilio |
+| Niños y familia | desde $350 | Sesión en estudio o al aire libre |
+| Individual / Retratos | desde $250 | Sesión en estudio |
+
+## H2 — Eventos sociales
+*(paquete genérico — la única tabla del sitio con estructura de "hora adicional")*
+
+| Servicio | Precio |
+|---|---|
+| Solo fotografía | $200 |
+| Foto + Video | $400 |
+| Hora adicional (solo foto) | $100 |
+| Hora adicional (foto + video) | $250 |
+
+## H2 — Marca y contenido de negocio
+*(`pageType: subscription` — reusa `SubscriptionTable.astro`, no `PricingTable.astro`)*
+
+**Sesiones únicas**
+
+| Sesión | Precio |
+|---|---|
+| Impulso Visual | $700 |
+| La Autoridad | $3,500 |
+
+**Socio de contenido mensual** — facturado cada mes, se cancela con 30 días de aviso
+
+| Línea | Entrada | Alianza | Nivel superior |
+|---|---|---|---|
+| Enfoque en foto | Contenido Social — $500/mes | El Socio de Crecimiento — $1,500/mes | La Autoridad — $3,500/mes |
+| Enfoque en video | Contenido Social — $500/mes | Brand Partner — $1,350/mes | Cinematic Legacy — $3,200+/mes |
+
+[Detalles completos de marca →](/es/west-palm-beach/fotografia-de-marca/)
+
+## H2 — Qué siempre incluye
+
+Retoque profesional · galería privada en línea · archivos en alta resolución y tamaño
+web · atención bilingüe en todo momento · sin cargos por traslado dentro del condado de
+Palm Beach o Port St. Lucie.
+
+## H2 — Forma de pago
+
+50% de depósito para reservar tu fecha, el resto se paga el día del evento. Aceptamos
+Zelle, efectivo y todas las tarjetas principales, y ofrecemos planes de pago mensuales
+para colecciones completas y paquetes de eventos grandes.
+
+## H2 — Preguntas frecuentes
+
+**¿Estos son los precios finales, o hay depósito y cargos extra?**
+Estos son los precios completos de cada colección. Un depósito del 50% asegura tu
+fecha; el resto se paga el día del evento. No hay cargos ocultos en locaciones dentro
+del condado de Palm Beach o Port St. Lucie — el traslado fuera de esas zonas se cotiza
+aparte, por escrito, antes de reservar.
+
+**¿Por qué la diferencia de precio entre solo foto y foto con video es tan chica?**
+Porque el número final es lo que decide, no la estrategia detrás. En bodas,
+quinceañeras y eventos sociales, mantuvimos ese salto lo más bajo posible a propósito,
+para que agregar video no se sienta como una compra aparte sino como una decisión
+fácil de sí.
+
+**¿West Palm Beach y Port St. Lucie tienen precios distintos?**
+No. El precio es el mismo en las dos sedes. Lo que cambia es qué servicio enfocamos
+más en cada mercado — quinceañeras y embarazo son más fuertes en Port St. Lucie, bodas
+y marca en West Palm Beach — pero el precio en sí no cambia.
+
+**¿Puedo combinar servicios, como una sesión de embarazo con un paquete de anuncio de
+nacimiento?**
+Sí. Escríbenos con lo que estás planeando y armamos una propuesta a la medida — nos lo
+piden lo suficiente como para cotizarlo de forma habitual, no como caso especial.
+
+**¿Ofrecen planes de pago?**
+Sí, para colecciones completas de boda, quinceañera y marca. Pregunta al pedir tu
+propuesta y armamos un calendario mensual que se ajuste a tu fecha.
+
+## CTA final
+**¿Todavía no sabes qué te conviene?** Cuéntanos qué estás planeando y te recomendamos
+la colección correcta — sin presión, sin compromiso. [WhatsApp (561) 260-3245]
 
 ---
 
@@ -262,3 +386,5 @@ especificadas arriba.
 - [ ] La sección de quinceañeras enlaza al hub de PSL (`#quinceanera`), no a una URL
       `planned` — misma regla que en el deck de hubs
 - [ ] hreflang recíproco EN↔ES
+- [x] Versión ES escrita — nativa, no traducida; FAQ sin reutilizar de boda, video ni
+      branding

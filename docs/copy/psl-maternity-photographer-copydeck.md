@@ -143,14 +143,132 @@ right week to book. [WhatsApp `{{PSL_PHONE_772}}`]
 
 ---
 
-## 2. Nota para la versión ES
+## 2. Contenido — Español
+*Escrito nativo, no traducido. Prioriza la idea de continuidad familiar
+(embarazo → bebé) sobre el lenguaje editorial/de moda que domina la versión en inglés.*
 
-- Esta es probablemente, junto con quinceañeras, la página de mayor conexión emocional
-  con el público hispano de PSL — vale la pena que el párrafo-respuesta y el bloque de
-  "Raíces Eternas" prioricen la idea de continuidad familiar (embarazo → bebé) sobre el
-  lenguaje editorial/de moda que domina la versión en inglés.
-- FAQ únicas frente a todas las demás páginas ya escritas — ninguna coincide todavía
-  entre sí, mantener la racha.
+**Meta title** (57 car.)
+`Fotógrafo de Embarazo en Port St. Lucie | Wonderlands Studio`
+
+**Meta description** (150 car.)
+`Fotografía de embarazo bilingüe en Port St. Lucie, FL. Sesiones editoriales desde $500, con opción de foto + video + seguimiento. Estudio o en locación.`
+
+## H1
+**Fotógrafo de Embarazo en Port St. Lucie, FL**
+
+## Párrafo-respuesta (61 palabras)
+
+Wonderlands Studio fotografía sesiones de embarazo en Port St. Lucie, Florida, desde
+nuestro estudio cerca de Tradition. Las colecciones empiezan en $500 por una sesión
+editorial de fotografía, con una opción de $1,450 que suma video cinematográfico y una
+sesión de seguimiento después del nacimiento. Cada sesión incluye guía de vestuario,
+retoque profesional y galería privada. Estudio bilingüe. `{{PSL_PHONE_772}}`.
+
+## H2 — Una sesión editorial, no una foto rápida
+
+Dirigimos cada sesión de embarazo como dirigiríamos una producción editorial: opciones
+de vestuario cuidadas, poses pensadas que se ven bien incluso si nunca has estado
+frente a una cámara, y luz trabajada para un acabado de revista en vez de un fondo
+plano de estudio. Ya sea en nuestro estudio con climatización o en una locación al aire
+libre en Port St. Lucie, la dirección es la misma.
+
+## H2 — Dos formas de documentar esta etapa
+
+**Esencia de Vida** es una sola sesión editorial — la galería clásica de embarazo,
+programada alrededor de las semanas 32 a 36, cuando la pancita está en su punto más
+fotogénico y todavía estás cómoda para una sesión completa.
+
+**Raíces Eternas** va más allá: une la sesión de embarazo con un video corto y
+cinematográfico y una sesión de seguimiento cuando llega el bebé, para que el embarazo
+y el primer encuentro se conviertan en una sola historia continua —de mamá a
+familia— en vez de dos compras separadas meses después.
+
+## H2 — Colecciones y precios
+
+*Precios completos. Sin cargos ocultos en Port St. Lucie y alrededores de Tradition.*
+
+| Colección | Inversión | Incluye |
+|---|---|---|
+| Esencia de Vida | $500 | Sesión editorial de fotografía de embarazo, guía de vestuario, galería privada |
+| Raíces Eternas | $1,450 | Sesión de embarazo + video cinematográfico + sesión de seguimiento con el recién nacido |
+
+Ambas colecciones incluyen retoque profesional y entrega en tu galería privada en
+línea, en alta resolución y tamaño web.
+
+**Adicionales:** retratos de pareja y hermanos · cambio de vestuario adicional · tiempo
+extendido de sesión · impresiones y álbumes.
+
+[Consulta disponibilidad por WhatsApp](wa.me link) · [Ver trabajos recientes de embarazo](/es/portafolio/maternidad/)
+
+## H2 — En estudio o en locación
+
+**En nuestro estudio:** con climatización e iluminación cinematográfica pensada para
+este tipo de sesión — útil cuando el calor de Florida hace que una sesión al aire libre
+a las 34 semanas suene menos atractiva de lo que parece.
+
+**En locación:** la luz dorada de Port St. Lucie y Tradition Square, parques con buena
+vista y acceso cercano a la playa. Te ayudamos a elegir según la temporada y cómo te
+sientas, no solo lo que se ve mejor en un portafolio.
+
+## H2 — Cuándo reservar
+
+La mayoría reserva entre las semanas 28 y 32 y hace la sesión entre la 32 y la 36, lo
+que da tiempo suficiente para planear el vestuario y suficiente pancita para que las
+fotos se sientan como un hito real y no como una apuesta temprana. Si ya pasaste esa
+ventana, escríbenos de todas formas — una sesión funciona hasta cerca de la fecha de
+parto, solo la planeamos distinto.
+
+## H2 — Sobre Lisandra
+[Foto] Lisandra trabaja las sesiones de embarazo con la misma paciencia que le pone a
+la fotografía de recién nacidos — sin prisa, cálida, y acostumbrada a trabajar con
+clientas cansadas, con los tobillos hinchados, y no muy convencidas de querer que las
+fotografíen justo ahora. La mayoría termina contenta de haberlo hecho. [Conoce más de
+su trabajo →](/es/sobre-lisandra/)
+
+## H2 — Lo que dicen las clientas
+*[Condicionado a testimonios verificados, filtrados por category: maternity, city: psl.]*
+
+## H2 — Preguntas frecuentes
+
+**¿Qué semana del embarazo es mejor para la sesión?**
+Entre la semana 32 y la 36 es el punto ideal para la mayoría — la pancita ya tiene su
+forma completa y normalmente todavía estás cómoda para una sesión completa. Embarazos
+de gemelos o de mayor riesgo suelen hacerse un poco antes; eso lo planeamos contigo de
+forma individual.
+
+**¿Qué me pongo, y ustedes dan el vestuario?**
+Te damos guía sobre siluetas y colores que se ven bien en cámara, y podemos sugerir
+opciones si todavía no tienes nada en mente. Telas fluidas y prendas ajustadas
+funcionan las dos — depende del ambiente que quieras, editorial de estudio o algo suave
+y natural.
+
+**¿Pueden salir mi pareja y mis otros hijos en algunas fotos?**
+Sí, y lo recomendamos. Los retratos familiares están incluidos en una sesión completa;
+solo avísanos al reservar para planear tiempo suficiente para la parte individual y la
+familiar.
+
+**¿Qué incluye exactamente Raíces Eternas, paso a paso?**
+Primero la sesión de embarazo, entre la semana 32 y la 36, con video cinematográfico
+incluido junto con la fotografía. Cuando llega tu bebé, agendas la sesión de
+seguimiento de recién nacido, normalmente dentro de las primeras dos semanas. Terminas
+con una sola historia visual continua en vez de reservar dos servicios separados con
+meses de diferencia.
+
+**¿Hacen las sesiones en estudio o tengo que salir al aire libre?**
+Las dos opciones. Nuestro estudio en Port St. Lucie tiene climatización, que importa
+más de lo que suena en el verano de Florida. Las sesiones al aire libre se hacen a la
+hora dorada, cuando la luz y el calor cooperan los dos.
+
+**¿Con cuánta anticipación debo reservar?**
+Apenas sepas tu fecha probable de parto, si ya tienes una semana específica en mente —
+las fechas de embarazo son más flexibles que las de boda, pero la ventana popular de la
+semana 32 a la 36 se llena durante la temporada alta de bebés (más o menos los mismos
+meses que la temporada de bodas, porque los bebés llegan unos nueve meses después de
+las bodas).
+
+## CTA final
+**¿Lista para documentar esta etapa?** Mándanos tu fecha probable de parto y te
+ayudamos a encontrar la semana correcta para reservar. [WhatsApp `{{PSL_PHONE_772}}`]
 
 ---
 
@@ -186,4 +304,5 @@ Mismo patrón que boda — `pageType: event`, un solo `OfferCatalog` en escalera
 - [ ] FAQ únicas frente a las 5 páginas hoja ya escritas
 - [ ] Sin `Review`/`AggregateRating` hasta reseñas verificadas
 - [ ] hreflang recíproco EN↔ES
-- [ ] **Con este deck, Fase 1 queda completa en copy EN — actualizar PLAN.md sección 7/8**
+- [x] Versión ES escrita — nativa, prioriza continuidad familiar sobre lenguaje editorial
+- [x] **Con este deck, Fase 1 queda completa en copy EN — PLAN.md sección 7/8 actualizado**
