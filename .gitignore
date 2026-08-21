@@ -3,3 +3,6 @@ dist/
 .env
 .env.local
 .DS_Store
+
+# Metadata de Windows/WSL al copiar archivos descargados
+*:Zone.Identifier
