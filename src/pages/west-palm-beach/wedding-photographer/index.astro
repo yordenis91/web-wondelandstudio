@@ -1,0 +1,31 @@
+---
+/**
+ * `/west-palm-beach/wedding-photographer/`
+ *
+ * Contenido literal de `docs/copy/wpb-wedding-photographer-copydeck.md` (versión EN).
+ * La estructura vive en `ServicePageTemplate`; aquí solo se declara qué contenido, qué
+ * ruta y cuál es la página hermana.
+ */
+import ServicePageTemplate from '../../../components/ServicePageTemplate.astro';
+import { WPB_WEDDING_PHOTOGRAPHER } from '../../../content/wpb-wedding-photographer.ts';
+import { getWeddingPricing, getWeddingOffers, weddingHighlight } from '../../../data/pricing.ts';
+
+const lang = 'en' as const;
+const path = '/west-palm-beach/wedding-photographer/';
+---
+
+<ServicePageTemplate
+  path={path}
+  lang={lang}
+  city="wpb"
+  content={WPB_WEDDING_PHOTOGRAPHER[lang]}
+  pricing={getWeddingPricing(lang)}
+  pricingHighlight={weddingHighlight(lang)}
+  offers={getWeddingOffers(lang)}
+  serviceName="Wedding Photography in West Palm Beach"
+  serviceType="Wedding Photography"
+  areaServed="Palm Beach County, FL"
+  relatedServicePath="/west-palm-beach/wedding-videographer/"
+  heroImage={{ src: '/hero-placeholder.svg', width: 1600, height: 900 }}
+  utmCampaign="wpb-wedding-photographer-en"
+/>

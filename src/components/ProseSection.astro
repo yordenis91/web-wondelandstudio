@@ -1,0 +1,67 @@
+---
+/**
+ * Sección de prosa: un H2 y sus párrafos, con enlaces en línea.
+ *
+ * Es el componente que renderiza cada entrada de `servicePage.sections` — el bloque
+ * modular que docs/PLAN.md §4 eligió en vez de campos fijos, precisamente para que
+ * páginas hermanas con secciones distintas ("How booking works" en fotografía, "Gear
+ * and crew" en vídeo) no necesiten migración de esquema.
+ */
+import { isLink, type Paragraph } from '../lib/richtext.ts';
+
+interface Props {
+  heading: string;
+  paragraphs: readonly Paragraph[];
+  /** Nota en cursiva bajo el H2, antes de los párrafos. */
+  note?: string;
+  /** Ancla estable para enlazar a esta sección desde otras páginas. */
+  id?: string;
+}
+
+const { heading, paragraphs, note, id } = Astro.props;
+---
+
+<section class="prose" id={id}>
+  <h2>{heading}</h2>
+  {note && <p class="prose__note">{note}</p>}
+  {
+    paragraphs.map((paragraph) => (
+      <p>
+        {paragraph.map((segment) =>
+          isLink(segment) ? <a href={segment.href}>{segment.text}</a> : segment,
+        )}
+      </p>
+    ))
+  }
+  <slot />
+</section>
+
+<style>
+  .prose {
+    padding-block: var(--space-6);
+  }
+
+  .prose p {
+    max-width: 70ch;
+    line-height: 1.7;
+  }
+
+  .prose__note {
+    color: var(--color-fg-muted);
+    font-style: italic;
+  }
+
+  /* El subrayado sale del acento y el texto se queda claro: el enlace se distingue sin
+     que la línea compita con la lectura. */
+  .prose a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: var(--color-accent);
+    text-underline-offset: 0.2em;
+    transition: color 0.3s ease;
+  }
+
+  .prose a:hover {
+    color: var(--color-accent);
+  }
+</style>

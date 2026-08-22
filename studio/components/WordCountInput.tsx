@@ -3,14 +3,22 @@ import { Box, Text } from '@sanity/ui';
 import { type StringInputProps, set, unset } from 'sanity';
 
 /**
- * `answerParagraph` debe caer en 60-65 palabras (CLAUDE.md regla 7 / PLAN.md §2): un
- * párrafo-respuesta demasiado corto no compite en AI Overviews, uno demasiado largo dobla
- * como copy de otra sección y arriesga contenido duplicado entre páginas hermanas.
+ * Umbrales del `answerParagraph`, compartidos con la validación de `servicePage` para
+ * que la cifra viva en un solo sitio.
+ *
+ * Los dos límites NO tienen el mismo peso:
+ *
+ * - `MAX_WORDS` es la regla dura. Es la única cifra que fija CLAUDE.md en el modelo de
+ *   contenido ("answerParagraph (máx 65 palabras, validado)"), y pasarse arriesga que
+ *   el párrafo doble como copy de otra sección — contenido duplicado entre hermanas.
+ * - `MIN_WORDS` es guía editorial, no requisito. Un párrafo corto compite peor en AI
+ *   Overviews, pero cinco párrafos ya aprobados en `docs/copy/` caen en 57-59 palabras,
+ *   así que rechazarlos sería bloquear contenido real.
  */
-const MIN_WORDS = 60;
-const MAX_WORDS = 65;
+export const MIN_WORDS = 60;
+export const MAX_WORDS = 65;
 
-function countWords(value: string | undefined): number {
+export function countWords(value: string | undefined): number {
   if (!value) return 0;
   return value.trim().split(/\s+/).filter(Boolean).length;
 }
@@ -27,8 +35,16 @@ export function WordCountInput(props: StringInputProps) {
     [onChange],
   );
 
-  const inRange = count >= MIN_WORDS && count <= MAX_WORDS;
-  const tone = count === 0 ? 'default' : inRange ? 'positive' : 'critical';
+  /* Tres estados, no dos: pasarse es un error que bloquea, quedarse corto es solo un
+     aviso. El color lo refleja para que no parezcan la misma gravedad. */
+  const tone =
+    count === 0
+      ? 'default'
+      : count > MAX_WORDS
+        ? 'critical'
+        : count < MIN_WORDS
+          ? 'caution'
+          : 'positive';
 
   return (
     <Box>
@@ -50,11 +66,8 @@ export function WordCountInput(props: StringInputProps) {
       <Box marginTop={2}>
         <Text size={1} weight="medium" style={{ color: `var(--card-badge-${tone}-dot-color, inherit)` }}>
           {count} / {MIN_WORDS}-{MAX_WORDS} palabras
-          {count > 0 && !inRange
-            ? count < MIN_WORDS
-              ? ` — faltan ${MIN_WORDS - count}`
-              : ` — sobran ${count - MAX_WORDS}`
-            : ''}
+          {count > MAX_WORDS ? ` — sobran ${count - MAX_WORDS}, no se puede guardar` : ''}
+          {count > 0 && count < MIN_WORDS ? ` — faltan ${MIN_WORDS - count} (aviso, se puede guardar)` : ''}
         </Text>
       </Box>
     </Box>
