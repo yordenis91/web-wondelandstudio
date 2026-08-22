@@ -1,0 +1,94 @@
+---
+/**
+ * Testimonios, filtrados por ciudad y categoría.
+ *
+ * Dos reglas que este componente hace cumplir:
+ *
+ * 1. Solo se muestran los `verified: true`. La consulta de Sanity ya filtra, pero se
+ *    vuelve a filtrar aquí: es la clase de garantía que no conviene delegar a que
+ *    quien llame haya usado la consulta correcta.
+ * 2. **Nunca** emite `Review` ni `AggregateRating` en JSON-LD (regla 5 de CLAUDE.md).
+ *    Marcar reseñas sin respaldo verificable es motivo de acción manual en Google.
+ *    `schema.ts` tampoco tiene función que las construya.
+ *
+ * Si no hay testimonios que pasen el filtro, el componente no renderiza nada — un
+ * bloque "Lo que dicen las parejas" vacío es peor que su ausencia.
+ */
+import type { TestimonialDoc } from '../lib/queries.ts';
+import type { City } from '../i18n/routes.ts';
+
+interface Props {
+  testimonials: readonly TestimonialDoc[];
+  heading: string;
+  city?: City;
+  category?: string;
+  limit?: number;
+}
+
+const { testimonials, heading, city, category, limit = 3 } = Astro.props;
+
+const shown = testimonials
+  .filter((t) => t.verified)
+  .filter((t) => (city ? t.city === city : true))
+  .filter((t) => (category ? t.category === category : true))
+  .slice(0, limit);
+---
+
+{
+  shown.length > 0 && (
+    <section class="testimonials">
+      <h2>{heading}</h2>
+      <ul class="testimonials__list">
+        {shown.map((t) => (
+          <li>
+            <figure class="testimonials__item">
+              <blockquote class="testimonials__quote">
+                <p>{t.text}</p>
+              </blockquote>
+              <figcaption class="testimonials__author">{t.author}</figcaption>
+            </figure>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
+<style>
+  .testimonials {
+    padding-block: var(--space-6);
+  }
+
+  .testimonials__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .testimonials__item {
+    margin: 0;
+    padding: var(--space-3);
+    background: var(--color-bg-elevated);
+    height: 100%;
+  }
+
+  .testimonials__quote {
+    margin: 0 0 var(--space-2);
+  }
+
+  .testimonials__quote p {
+    margin: 0;
+  }
+
+  .testimonials__author {
+    font-size: var(--text-small);
+    color: var(--color-fg-muted);
+  }
+
+  .testimonials__author::before {
+    content: '— ';
+  }
+</style>

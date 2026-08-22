@@ -1,0 +1,93 @@
+---
+/**
+ * FAQ con `<details>`/`<summary>` nativos. Cero JavaScript.
+ *
+ * Dos razones, y la segunda es la que manda: el acordeón nativo ya trae teclado,
+ * ARIA y estado por defecto, así que reimplementarlo en JS solo añade peso y bugs —
+ * pero sobre todo, el texto de la respuesta está en el HTML servido aunque el
+ * `<details>` esté cerrado. Un crawler de LLM lo lee igual (regla 1 de CLAUDE.md);
+ * con un acordeón en JS no existiría.
+ *
+ * El JSON-LD de `FAQPage` no se emite aquí — lo compone `schema.ts` a nivel de página,
+ * para que haya un solo `<script type="application/ld+json">` por documento.
+ */
+import type { FaqInput } from '../lib/schema.ts';
+
+interface Props {
+  faqs: readonly FaqInput[];
+  heading: string;
+  /** Abre la primera respuesta: útil cuando la FAQ es el contenido principal. */
+  openFirst?: boolean;
+}
+
+const { faqs, heading, openFirst = false } = Astro.props;
+---
+
+<section class="faq">
+  <h2>{heading}</h2>
+
+  {
+    faqs.map((faq, index) => (
+      <details class="faq__item" open={openFirst && index === 0}>
+        <summary class="faq__question">{faq.question}</summary>
+        <div class="faq__answer">
+          <p>{faq.answer}</p>
+        </div>
+      </details>
+    ))
+  }
+</section>
+
+<style>
+  .faq {
+    padding-block: var(--space-6);
+  }
+
+  .faq__item {
+    border-block-end: 1px solid var(--color-border);
+  }
+
+  .faq__question {
+    padding-block: var(--space-2);
+    font-weight: 600;
+    font-size: var(--text-body);
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+  }
+
+  /* Quita el triángulo por defecto en WebKit para poner el nuestro. */
+  .faq__question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq__question::before {
+    content: '+';
+    color: var(--color-accent);
+    font-weight: 400;
+    line-height: 1;
+    flex: none;
+  }
+
+  .faq__item[open] > .faq__question::before {
+    content: '−';
+  }
+
+  /* El foco va en el `summary`, que es lo enfocable; se marca la fila entera. */
+  .faq__question:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .faq__answer {
+    max-width: 70ch;
+    padding-block-end: var(--space-2);
+    color: var(--color-fg-muted);
+  }
+
+  .faq__answer p {
+    margin: 0;
+  }
+</style>

@@ -1,0 +1,48 @@
+---
+/**
+ * El párrafo-respuesta: el bloque que los LLM extraen como respuesta directa.
+ *
+ * Va en HTML plano y servido, sin JS (regla 1 de CLAUDE.md) — un crawler de LLM no
+ * ejecuta JavaScript, así que si esto se pintara en cliente no existiría para ellos.
+ *
+ * Sobre el límite de palabras: CLAUDE.md fija "máx 65 palabras" y eso es lo que se
+ * valida aquí. El esquema de Sanity exige además un mínimo de 60, pero cinco párrafos
+ * ya aprobados en docs/copy/ están por debajo (57, 58, 58, 59, 59), así que ese mínimo
+ * rechazaría contenido real. Ver la nota en docs/PLAN.md §7 — mientras no se resuelva,
+ * la autoridad es CLAUDE.md.
+ */
+interface Props {
+  text: string;
+  /** `h2` si la sección lleva encabezado propio; por defecto el bloque va suelto. */
+  heading?: string;
+}
+
+const { text, heading } = Astro.props;
+
+const words = text.trim().split(/\s+/).filter(Boolean).length;
+
+if (words > 65) {
+  throw new Error(
+    `Párrafo-respuesta de ${words} palabras, máximo 65 (CLAUDE.md). ` +
+      `Sobran ${words - 65}: "${text.slice(0, 60)}…"`,
+  );
+}
+---
+
+<section class="answer">
+  {heading && <h2>{heading}</h2>}
+  <p class="answer__text" data-word-count={words}>{text}</p>
+</section>
+
+<style>
+  .answer {
+    padding-block: var(--space-6);
+  }
+
+  .answer__text {
+    max-width: 65ch;
+    font-size: var(--text-h5);
+    line-height: 1.6;
+    margin: 0;
+  }
+</style>
