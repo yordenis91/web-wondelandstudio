@@ -1,11 +1,18 @@
 ---
 /**
- * Cabecera: navegación y selector de idioma.
+ * Cabecera: navegación, teléfono y selector de idioma.
  *
  * El selector no manda a la home del otro idioma — resuelve la página equivalente con
  * `getAlternate()`. Alguien leyendo la página de fotógrafo de bodas en inglés que pulsa
  * "ES" aterriza en `/es/west-palm-beach/fotografo-de-bodas/`, no en `/es/`. Perder el
  * contexto en el cambio de idioma es la forma más rápida de perder la visita.
+ *
+ * En móvil la navegación se colapsa tras un botón de tres rayas, **por mejora
+ * progresiva**: los enlaces siempre están en el HTML servido (regla 1 de CLAUDE.md), y
+ * el colapso solo ocurre si hay JavaScript. Sin JS el menú se ve desplegado y el sitio
+ * es perfectamente usable — nunca queda contenido inalcanzable detrás de un botón
+ * muerto. La clase `.js` la pone `Layout.astro` antes del primer pintado, así que no
+ * hay parpadeo de menú abierto→cerrado.
  */
 import { getAlternate, getLang, normalizePath, type Lang } from '../i18n/routes.ts';
 import { BUSINESS, getLocation } from '../data/business.ts';
@@ -38,51 +45,75 @@ const NAV = {
   ],
 } as const;
 
+const L = {
+  en: { nav: 'Main', menu: 'Menu' },
+  es: { nav: 'Principal', menu: 'Menú' },
+}[lang];
+
 const items = NAV[lang];
 const home = lang === 'en' ? '/' : '/es/';
 const phone = getLocation('wpb').phone;
 const showPhone = !isPending(phone.e164) && !isPending(phone.display);
 ---
 
-<header class="site-header">
-  <div class="site-header__inner container">
+<header class="site-header" data-site-header>
+  <div class="site-header__bar container">
     <a class="site-header__logo" href={home}>{BUSINESS.legalName}</a>
 
-    <nav aria-label={lang === 'en' ? 'Main' : 'Principal'}>
-      <ul class="site-header__nav">
-        {
-          items.map((item) => {
-            const current = normalizePath(item.href) === canonicalPath;
-            return (
-              <li>
-                <a href={item.href} aria-current={current ? 'page' : undefined}>
-                  {item.label}
-                </a>
-              </li>
-            );
-          })
-        }
-      </ul>
-    </nav>
+    {/*
+      `hidden` en el HTML servido: sin JS el botón no existe para nadie —ni visualmente
+      ni para un lector de pantalla— porque no tendría nada que hacer. El script lo
+      revela.
+    */}
+    <button
+      class="nav-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="site-nav"
+      data-nav-toggle
+      hidden
+    >
+      <span class="nav-toggle__bars" aria-hidden="true"></span>
+      <span class="visually-hidden">{L.menu}</span>
+    </button>
 
-    <div class="site-header__aside">
-      {
-        showPhone && (
-          <a class="site-header__phone" href={`tel:${phone.e164}`}>
-            {phone.display}
-          </a>
-        )
-      }
-      {/* `lang` + `hreflang` para que un lector de pantalla anuncie el cambio de idioma. */}
-      <a
-        class="site-header__lang"
-        href={otherHref}
-        lang={other}
-        hreflang={other}
-        rel="alternate"
-      >
-        {other === 'en' ? 'English' : 'Español'}
-      </a>
+    <div class="site-header__panel" id="site-nav" data-nav-panel>
+      <nav aria-label={L.nav}>
+        <ul class="site-header__nav">
+          {
+            items.map((item) => {
+              const current = normalizePath(item.href) === canonicalPath;
+              return (
+                <li>
+                  <a href={item.href} aria-current={current ? 'page' : undefined}>
+                    {item.label}
+                  </a>
+                </li>
+              );
+            })
+          }
+        </ul>
+      </nav>
+
+      <div class="site-header__aside">
+        {
+          showPhone && (
+            <a class="site-header__phone" href={`tel:${phone.e164}`}>
+              {phone.display}
+            </a>
+          )
+        }
+        {/* `lang` + `hreflang` para que un lector de pantalla anuncie el cambio de idioma. */}
+        <a
+          class="site-header__lang"
+          href={otherHref}
+          lang={other}
+          hreflang={other}
+          rel="alternate"
+        >
+          {other === 'en' ? 'English' : 'Español'}
+        </a>
+      </div>
     </div>
   </div>
 </header>
@@ -92,7 +123,7 @@ const showPhone = !isPending(phone.e164) && !isPending(phone.display);
     border-bottom: 1px solid var(--color-border);
   }
 
-  .site-header__inner {
+  .site-header__bar {
     display: flex;
     align-items: center;
     gap: var(--space-3);
@@ -104,6 +135,14 @@ const showPhone = !isPending(phone.e164) && !isPending(phone.display);
     font-weight: 700;
     text-decoration: none;
     letter-spacing: 0.02em;
+    margin-inline-end: auto;
+  }
+
+  .site-header__panel {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
   }
 
   .site-header__nav {
@@ -133,7 +172,6 @@ const showPhone = !isPending(phone.e164) && !isPending(phone.display);
     display: flex;
     align-items: center;
     gap: var(--space-2);
-    margin-inline-start: auto;
   }
 
   .site-header__phone,
@@ -153,4 +191,143 @@ const showPhone = !isPending(phone.e164) && !isPending(phone.display);
   .site-header__lang:hover {
     color: var(--color-fg);
   }
+
+  /* ── Botón de tres rayas ───────────────────────────────────────────────────
+     Las tres rayas son un solo `<span>` más sus dos pseudoelementos: la de en medio
+     se desvanece al abrir y las otras dos rotan hasta formar la X. */
+  .nav-toggle {
+    display: none;
+    position: relative;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid var(--color-border);
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .nav-toggle__bars,
+  .nav-toggle__bars::before,
+  .nav-toggle__bars::after {
+    position: absolute;
+    left: 50%;
+    width: 20px;
+    height: 2px;
+    background: currentColor;
+    transition:
+      transform 0.25s ease,
+      opacity 0.2s ease;
+  }
+
+  .nav-toggle__bars {
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .nav-toggle__bars::before,
+  .nav-toggle__bars::after {
+    content: '';
+    left: 0;
+  }
+
+  .nav-toggle__bars::before {
+    transform: translateY(-6px);
+  }
+
+  .nav-toggle__bars::after {
+    transform: translateY(6px);
+  }
+
+  [aria-expanded='true'] .nav-toggle__bars {
+    background: transparent;
+  }
+
+  [aria-expanded='true'] .nav-toggle__bars::before {
+    transform: translateY(0) rotate(45deg);
+  }
+
+  [aria-expanded='true'] .nav-toggle__bars::after {
+    transform: translateY(0) rotate(-45deg);
+  }
+
+  /* ── Colapso en móvil ──────────────────────────────────────────────────────
+     Todo lo de abajo depende de `.js` en <html>: sin JavaScript no se aplica nada y el
+     menú queda desplegado y navegable. */
+  @media (max-width: 767.98px) {
+    :global(html.js) .nav-toggle {
+      display: block;
+    }
+
+    :global(html.js) .site-header__panel {
+      display: none;
+      flex-basis: 100%;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-3);
+      padding-block: var(--space-3);
+      border-block-start: 1px solid var(--color-border);
+    }
+
+    :global(html.js) .site-header__panel[data-open] {
+      display: flex;
+    }
+
+    .site-header__nav {
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    /* Área de toque cómoda: los enlaces del menú abierto son fáciles de acertar. */
+    .site-header__nav a {
+      display: block;
+      padding-block: var(--space-1);
+      font-size: var(--text-body);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav-toggle__bars,
+    .nav-toggle__bars::before,
+    .nav-toggle__bars::after {
+      transition: none;
+    }
+  }
 </style>
+
+<script is:inline>
+  (function () {
+    var toggle = document.querySelector('[data-nav-toggle]');
+    var panel = document.querySelector('[data-nav-panel]');
+    if (!toggle || !panel) return;
+
+    // Hay JS: el botón pasa a existir. Sin esto nunca se muestra.
+    toggle.hidden = false;
+
+    function setOpen(open) {
+      toggle.setAttribute('aria-expanded', String(open));
+      if (open) panel.setAttribute('data-open', '');
+      else panel.removeAttribute('data-open');
+    }
+
+    toggle.addEventListener('click', function () {
+      setOpen(toggle.getAttribute('aria-expanded') !== 'true');
+    });
+
+    // Escape cierra y devuelve el foco al botón, que es de donde salió.
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+
+    /* Al volver a escritorio el panel debe quedar visible aunque se cerrara en móvil:
+       el CSS ya lo muestra, pero `aria-expanded="false"` mentiría sobre su estado. */
+    var desktop = window.matchMedia('(min-width: 768px)');
+    function sync() {
+      if (desktop.matches) setOpen(false);
+    }
+    desktop.addEventListener('change', sync);
+  })();
+</script>

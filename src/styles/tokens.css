@@ -25,7 +25,10 @@
      clamp() para no depender de un breakpoint fijo */
   --font-sans: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
 
-  --text-h1: clamp(3rem, 2.5rem + 2vw, 3.75rem);
+  /* El mínimo baja a 36px (no 48px como el sitio original) porque los H1 de página de
+     servicio son largos —"Fotógrafo de Bodas en West Palm Beach, FL"— y a 48px ocupaban
+     cinco líneas en un móvil de 390px, empujando todo el contenido bajo el pliegue. */
+  --text-h1: clamp(2.25rem, 1.6rem + 2.8vw, 3.75rem);
   --text-h2: clamp(2.25rem, 1.85rem + 1.5vw, 3rem);
   --text-h3: clamp(1.875rem, 1.65rem + 0.8vw, 2.25rem);
   --text-h4: clamp(1.5rem, 1.35rem + 0.6vw, 1.875rem);
