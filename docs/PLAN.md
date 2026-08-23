@@ -118,8 +118,12 @@ Sin cambios de v1. WPB y PSL, NAP, geo, idiomas.
 - service: string
 - pageType: 'event' | 'subscription' | 'hub' | 'aggregate' | 'about'   ← 5 valores, todos validados
 - h1: string
-- answerParagraph: string (validación 60–65 palabras)
+- answerParagraph: string (error si >65; aviso, no error, si <60 — ver §7)
 - secciones: array de { title, body, images }
+    - body: Portable Text, no string plano — los párrafos llevan enlaces en línea.
+      Solo párrafos, listas, negrita, cursiva y enlace; sin encabezados (el H2 es
+      `title`). El `href` del enlace se valida al guardar: ruta interna con barra
+      inicial y final, ancla, o URL completa.
 - faqs: array de { pregunta, respuesta } (mínimo 4)
 - videoEmbeds: array opcional (solo si pageType permite video — descubierto en deck de video)
 - metaTitle, metaDescription
@@ -137,7 +141,10 @@ Sin cambios de v1. WPB y PSL, NAP, geo, idiomas.
   - price: number
   - coverage: string
   - includes: array de string
-  - appliesTo: reference → servicePage (para saber a qué página pertenece cada entrada)
+  - appliesTo: array de reference → servicePage, no una sola referencia. Las mismas
+    colecciones de boda salen en fotógrafo, videógrafo y /pricing/, y en las dos caras
+    de idioma de cada una; con una referencia única había que duplicar la entrada por
+    página — el bug de precios contradictorios que la regla 2 evita.
 ```
 
 ### `testimonial`

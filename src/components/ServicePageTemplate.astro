@@ -13,6 +13,7 @@ import Hero from './Hero.astro';
 import Breadcrumbs from './Breadcrumbs.astro';
 import AnswerBlock from './AnswerBlock.astro';
 import ProseSection from './ProseSection.astro';
+import PortableText from './PortableText.astro';
 import BookingSteps from './BookingSteps.astro';
 import PricingTable from './PricingTable.astro';
 import TestimonialList from './TestimonialList.astro';
@@ -107,7 +108,7 @@ const jsonLd = servicePageGraph({
           <ProseSection
             heading={section.heading}
             note={section.note}
-            paragraphs={section.paragraphs}
+            body={section.body}
           />
         ) : (
           <BookingSteps heading={section.heading} steps={section.steps} />
@@ -123,7 +124,7 @@ const jsonLd = servicePageGraph({
         caption={content.pricing.note}
         highlight={pricingHighlight}
       />
-      {content.pricing.afterTable.map((paragraph) => <p>{paragraph.join('')}</p>)}
+      <PortableText blocks={content.pricing.afterTable} />
       <p class="pricing-section__addons">{content.pricing.addOns}</p>
       <CTAWhatsApp
         label={content.pricing.ctaLabel}
@@ -139,7 +140,7 @@ const jsonLd = servicePageGraph({
           <ProseSection
             heading={section.heading}
             note={section.note}
-            paragraphs={section.paragraphs}
+            body={section.body}
           />
         ) : (
           <BookingSteps heading={section.heading} steps={section.steps} />

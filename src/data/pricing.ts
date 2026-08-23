@@ -89,10 +89,10 @@ export function weddingHighlight(lang: Lang): string {
 /**
  * Las colecciones de boda en la forma de `pricingCatalog`, resueltas a un idioma.
  *
- * `appliesTo` queda vacío a propósito: en Sanity es una referencia única a un
- * `servicePage`, pero estas mismas colecciones salen en tres páginas —fotógrafo,
- * videógrafo y `/pricing/`— así que una referencia única no las puede modelar. Ver la
- * nota de reutilización en docs/PLAN.md.
+ * `appliesTo` queda vacío mientras el CMS no esté conectado: aquí no hay documentos de
+ * Sanity a los que referenciar. El campo ya es un array —las mismas colecciones salen en
+ * fotógrafo, videógrafo y `/pricing/`, en sus dos idiomas— así que al conectar Sanity se
+ * rellena sin cambiar el tipo.
  */
 export function getWeddingPricing(lang: Lang): readonly PricingEntry[] {
   return WEDDING_COLLECTIONS.map((collection) => ({
@@ -102,7 +102,7 @@ export function getWeddingPricing(lang: Lang): readonly PricingEntry[] {
     price: collection.price,
     coverage: collection.coverage[lang],
     includes: [collection.includes[lang]],
-    appliesTo: { _ref: '' },
+    appliesTo: [],
   }));
 }
 

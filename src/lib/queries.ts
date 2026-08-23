@@ -5,6 +5,8 @@
  * endpoints, etc.) tenga el contrato ya tipado.
  */
 
+import type { PortableTextBlock } from './richtext.ts';
+
 export type Lang = 'en' | 'es';
 export type City = 'wpb' | 'psl';
 export type PageType = 'event' | 'subscription' | 'hub' | 'aggregate' | 'about';
@@ -76,7 +78,13 @@ export interface PricingEntry {
   readonly price: number;
   readonly coverage: string;
   readonly includes: readonly string[];
-  readonly appliesTo: { readonly _ref: string };
+  /**
+   * Todas las páginas que muestran esta colección. Es un array porque las colecciones de
+   * boda salen a la vez en fotógrafo, videógrafo y `/pricing/`, y en las dos caras de
+   * idioma de cada una — una referencia única obligaría a duplicar la entrada por
+   * página, que es el bug de precios contradictorios que la regla 2 evita.
+   */
+  readonly appliesTo: readonly { readonly _ref: string }[];
 }
 
 export interface PricingCatalogDoc {
@@ -93,7 +101,8 @@ export const pricingCatalogQuery = /* groq */ `
 
 export interface ServicePageSection {
   readonly title: string;
-  readonly body: string;
+  /** Portable Text: los párrafos llevan enlaces en línea, un `string` no los admite. */
+  readonly body: readonly PortableTextBlock[];
   readonly images?: readonly SanityImage[];
 }
 
