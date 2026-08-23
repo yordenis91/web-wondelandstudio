@@ -100,11 +100,18 @@ const ogLocaleAlt = lang === 'en' ? 'es_US' : 'en_US';
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    {/*
+      La fuente se autoaloja (ver el @font-face de global.css), así que no hay
+      `preconnect` a Google: no hay tercer origen al que conectarse. El `preload` la
+      pide en paralelo al CSS en vez de esperar a que el navegador descubra el
+      @font-face al parsearlo, que es lo que retrasa el texto.
+    */}
     <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      href="/fonts/montserrat-variable.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
     />
 
     {

@@ -118,12 +118,26 @@ defecto razonable.
 | Escala H1–H5 | `clamp()` fluido, min/max tomados de los breakpoints desktop/mobile del CSS original (H1: 48px móvil → 60px desktop, y así en cascada) | Evita duplicar reglas por media query manteniendo el mismo rango de tamaños que ya existía |
 | `--text-eyebrow` | 13px, uppercase, `letter-spacing: 0.08em`, color acento | El label pequeño sobre cada H1 ("SESIONES FOTOGRÁFICAS...", "ESTUDIO FOTOGRÁFICO Y DE VIDEO...") — es el otro único lugar donde vive el acento, ver 1.1 |
 
-Carga vía Google Fonts (`fonts.googleapis.com`, con `preconnect` +
-`font-display: swap`) en vez de autoalojada — pendiente de revisar si vale la
-pena autoalojar los `.woff2` para recortar el round-trip externo, dado el
-presupuesto de LCP < 2.0s de CLAUDE.md. No es bloqueante hoy porque el peso
-de Montserrat en 3 cortes (400/600/700) es bajo, pero es la primera
-optimización a probar si Lighthouse marca algo en el bloque de fuentes.
+**Autoalojada, decidido con datos.** Se sirve desde `/fonts/montserrat-variable.woff2`,
+no desde el CDN de Google. Medido con Lighthouse móvil sobre la misma página:
+
+| | Google Fonts CDN | Autoalojada |
+|---|---|---|
+| Performance | 90 | **100** |
+| Best Practices | 96 | **100** |
+| LCP | 1.4 s | **1.2 s** |
+| Errores de consola | 1 | **0** |
+
+El `<link>` externo costaba 743 ms de render-blocking: dos conexiones nuevas
+(`googleapis` para el CSS, `gstatic` para el `.woff2`) antes de poder pintar
+texto. Autoalojada son cero orígenes de terceros.
+
+Es **una sola fuente variable de 37 KB** que cubre los pesos 400-700, en vez de
+tres archivos estáticos, y solo el subset `latin`: su `unicode-range` incluye
+ñ, los acentos, ¿ y ¡, así que el español queda cubierto sin traer los 70 KB de
+`latin-ext` (alfabeto centroeuropeo que el sitio no usa). Se precarga con
+`<link rel="preload">` y usa `font-display: swap`, así que nunca hay texto
+invisible.
 
 ---
 
@@ -189,7 +203,7 @@ documento está desactualizado — hay que corregirlo, no al revés.
 ## 7. Abierto — pendiente de definir
 
 - Fallback de la grilla de portafolio en touch/móvil (sección 1.2)
-- Autoalojar Montserrat vs. Google Fonts CDN, según lo que diga Lighthouse
+- [x] ~~Autoalojar Montserrat vs. Google Fonts CDN~~ — resuelto con medición, ver §2
 - Tratamiento del hero: imagen estática confirmado por CLAUDE.md (regla 8,
   "el hero es imagen, nunca video autoplay"), pero el crop/overlay/tratamiento
   de color sobre la imagen del hero no está especificado todavía
