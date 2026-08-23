@@ -1,0 +1,21 @@
+---
+/**
+ * `/es/sobre-lisandra/` — pageType: about. Contenido literal de
+ * `docs/copy/about-lisandra-copydeck.md` (versión ES, escrita nativa — H1 optimizado a
+ * intención de búsqueda directa en vez de traducir "Meet Lisandra" literal).
+ */
+import AboutPageTemplate from '../../../components/AboutPageTemplate.astro';
+import { ABOUT_LISANDRA } from '../../../content/about-lisandra.ts';
+
+const lang = 'es' as const;
+const path = '/es/sobre-lisandra/';
+---
+
+<AboutPageTemplate
+  path={path}
+  lang={lang}
+  content={ABOUT_LISANDRA[lang]}
+  jobTitle="Directora Creativa y Fotógrafa Principal"
+  heroImage={{ src: '/hero-placeholder.svg', width: 1600, height: 900 }}
+  utmCampaign="about-lisandra-es"
+/>
