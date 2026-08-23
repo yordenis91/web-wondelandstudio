@@ -1,0 +1,57 @@
+---
+/**
+ * Pasos numerados ("How booking works" / "Cómo se reserva").
+ *
+ * Es una lista ordenada de verdad, no párrafos con números escritos a mano: el orden es
+ * semántico —cada paso ocurre después del anterior— y un lector de pantalla lo anuncia
+ * como "lista de 5 elementos, elemento 1 de 5".
+ */
+interface Step {
+  /** La parte en negrita que abre el paso: "Message us", "Reserva la fecha"… */
+  lead: string;
+  rest: string;
+}
+
+interface Props {
+  heading: string;
+  steps: readonly Step[];
+  id?: string;
+}
+
+const { heading, steps, id } = Astro.props;
+---
+
+<section class="steps" id={id}>
+  <h2>{heading}</h2>
+  <ol class="steps__list">
+    {
+      steps.map((step) => (
+        <li>
+          <strong>{step.lead}</strong> {step.rest}
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<style>
+  .steps {
+    padding-block: var(--space-6);
+  }
+
+  .steps__list {
+    max-width: 70ch;
+    margin: 0;
+    padding-inline-start: 1.3em;
+    line-height: 1.7;
+  }
+
+  .steps__list li {
+    margin-block-end: var(--space-2);
+  }
+
+  .steps__list li::marker {
+    color: var(--color-accent);
+    font-weight: 700;
+  }
+</style>

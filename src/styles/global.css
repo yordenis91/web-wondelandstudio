@@ -1,6 +1,32 @@
 @import './tokens.css';
 
 /**
+ * Montserrat autoalojada, no desde el CDN de Google.
+ *
+ * El `<link>` a fonts.googleapis.com costaba 743 ms de render-blocking medidos con
+ * Lighthouse: dos conexiones nuevas (googleapis para el CSS, gstatic para el .woff2)
+ * antes de poder pintar texto. Sirviéndola desde el mismo origen desaparecen las dos.
+ *
+ * Es **una sola** fuente variable de 37 KB que cubre los pesos 400-700, en vez de tres
+ * archivos estáticos. Solo el subset `latin`: su unicode-range (U+0000-00FF y demás)
+ * incluye ñ, los acentos, ¿ y ¡, así que el español está cubierto sin traer los 70 KB
+ * de `latin-ext`, que es alfabeto centroeuropeo que el sitio no usa.
+ *
+ * `font-display: swap` mantiene el texto visible desde el primer pintado con la fuente
+ * de sistema, y cambia a Montserrat al cargar — nunca hay texto invisible.
+ */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/montserrat-variable.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/**
  * Reset + estilos base. Deliberadamente lean: nada de grid de Bootstrap,
  * soporte RTL, WooCommerce ni prefijos -webkit-box/-ms-flexbox — Astro
  * compila para navegadores modernos, no hace falta esa capa de compatibilidad.

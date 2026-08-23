@@ -220,14 +220,13 @@ con Lisandra, o decisiones de negocio.
 - [x] **Corrección de link ya aplicada:** el link a `/port-st-lucie/wedding-photographer/`
   se corrigió a `/port-st-lucie/#wedding` en los cuatro lugares donde aparecía (deck de
   boda foto y video, EN y ES) — ver sección 3.4.
-- **Conflicto sin resolver: el mínimo de 60 palabras del `answerParagraph`.** El esquema
-  de Sanity (`studio/schemaTypes/servicePage.ts`) rechaza el guardado por debajo de 60
-  palabras, pero **cinco párrafos ya aprobados en `docs/copy/` están por debajo**:
-  about-lisandra EN (58), city-hubs WPB EN (59), PSL EN (57), WPB ES (59), PSL ES (58).
-  Tal como está, ese contenido no se puede cargar en el CMS. `CLAUDE.md` solo fija
-  "máx 65 palabras", sin mínimo, y es la autoridad — `AnswerBlock.astro` valida solo el
-  máximo. Hay que decidir: relajar el mínimo en Sanity (recomendado, alinea con
-  CLAUDE.md) o reescribir los cinco párrafos para que lleguen a 60.
+- [x] **Mínimo de 60 palabras del `answerParagraph`: relajado.** El esquema de Sanity
+  rechazaba por debajo de 60, pero cinco párrafos ya aprobados están en 57-59
+  (about-lisandra EN 58, city-hubs WPB EN 59 / PSL EN 57 / WPB ES 59 / PSL ES 58) y no
+  se habrían podido cargar. Ahora los dos límites tienen pesos distintos: **error** por
+  encima de 65 (la única cifra que fija CLAUDE.md) y **aviso** por debajo de 60 (guía
+  editorial, deja guardar). Los umbrales viven en `WordCountInput.tsx` y los importa la
+  validación, para que la cifra no se duplique.
 - [x] **Consistencia del `@id` de `Person` verificada.** `wpb-wedding-photographer-copydeck.md`
   (campo `founder` de `Organization`) y `about-lisandra-copydeck.md` (declaración
   completa) usan ambos

@@ -1,0 +1,193 @@
+---
+/**
+ * Plantilla de página de servicio (`pageType: event`).
+ *
+ * Las dos caras de idioma de una misma página comparten estructura y difieren solo en
+ * contenido, así que la estructura vive aquí una vez y cada `.astro` de `pages/` queda
+ * en unas pocas líneas: qué contenido, qué ruta, qué servicio hermano. Es lo que hace
+ * que replicar a las 15 páginas de Fase 1 sea añadir contenido, no maquetar de nuevo.
+ */
+import Layout from './Layout.astro';
+import Header from './Header.astro';
+import Hero from './Hero.astro';
+import Breadcrumbs from './Breadcrumbs.astro';
+import AnswerBlock from './AnswerBlock.astro';
+import ProseSection from './ProseSection.astro';
+import BookingSteps from './BookingSteps.astro';
+import PricingTable from './PricingTable.astro';
+import TestimonialList from './TestimonialList.astro';
+import FAQ from './FAQ.astro';
+import CTAWhatsApp from './CTAWhatsApp.astro';
+
+import type { PageContent } from '../content/wpb-wedding-photographer.ts';
+import type { Lang, City } from '../i18n/routes.ts';
+import type { PricingEntry, TestimonialDoc } from '../lib/queries.ts';
+import { servicePageGraph, serviceId, type OfferInput } from '../lib/schema.ts';
+
+interface Props {
+  path: string;
+  lang: Lang;
+  city: City;
+  content: PageContent;
+  pricing: readonly PricingEntry[];
+  pricingHighlight: string;
+  /** Ofertas para el `@graph`, del mismo origen que la tabla visible. */
+  offers: readonly OfferInput[];
+  serviceName: string;
+  serviceType: string;
+  areaServed: string;
+  /** Ruta de la página hermana, para el `isRelatedTo` recíproco. */
+  relatedServicePath?: string;
+  /** Testimonios ya consultados. Vacío mientras no haya ninguno verificado. */
+  testimonials?: readonly TestimonialDoc[];
+  heroImage: { src: string; width: number; height: number };
+  utmCampaign: string;
+}
+
+const {
+  path,
+  lang,
+  city,
+  content,
+  pricing,
+  pricingHighlight,
+  offers,
+  serviceName,
+  serviceType,
+  areaServed,
+  relatedServicePath,
+  testimonials = [],
+  heroImage,
+  utmCampaign,
+} = Astro.props;
+
+const jsonLd = servicePageGraph({
+  service: {
+    path,
+    name: serviceName,
+    serviceType,
+    city,
+    areaServed,
+    catalogs: [{ name: serviceName, offers }],
+    relatedServiceId: relatedServicePath ? serviceId(relatedServicePath) : undefined,
+  },
+  faqs: content.faqs,
+  breadcrumbs: content.breadcrumbs,
+});
+---
+
+<Layout
+  path={path}
+  title={content.metaTitle}
+  description={content.metaDescription}
+  jsonLd={jsonLd}
+>
+  <Header slot="header" path={path} />
+
+  <Hero
+    eyebrow={content.hero.eyebrow}
+    heading={content.h1}
+    intro={undefined}
+    image={{
+      src: heroImage.src,
+      alt: content.hero.alt,
+      width: heroImage.width,
+      height: heroImage.height,
+    }}
+  />
+
+  <div class="container">
+    <Breadcrumbs items={content.breadcrumbs} lang={lang} />
+
+    <AnswerBlock text={content.answerParagraph} />
+
+    {
+      content.sectionsBeforePricing.map((section) =>
+        section.kind === 'prose' ? (
+          <ProseSection
+            heading={section.heading}
+            note={section.note}
+            paragraphs={section.paragraphs}
+          />
+        ) : (
+          <BookingSteps heading={section.heading} steps={section.steps} />
+        ),
+      )
+    }
+
+    <section class="pricing-section" id="pricing">
+      <h2>{content.pricing.heading}</h2>
+      <PricingTable
+        entries={pricing}
+        lang={lang}
+        caption={content.pricing.note}
+        highlight={pricingHighlight}
+      />
+      {content.pricing.afterTable.map((paragraph) => <p>{paragraph.join('')}</p>)}
+      <p class="pricing-section__addons">{content.pricing.addOns}</p>
+      <CTAWhatsApp
+        label={content.pricing.ctaLabel}
+        message={content.pricing.ctaMessage}
+        location="pricing"
+        utm={{ source: 'site', medium: 'pricing', campaign: utmCampaign }}
+      />
+    </section>
+
+    {
+      content.sectionsAfterPricing.map((section) =>
+        section.kind === 'prose' ? (
+          <ProseSection
+            heading={section.heading}
+            note={section.note}
+            paragraphs={section.paragraphs}
+          />
+        ) : (
+          <BookingSteps heading={section.heading} steps={section.steps} />
+        ),
+      )
+    }
+
+    {/* No renderiza nada mientras no haya testimonios verificados (regla 5). */}
+    <TestimonialList
+      testimonials={testimonials}
+      heading={content.testimonialsHeading}
+      city={city}
+      category="wedding"
+    />
+
+    <FAQ faqs={content.faqs} heading={content.faqHeading} />
+
+    <section class="final-cta">
+      <h2>{content.finalCta.heading}</h2>
+      <p>{content.finalCta.body}</p>
+      <CTAWhatsApp
+        label={content.finalCta.label}
+        message={content.finalCta.message}
+        location="final-cta"
+        utm={{ source: 'site', medium: 'cta-final', campaign: utmCampaign }}
+        variant="fill"
+      />
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .pricing-section,
+  .final-cta {
+    padding-block: var(--space-6);
+  }
+
+  .pricing-section p,
+  .final-cta p {
+    max-width: 70ch;
+    line-height: 1.7;
+  }
+
+  .pricing-section__addons {
+    color: var(--color-fg-muted);
+  }
+
+  .final-cta {
+    border-block-start: 1px solid var(--color-border);
+  }
+</style>

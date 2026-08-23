@@ -63,6 +63,16 @@ const ogLocaleAlt = lang === 'en' ? 'es_US' : 'en_US';
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+    {/*
+      Marca que hay JavaScript, antes del primer pintado. El menú móvil solo se colapsa
+      si esta clase está: sin JS la navegación se sirve desplegada y usable, y como esto
+      corre en el <head> y no al final del body, nunca se ve el menú abierto un instante
+      antes de cerrarse.
+    */}
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+
     <title>{title}</title>
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
@@ -90,11 +100,18 @@ const ogLocaleAlt = lang === 'en' ? 'es_US' : 'en_US';
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    {/*
+      La fuente se autoaloja (ver el @font-face de global.css), así que no hay
+      `preconnect` a Google: no hay tercer origen al que conectarse. El `preload` la
+      pide en paralelo al CSS en vez de esperar a que el navegador descubra el
+      @font-face al parsearlo, que es lo que retrasa el texto.
+    */}
     <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      href="/fonts/montserrat-variable.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
     />
 
     {

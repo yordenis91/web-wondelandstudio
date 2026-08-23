@@ -66,11 +66,17 @@ const money = new Intl.NumberFormat(lang === 'en' ? 'en-US' : 'es-US', {
               </td>
               <td>{entry.coverage}</td>
               <td>
-                <ul class="pricing__includes">
-                  {entry.includes.map((item) => (
-                    <li>{item}</li>
-                  ))}
-                </ul>
+                {/* Una sola frase se pinta como frase. Una lista de un bullet parece un
+                    error de maquetación, y el copy deck da texto corrido, no listas. */}
+                {entry.includes.length === 1 ? (
+                  entry.includes[0]
+                ) : (
+                  <ul class="pricing__includes">
+                    {entry.includes.map((item) => (
+                      <li>{item}</li>
+                    ))}
+                  </ul>
+                )}
               </td>
             </tr>
           );

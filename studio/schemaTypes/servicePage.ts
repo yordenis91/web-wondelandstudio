@@ -1,7 +1,12 @@
 import { defineArrayMember, defineField, defineType } from 'sanity';
 
 import { SeoPreviewInput } from '../components/SeoPreviewInput';
-import { WordCountInput } from '../components/WordCountInput';
+import {
+  MAX_WORDS,
+  MIN_WORDS,
+  WordCountInput,
+  countWords,
+} from '../components/WordCountInput';
 
 /**
  * Una por combinación servicio+ciudad+idioma (CLAUDE.md, modelo de contenido).
@@ -73,18 +78,38 @@ export const servicePage = defineType({
     defineField({
       name: 'answerParagraph',
       title: 'Párrafo-respuesta',
-      description: 'Debe ser 60-65 palabras. Rechaza el guardado si excede.',
+      description:
+        'Máximo 65 palabras (obligatorio). Por debajo de 60 avisa pero deja guardar: ' +
+        'cinco párrafos ya aprobados están en 57-59.',
       type: 'text',
       group: 'content',
       components: { input: WordCountInput },
-      validation: (Rule) =>
+      /**
+       * Dos niveles distintos a propósito:
+       *
+       * - **Error** por encima de 65. Es la única cifra que fija CLAUDE.md
+       *   ("answerParagraph (máx 65 palabras, validado)") y por tanto la regla dura.
+       * - **Aviso** por debajo de 60. Es guía editorial —un párrafo corto compite peor
+       *   en AI Overviews— pero no puede rechazar el guardado: cinco párrafos ya
+       *   aprobados en docs/copy/ caen en 57-59 palabras (about-lisandra EN 58,
+       *   city-hubs WPB EN 59 / PSL EN 57 / WPB ES 59 / PSL ES 58). Con un mínimo duro,
+       *   ese contenido no se podría cargar en el CMS.
+       */
+      validation: (Rule) => [
         Rule.required().custom((value: string | undefined) => {
-          const count = (value ?? '').trim().split(/\s+/).filter(Boolean).length;
+          const count = countWords(value);
           if (count === 0) return true;
-          if (count < 60) return `Solo ${count} palabras — mínimo 60`;
-          if (count > 65) return `${count} palabras — máximo 65, sobran ${count - 65}`;
+          if (count > MAX_WORDS) {
+            return `${count} palabras — máximo ${MAX_WORDS}, sobran ${count - MAX_WORDS}`;
+          }
           return true;
         }),
+        Rule.warning().custom((value: string | undefined) => {
+          const count = countWords(value);
+          if (count === 0 || count >= MIN_WORDS) return true;
+          return `Solo ${count} palabras. Por debajo de ${MIN_WORDS} compite peor en AI Overviews — se puede guardar, pero revísalo.`;
+        }),
+      ],
     }),
     defineField({
       name: 'sections',
