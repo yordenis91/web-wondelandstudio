@@ -122,7 +122,77 @@ export const servicePage = defineType({
           name: 'section',
           fields: [
             defineField({ name: 'title', title: 'Título', type: 'string', validation: (Rule) => Rule.required() }),
-            defineField({ name: 'body', title: 'Cuerpo', type: 'text', validation: (Rule) => Rule.required() }),
+            /**
+             * Portable Text, no texto plano.
+             *
+             * Los copy decks llevan enlaces dentro de los párrafos ("entra directamente
+             * a [video de bodas en West Palm Beach](...)"), y un `text` plano no los
+             * puede representar: obligaba a partir el párrafo o a perder el enlace.
+             *
+             * Deliberadamente pobre: solo párrafos, listas, negrita, cursiva y enlace.
+             * Sin encabezados —el H2 de la sección es el campo `title`, y permitir otro
+             * aquí rompería la jerarquía de la página— y sin estilos de color, que es
+             * decisión de diseño y no de contenido.
+             */
+            defineField({
+              name: 'body',
+              title: 'Cuerpo',
+              type: 'array',
+              of: [
+                defineArrayMember({
+                  type: 'block',
+                  styles: [{ title: 'Párrafo', value: 'normal' }],
+                  lists: [
+                    { title: 'Viñetas', value: 'bullet' },
+                    { title: 'Numerada', value: 'number' },
+                  ],
+                  marks: {
+                    decorators: [
+                      { title: 'Negrita', value: 'strong' },
+                      { title: 'Cursiva', value: 'em' },
+                    ],
+                    annotations: [
+                      {
+                        name: 'link',
+                        type: 'object',
+                        title: 'Enlace',
+                        fields: [
+                          defineField({
+                            name: 'href',
+                            title: 'Destino',
+                            type: 'string',
+                            description:
+                              'Ruta interna con barra inicial y final (/es/precios/), ancla (#wedding), o URL completa.',
+                            /**
+                             * Un enlace interno sin barra final acaba en una redirección
+                             * o en un 404, porque el sitio se sirve con
+                             * `trailingSlash: always`. Ya nos pasó una vez con un enlace
+                             * a una página que no existía; esto lo atrapa al guardar en
+                             * vez de en producción.
+                             */
+                            validation: (Rule) =>
+                              Rule.required().custom((value?: string) => {
+                                if (!value) return 'El enlace necesita un destino';
+                                if (/^https?:\/\//.test(value)) return true;
+                                if (/^#[a-z0-9-]+$/.test(value)) return true;
+                                if (!value.startsWith('/')) {
+                                  return 'Una ruta interna empieza por "/" (o usa una URL completa con https://)';
+                                }
+                                const [path] = value.split('#');
+                                if (!path.endsWith('/')) {
+                                  return 'Una ruta interna acaba en "/" — el sitio usa trailingSlash: always';
+                                }
+                                return true;
+                              }),
+                          }),
+                        ],
+                      },
+                    ],
+                  },
+                }),
+              ],
+              validation: (Rule) => Rule.required().min(1),
+            }),
             defineField({
               name: 'images',
               title: 'Imágenes',
@@ -130,7 +200,22 @@ export const servicePage = defineType({
               of: [{ type: 'image', options: { hotspot: true } }],
             }),
           ],
-          preview: { select: { title: 'title', subtitle: 'body' } },
+          preview: {
+            select: { title: 'title', body: 'body' },
+            prepare({ title, body }) {
+              /* `body` ya no es una cadena: hay que extraer el texto de los bloques para
+                 que la lista del Studio siga siendo legible. */
+              const text = Array.isArray(body)
+                ? body
+                    .filter((b: { _type?: string }) => b?._type === 'block')
+                    .flatMap((b: { children?: { text?: string }[] }) =>
+                      (b.children ?? []).map((c) => c.text ?? ''),
+                    )
+                    .join('')
+                : '';
+              return { title, subtitle: text.slice(0, 80) };
+            },
+          },
         }),
       ],
     }),

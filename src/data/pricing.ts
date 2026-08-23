@@ -17,19 +17,37 @@ import type { Lang } from '../i18n/routes.ts';
  * Una colección con sus dos caras de idioma. El nombre no siempre se comparte —en
  * español "The Luxury Collection" es "Colección de Lujo"— así que el par se declara
  * junto y no se traduce al vuelo.
+ *
+ * `includes` tiene **tres ángulos**, no uno. El precio y la cobertura de "The Full
+ * Experience" son el mismo número en la página de fotografía, en la de video y en
+ * `/pricing/` — eso es lo que la regla 2 exige que viva en un solo lugar — pero la
+ * frase de "qué incluye" no es la misma texto en las tres: la página de fotografía la
+ * redacta con foco en la foto ("Photography + cinematic film with vows..."), la de
+ * video con foco en el film ("Cinematic film with real vows..."), y `/pricing/` con una
+ * redacción condensada para caber junto a otros cuatro catálogos en la misma página
+ * ("Photography + cinematic film + drone + reel"). Es la misma colección descrita desde
+ * tres ángulos de venta, comprobado carácter por carácter contra los tres copy decks.
  */
 interface Collection {
   readonly tier: Tier;
   readonly price: number;
   readonly name: Readonly<Record<Lang, string>>;
   readonly coverage: Readonly<Record<Lang, string>>;
-  readonly includes: Readonly<Record<Lang, string>>;
+  readonly includes: {
+    readonly photography: Readonly<Record<Lang, string>>;
+    readonly film: Readonly<Record<Lang, string>>;
+    readonly summary: Readonly<Record<Lang, string>>;
+  };
 }
 
+/** Qué página está pidiendo el catálogo — decide qué redacción de `includes` usar. */
+export type PricingAngle = 'photography' | 'film' | 'summary';
+
 /**
- * Colecciones de boda. Texto tomado literal de
+ * Colecciones de boda. Precio, nombre y cobertura tomados literal de
  * `docs/copy/wpb-wedding-photographer-copydeck.md` §"Wedding collections and pricing"
- * y de su equivalente español.
+ * (idéntico en `wpb-wedding-videographer-copydeck.md`, es la misma tabla). El texto de
+ * `includes.film` sale del segundo deck, `includes.photography` del primero.
  */
 const WEDDING_COLLECTIONS: readonly Collection[] = [
   {
@@ -37,7 +55,11 @@ const WEDDING_COLLECTIONS: readonly Collection[] = [
     price: 1200,
     name: { en: 'Elopement / Civil', es: 'Elopement / Civil' },
     coverage: { en: '3 hours', es: '3 horas' },
-    includes: { en: 'Photography only', es: 'Solo fotografía' },
+    includes: {
+      photography: { en: 'Photography only', es: 'Solo fotografía' },
+      film: { en: 'Photography only', es: 'Solo fotografía' },
+      summary: { en: 'Photography only', es: 'Solo fotografía' },
+    },
   },
   {
     tier: 'essential',
@@ -45,8 +67,15 @@ const WEDDING_COLLECTIONS: readonly Collection[] = [
     name: { en: 'The Essential Story', es: 'The Essential Story' },
     coverage: { en: '6 hours', es: '6 horas' },
     includes: {
-      en: 'Photography + short film (music clip)',
-      es: 'Fotografía + video corto (music clip)',
+      photography: {
+        en: 'Photography + short film (music clip)',
+        es: 'Fotografía + video corto (music clip)',
+      },
+      film: {
+        en: 'Short film, 3–5 min, music clip',
+        es: 'Video corto de 3 a 5 min, music clip',
+      },
+      summary: { en: 'Photography + short film', es: 'Fotografía + video corto' },
     },
   },
   {
@@ -55,8 +84,18 @@ const WEDDING_COLLECTIONS: readonly Collection[] = [
     name: { en: 'The Full Experience', es: 'The Full Experience' },
     coverage: { en: '8 hours', es: '8 horas' },
     includes: {
-      en: 'Photography + cinematic film with vows + drone + vertical reel',
-      es: 'Fotografía + video cine con votos + drone + reel',
+      photography: {
+        en: 'Photography + cinematic film with vows + drone + vertical reel',
+        es: 'Fotografía + video cine con votos + drone + reel',
+      },
+      film: {
+        en: 'Cinematic film with real vows + drone + vertical reel',
+        es: 'Video cine con votos reales + drone + reel vertical',
+      },
+      summary: {
+        en: 'Photography + cinematic film + drone + reel',
+        es: 'Fotografía + video cine + drone + reel',
+      },
     },
   },
   {
@@ -65,8 +104,18 @@ const WEDDING_COLLECTIONS: readonly Collection[] = [
     name: { en: 'The Tradition', es: 'The Tradition' },
     coverage: { en: '8 hours', es: '8 horas' },
     includes: {
-      en: 'Everything above + second photographer + printed album',
-      es: 'Todo lo anterior + segundo fotógrafo + álbum impreso',
+      photography: {
+        en: 'Everything above + second photographer + printed album',
+        es: 'Todo lo anterior + segundo fotógrafo + álbum impreso',
+      },
+      film: {
+        en: 'Same film, plus second photographer and printed album',
+        es: 'El mismo video, más segundo fotógrafo y álbum impreso',
+      },
+      summary: {
+        en: 'Everything above + second photographer + album',
+        es: 'Todo lo anterior + segundo fotógrafo + álbum',
+      },
     },
   },
   {
@@ -75,8 +124,18 @@ const WEDDING_COLLECTIONS: readonly Collection[] = [
     name: { en: 'The Luxury Collection', es: 'Colección de Lujo' },
     coverage: { en: '10 hours', es: '10 horas' },
     includes: {
-      en: 'Photography + extended film + premium album',
-      es: 'Fotografía + video extendido + álbum premium',
+      photography: {
+        en: 'Photography + extended film + premium album',
+        es: 'Fotografía + video extendido + álbum premium',
+      },
+      film: {
+        en: 'Extended feature film + premium album',
+        es: 'Película extendida + álbum premium',
+      },
+      summary: {
+        en: 'Photography + extended film + premium album',
+        es: 'Fotografía + video extendido + álbum premium',
+      },
     },
   },
 ];
@@ -87,32 +146,31 @@ export function weddingHighlight(lang: Lang): string {
 }
 
 /**
- * Las colecciones de boda en la forma de `pricingCatalog`, resueltas a un idioma.
- *
- * `appliesTo` queda vacío a propósito: en Sanity es una referencia única a un
- * `servicePage`, pero estas mismas colecciones salen en tres páginas —fotógrafo,
- * videógrafo y `/pricing/`— así que una referencia única no las puede modelar. Ver la
- * nota de reutilización en docs/PLAN.md.
+ * Las colecciones de boda ya resueltas a un idioma y a un ángulo de venta — la misma
+ * forma que producirá `resolvePricingEntry()` una vez conectado Sanity.
  */
-export function getWeddingPricing(lang: Lang): readonly PricingEntry[] {
+export function getWeddingPricing(
+  lang: Lang,
+  angle: PricingAngle,
+): readonly PricingEntry[] {
   return WEDDING_COLLECTIONS.map((collection) => ({
     name: collection.name[lang],
     tier: collection.tier,
     billingType: 'oneTime' as const,
     price: collection.price,
     coverage: collection.coverage[lang],
-    includes: [collection.includes[lang]],
-    appliesTo: { _ref: '' },
+    includes: [collection.includes[angle][lang]],
   }));
 }
 
 /** Las mismas colecciones en la forma que consume el JSON-LD. */
 export function getWeddingOffers(
   lang: Lang,
+  angle: PricingAngle,
 ): readonly { name: string; price: number; description: string }[] {
   return WEDDING_COLLECTIONS.map((collection) => ({
     name: collection.name[lang],
     price: collection.price,
-    description: `${collection.coverage[lang]}, ${collection.includes[lang].toLowerCase()}`,
+    description: `${collection.coverage[lang]}, ${collection.includes[angle][lang].toLowerCase()}`,
   }));
 }

@@ -73,23 +73,70 @@ export const pricingCatalog = defineType({
             defineField({
               name: 'coverage',
               title: 'Cobertura',
-              description: 'Ej. "8 horas", "1 sesión / mes"',
+              description:
+                'Ej. "8 horas", "1 sesión / mes". Opcional: un tier de un solo producto ' +
+                '(ej. maternidad) no siempre tiene una noción de duración que valga la pena ' +
+                'destacar en su propia columna.',
               type: 'string',
-              validation: (Rule) => Rule.required(),
             }),
-            defineField({
-              name: 'includes',
-              title: 'Incluye',
-              type: 'array',
-              of: [{ type: 'string' }],
-              validation: (Rule) => Rule.required().min(1),
-            }),
+            /**
+             * `appliesTo` es un array de `{ page, includes }`, no una sola lista de
+             * páginas con un `includes` compartido.
+             *
+             * Precio, nombre y cobertura sí son un solo número para todas las páginas
+             * que muestran esta colección — eso es lo que la regla 2 exige. Pero el
+             * texto de "qué incluye" cambia de redacción según qué vende la página: la
+             * misma colección de $1,850 dice "Photography + short film" en la página de
+             * fotografía y "Short film, 3–5 min, music clip" en la de video —
+             * verificado carácter por carácter contra los dos copy decks de boda,
+             * mismo precio, mismo tier, frase distinta.
+             *
+             * Con un `includes` único a nivel de colección, esa diferencia de
+             * redacción solo se podía resolver duplicando la colección entera —
+             * mismo precio escrito dos veces, el bug exacto que esta regla existe
+             * para evitar. Con el override por página, el precio sigue en un solo
+             * lugar y cada página redacta su propia frase.
+             */
             defineField({
               name: 'appliesTo',
-              title: 'Página a la que pertenece',
-              type: 'reference',
-              to: [{ type: 'servicePage' }],
-              validation: (Rule) => Rule.required(),
+              title: 'Páginas donde aparece',
+              description:
+                'Una entrada por página que muestra esta colección (incluidas las dos caras de idioma), cada una con su propia redacción de "qué incluye".',
+              type: 'array',
+              of: [
+                defineArrayMember({
+                  type: 'object',
+                  name: 'application',
+                  fields: [
+                    defineField({
+                      name: 'page',
+                      title: 'Página',
+                      type: 'reference',
+                      to: [{ type: 'servicePage' }],
+                      validation: (Rule) => Rule.required(),
+                    }),
+                    defineField({
+                      name: 'includes',
+                      title: 'Incluye (redacción de esta página)',
+                      type: 'array',
+                      of: [{ type: 'string' }],
+                      validation: (Rule) => Rule.required().min(1),
+                    }),
+                  ],
+                  preview: {
+                    select: { title: 'page.h1', subtitle: 'page.language' },
+                  },
+                }),
+              ],
+              validation: (Rule) =>
+                Rule.required()
+                  .min(1)
+                  .custom((apps: { page?: { _ref?: string } }[] | undefined) => {
+                    if (!apps) return true;
+                    const refs = apps.map((a) => a.page?._ref).filter(Boolean);
+                    const dupes = refs.length !== new Set(refs).size;
+                    return dupes ? 'La misma página está listada dos veces' : true;
+                  }),
             }),
           ],
           preview: {

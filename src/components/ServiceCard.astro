@@ -1,0 +1,115 @@
+---
+/**
+ * Card de servicio del hub de ciudad. Dos estados, decididos por `SERVICE_MATRIX`
+ * (`i18n/routes.ts`), nunca por este componente:
+ *
+ *  - **Activa**: al menos una entrada `status: active`. Enlaza a su página real.
+ *  - **"Coming soon"**: todas las entradas `planned`. Sin `<a href>` a una URL que no
+ *    existe — el deck de hubs (§0/§8) es explícito: o el ancla del hub o un enlace de
+ *    respaldo (WhatsApp o cruce a otra ciudad), nunca un link roto.
+ *
+ * El precio siempre se pinta ("desde $X"), esté o no la página construida — es
+ * información real del negocio, no depende de que exista la URL.
+ */
+import PortableText from './PortableText.astro';
+import type { PortableTextBlock } from '../lib/richtext.ts';
+
+interface CardLink {
+  readonly label: string;
+  readonly href: string;
+}
+
+interface Props {
+  id?: string;
+  title: string;
+  fromPrice: number;
+  lang: 'en' | 'es';
+  comingSoon: boolean;
+  description?: string;
+  links?: readonly CardLink[];
+  comingSoonBody?: readonly PortableTextBlock[];
+}
+
+const { id, title, fromPrice, lang, comingSoon, description, links = [], comingSoonBody } =
+  Astro.props;
+
+const money = new Intl.NumberFormat(lang === 'en' ? 'en-US' : 'es-US', {
+  style: 'currency',
+  currency: 'USD',
+  maximumFractionDigits: 0,
+});
+const fromLabel = lang === 'en' ? 'from' : 'desde';
+const comingSoonLabel = lang === 'en' ? 'Coming soon' : 'Próximamente';
+---
+
+<li class:list={['service-card', comingSoon && 'service-card--coming-soon']} id={id}>
+  <h3 class="service-card__title">{title}</h3>
+  <p class="service-card__price">
+    {fromLabel} {money.format(fromPrice)}
+    {comingSoon && <span class="service-card__badge">{comingSoonLabel}</span>}
+  </p>
+
+  {description && <p class="service-card__description">{description}</p>}
+
+  {
+    links.length > 0 && (
+      <p class="service-card__links">
+        {links.map((link, index) => (
+          <>
+            {index > 0 && ' · '}
+            <a href={link.href}>{link.label}</a>
+          </>
+        ))}
+      </p>
+    )
+  }
+
+  {
+    comingSoonBody && (
+      <div class="service-card__coming-soon-body">
+        <PortableText blocks={comingSoonBody} />
+      </div>
+    )
+  }
+</li>
+
+<style>
+  .service-card {
+    padding: var(--space-4) 0;
+    border-block-end: 1px solid var(--color-border);
+  }
+
+  .service-card__title {
+    margin-block-end: var(--space-1);
+  }
+
+  .service-card__price {
+    font-weight: 700;
+    color: var(--color-fg-muted);
+    margin-block-end: var(--space-2);
+  }
+
+  .service-card__badge {
+    margin-inline-start: var(--space-2);
+    font-size: var(--text-eyebrow);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-uppercase);
+    font-weight: 600;
+    color: var(--color-accent);
+  }
+
+  .service-card__description,
+  .service-card__coming-soon-body :global(p) {
+    max-width: 60ch;
+    line-height: 1.7;
+  }
+
+  .service-card--coming-soon .service-card__coming-soon-body {
+    color: var(--color-fg-muted);
+    font-style: italic;
+  }
+
+  .service-card__links {
+    margin-block-start: var(--space-2);
+  }
+</style>

@@ -1,0 +1,114 @@
+---
+/**
+ * Matriz de nivel × línea del socio de contenido mensual (`pageType: subscription`).
+ *
+ * `PricingTable.astro` (el de boda) es una fila por colección; esto es dos catálogos
+ * paralelos comparados lado a lado — foto vs. video, al mismo nivel de precio — y esa
+ * forma no cabe en una fila-por-producto sin forzarla (docs del deck de branding §4).
+ *
+ * Tabla HTML semántica: `<th scope="row">` para el nivel, `<th scope="col">` para la
+ * línea, así un lector de pantalla anuncia "Alianza, Enfoque en foto, El Socio de
+ * Crecimiento, $1,500 al mes" en vez de celdas sueltas.
+ */
+import type { MonthlyLevelRow } from '../data/brandPricing.ts';
+import type { Lang } from '../i18n/routes.ts';
+
+interface Props {
+  levels: readonly MonthlyLevelRow[];
+  lang: Lang;
+  caption: string;
+  levelLabel: string;
+  photoLabel: string;
+  videoLabel: string;
+}
+
+const { levels, lang, caption, levelLabel, photoLabel, videoLabel } = Astro.props;
+
+const money = new Intl.NumberFormat(lang === 'en' ? 'en-US' : 'es-US', {
+  style: 'currency',
+  currency: 'USD',
+  maximumFractionDigits: 0,
+});
+
+const monthlySuffix = lang === 'en' ? '/mo' : '/mes';
+---
+
+<div class="subscription">
+  <table class="subscription__table">
+    <caption class="subscription__caption">{caption}</caption>
+    <thead>
+      <tr>
+        <th scope="col">{levelLabel}</th>
+        <th scope="col">{photoLabel}</th>
+        <th scope="col">{videoLabel}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        levels.map((row) => (
+          <tr class={row.highlight ? 'is-highlight' : undefined}>
+            <th scope="row">{row.level}</th>
+            <td>
+              <span class="subscription__name">{row.photo.name}</span>
+              {` — ${money.format(row.photo.price)}${row.photo.priceSuffix ?? ''}${monthlySuffix}`}
+            </td>
+            <td>
+              <span class="subscription__name">{row.video.name}</span>
+              {` — ${money.format(row.video.price)}${row.video.priceSuffix ?? ''}${monthlySuffix}`}
+            </td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .subscription {
+    overflow-x: auto;
+  }
+
+  .subscription__table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: var(--text-small);
+  }
+
+  .subscription__caption {
+    text-align: left;
+    color: var(--color-fg-muted);
+    padding-block-end: var(--space-2);
+    font-style: italic;
+  }
+
+  .subscription__table th,
+  .subscription__table td {
+    border-block-end: 1px solid var(--color-border);
+    padding: var(--space-2);
+    vertical-align: top;
+  }
+
+  .subscription__table thead th {
+    font-size: var(--text-eyebrow);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-uppercase);
+    color: var(--color-fg-muted);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .subscription__table tbody th {
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .subscription__name {
+    font-weight: 700;
+  }
+
+  .is-highlight {
+    background: var(--color-bg-elevated);
+    font-weight: 600;
+  }
+</style>

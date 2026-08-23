@@ -7,32 +7,26 @@
  * páginas hermanas con secciones distintas ("How booking works" en fotografía, "Gear
  * and crew" en vídeo) no necesiten migración de esquema.
  */
-import { isLink, type Paragraph } from '../lib/richtext.ts';
+import PortableText from './PortableText.astro';
+import type { PortableTextBlock } from '../lib/richtext.ts';
 
 interface Props {
   heading: string;
-  paragraphs: readonly Paragraph[];
-  /** Nota en cursiva bajo el H2, antes de los párrafos. */
+  /** El `body` de `servicePage.sections`, tal cual lo devuelve Sanity. */
+  body: readonly PortableTextBlock[];
+  /** Nota en cursiva bajo el H2, antes del cuerpo. */
   note?: string;
   /** Ancla estable para enlazar a esta sección desde otras páginas. */
   id?: string;
 }
 
-const { heading, paragraphs, note, id } = Astro.props;
+const { heading, body, note, id } = Astro.props;
 ---
 
 <section class="prose" id={id}>
   <h2>{heading}</h2>
   {note && <p class="prose__note">{note}</p>}
-  {
-    paragraphs.map((paragraph) => (
-      <p>
-        {paragraph.map((segment) =>
-          isLink(segment) ? <a href={segment.href}>{segment.text}</a> : segment,
-        )}
-      </p>
-    ))
-  }
+  <PortableText blocks={body} />
   <slot />
 </section>
 

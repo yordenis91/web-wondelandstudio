@@ -1,0 +1,68 @@
+---
+/**
+ * Renderiza Portable Text.
+ *
+ * Cubre exactamente lo que el esquema de Sanity permite y nada más: párrafos, listas de
+ * viñetas y numeradas, negrita, cursiva y enlace. Un renderer que soporta más de lo que
+ * el CMS puede producir es código muerto que hay que mantener.
+ *
+ * No usa `@portabletext/to-html` a propósito: son ~15 KB para cubrir un conjunto de
+ * marcas que aquí es cerrado y diminuto, y esto se renderiza en el servidor, así que la
+ * dependencia solo añadiría superficie de build sin quitar trabajo.
+ */
+import PortableTextSpans from './PortableTextSpans.astro';
+import type { PortableTextBlock } from '../lib/richtext.ts';
+
+interface Props {
+  blocks: readonly PortableTextBlock[];
+}
+
+const { blocks } = Astro.props;
+
+/**
+ * Agrupa bloques consecutivos en listas.
+ *
+ * Sanity no anida: emite bloques hermanos marcados con `listItem`, y reconstruir el
+ * `<ul>`/`<ol>` es trabajo del renderer. Sin agrupar saldría una lista por viñeta —
+ * válido en HTML pero mal semánticamente: un lector de pantalla anunciaría "lista de 1
+ * elemento" cinco veces en vez de "lista de 5 elementos".
+ */
+type Group =
+  | { kind: 'prose'; blocks: PortableTextBlock[] }
+  | { kind: 'list'; listItem: 'bullet' | 'number'; blocks: PortableTextBlock[] };
+
+const groups: Group[] = [];
+for (const block of blocks) {
+  if (block._type !== 'block') continue;
+  const last = groups.at(-1);
+
+  if (block.listItem) {
+    if (last?.kind === 'list' && last.listItem === block.listItem) last.blocks.push(block);
+    else groups.push({ kind: 'list', listItem: block.listItem, blocks: [block] });
+    continue;
+  }
+
+  if (last?.kind === 'prose') last.blocks.push(block);
+  else groups.push({ kind: 'prose', blocks: [block] });
+}
+---
+
+{
+  groups.map((group) => {
+    if (group.kind === 'prose') {
+      return group.blocks.map((block) => (
+        <p>
+          <PortableTextSpans block={block} />
+        </p>
+      ));
+    }
+
+    const items = group.blocks.map((block) => (
+      <li>
+        <PortableTextSpans block={block} />
+      </li>
+    ));
+
+    return group.listItem === 'bullet' ? <ul>{items}</ul> : <ol>{items}</ol>;
+  })
+}

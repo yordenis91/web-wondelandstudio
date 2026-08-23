@@ -25,8 +25,8 @@ interface Props {
 const { entries, lang, caption, highlight } = Astro.props;
 
 const L = {
-  en: { collection: 'Collection', investment: 'Investment', coverage: 'Coverage', includes: "What's included", monthly: '/mo', popular: 'Most chosen' },
-  es: { collection: 'Colección', investment: 'Inversión', coverage: 'Cobertura', includes: 'Incluye', monthly: '/mes', popular: 'La más elegida' },
+  en: { collection: 'Collection', investment: 'Investment', coverage: 'Coverage', includes: "What's included", monthly: '/mo', popular: 'Most chosen', from: 'from' },
+  es: { collection: 'Colección', investment: 'Inversión', coverage: 'Cobertura', includes: 'Incluye', monthly: '/mes', popular: 'La más elegida', from: 'desde' },
 }[lang];
 
 /** Formato de moneda del sitio: USD, sin decimales — los precios son redondos. */
@@ -35,6 +35,20 @@ const money = new Intl.NumberFormat(lang === 'en' ? 'en-US' : 'es-US', {
   currency: 'USD',
   maximumFractionDigits: 0,
 });
+
+/**
+ * `coverage` es opcional (un tier de un solo producto, como maternidad, no siempre
+ * tiene una duración que valga la pena destacar). La columna solo se pinta si al
+ * menos una fila la trae — una tabla sin ninguna cobertura no debería tener una
+ * columna "Cobertura" vacía de punta a punta.
+ */
+const hasCoverage = entries.some((entry) => entry.coverage !== undefined);
+/**
+ * `includes` es igual de opcional que `coverage`, por la misma razón: un paquete
+ * genérico (eventos sociales en `/pricing/`) no tiene nada que decir más allá de su
+ * nombre y su precio — una columna "Incluye" vacía en las cuatro filas sería ruido.
+ */
+const hasIncludes = entries.some((entry) => (entry.includes?.length ?? 0) > 0);
 ---
 
 <div class="pricing">
@@ -44,14 +58,15 @@ const money = new Intl.NumberFormat(lang === 'en' ? 'en-US' : 'es-US', {
       <tr>
         <th scope="col">{L.collection}</th>
         <th scope="col">{L.investment}</th>
-        <th scope="col">{L.coverage}</th>
-        <th scope="col">{L.includes}</th>
+        {hasCoverage && <th scope="col">{L.coverage}</th>}
+        {hasIncludes && <th scope="col">{L.includes}</th>}
       </tr>
     </thead>
     <tbody>
       {
         entries.map((entry) => {
           const isHighlight = highlight !== undefined && entry.name === highlight;
+          const includes = entry.includes ?? [];
           return (
             <tr class={isHighlight ? 'is-highlight' : undefined}>
               <th scope="row">
@@ -59,25 +74,28 @@ const money = new Intl.NumberFormat(lang === 'en' ? 'en-US' : 'es-US', {
                 {isHighlight && <span class="pricing__badge">{L.popular}</span>}
               </th>
               <td class="pricing__price">
+                {entry.priceIsFrom && `${L.from} `}
                 {money.format(entry.price)}
                 {entry.billingType === 'monthly' && (
                   <span class="pricing__unit">{L.monthly}</span>
                 )}
               </td>
-              <td>{entry.coverage}</td>
-              <td>
-                {/* Una sola frase se pinta como frase. Una lista de un bullet parece un
-                    error de maquetación, y el copy deck da texto corrido, no listas. */}
-                {entry.includes.length === 1 ? (
-                  entry.includes[0]
-                ) : (
-                  <ul class="pricing__includes">
-                    {entry.includes.map((item) => (
-                      <li>{item}</li>
-                    ))}
-                  </ul>
-                )}
-              </td>
+              {hasCoverage && <td>{entry.coverage}</td>}
+              {hasIncludes && (
+                <td>
+                  {/* Una sola frase se pinta como frase. Una lista de un bullet parece un
+                      error de maquetación, y el copy deck da texto corrido, no listas. */}
+                  {includes.length === 1 ? (
+                    includes[0]
+                  ) : (
+                    <ul class="pricing__includes">
+                      {includes.map((item) => (
+                        <li>{item}</li>
+                      ))}
+                    </ul>
+                  )}
+                </td>
+              )}
             </tr>
           );
         })

@@ -8,51 +8,11 @@
  * La forma imita la que devolverá `servicePageQuery` de Sanity, para que conectar el CMS
  * sea sustituir el import y no reescribir la página.
  */
-import type { Paragraph } from '../lib/richtext.ts';
+import { paragraphs } from '../lib/richtext.ts';
 import type { Lang } from '../i18n/routes.ts';
+import type { PageContent } from '../lib/pageContent.ts';
 
-export interface ProseSectionContent {
-  readonly kind: 'prose';
-  readonly heading: string;
-  readonly note?: string;
-  readonly paragraphs: readonly Paragraph[];
-}
-
-export interface StepsSectionContent {
-  readonly kind: 'steps';
-  readonly heading: string;
-  readonly steps: readonly { readonly lead: string; readonly rest: string }[];
-}
-
-export type SectionContent = ProseSectionContent | StepsSectionContent;
-
-export interface PageContent {
-  readonly metaTitle: string;
-  readonly metaDescription: string;
-  readonly h1: string;
-  readonly answerParagraph: string;
-  readonly sectionsBeforePricing: readonly SectionContent[];
-  readonly pricing: {
-    readonly heading: string;
-    readonly note: string;
-    readonly afterTable: readonly Paragraph[];
-    readonly addOns: string;
-    readonly ctaLabel: string;
-    readonly ctaMessage: string;
-  };
-  readonly sectionsAfterPricing: readonly SectionContent[];
-  readonly testimonialsHeading: string;
-  readonly faqHeading: string;
-  readonly faqs: readonly { readonly question: string; readonly answer: string }[];
-  readonly finalCta: {
-    readonly heading: string;
-    readonly body: string;
-    readonly label: string;
-    readonly message: string;
-  };
-  readonly breadcrumbs: readonly { readonly name: string; readonly path?: string }[];
-  readonly hero: { readonly eyebrow: string; readonly alt: string };
-}
+export type { ProseSectionContent, StepsSectionContent, SectionContent, PageContent } from '../lib/pageContent.ts';
 
 const EN: PageContent = {
   metaTitle: 'Wedding Photographer in West Palm Beach | Wonderlands Studio',
@@ -66,7 +26,7 @@ const EN: PageContent = {
     {
       kind: 'prose',
       heading: 'Photo and cinema, from one team',
-      paragraphs: [
+      body: paragraphs([
         [
           'Most couples in Palm Beach hire a photographer and then scramble to find a videographer who works well beside them. We do both. One team, one creative direction, one contract — and no two vendors competing for the same three feet of aisle. The photographs are editorial and unhurried; the film is cinematic, cut with your real vows and your real voices.',
         ],
@@ -78,12 +38,12 @@ const EN: PageContent = {
           },
           ' instead. Same team, different emphasis.',
         ],
-      ],
+      ]),
     },
     {
       kind: 'prose',
       heading: 'Venues we cover in Palm Beach County',
-      paragraphs: [
+      body: paragraphs([
         [
           'We shoot throughout West Palm Beach and Palm Beach Island with no travel fee: The Breakers, the Flagler Museum, the Norton Museum of Art, the Kravis Center, Grandview Gardens, the Ann Norton Sculpture Gardens, Worth Avenue, Clematis Street and the downtown waterfront. We also cover Palm Beach Gardens, Wellington, Jupiter and Boca Raton.',
         ],
@@ -92,21 +52,21 @@ const EN: PageContent = {
           { text: 'Port St. Lucie wedding coverage', href: '/port-st-lucie/#wedding' },
           '.',
         ],
-      ],
+      ]),
     },
   ],
 
   pricing: {
     heading: 'Wedding collections and pricing',
     note: 'Prices are current and complete. No hidden fees for local venues in Palm Beach County.',
-    afterTable: [
+    afterTable: paragraphs([
       [
         'Most couples choose The Essential Story. The step from photography-only to photography plus film is $650 — deliberately small, because we would rather film your wedding than not.',
       ],
       [
         'Every collection includes professional retouching, a private online gallery in high resolution and web size, and a 3-week delivery window for the full gallery. Social-ready vertical clips are delivered in 24–48 hours.',
       ],
-    ],
+    ]),
     addOns:
       'Add-ons: second photographer $500 · additional hour · printed albums · engagement session · rehearsal-dinner coverage.',
     ctaLabel: 'Check your date on WhatsApp',
@@ -144,12 +104,12 @@ const EN: PageContent = {
     {
       kind: 'prose',
       heading: 'About Lisandra',
-      paragraphs: [
+      body: paragraphs([
         [
           'Lisandra is the creative director and lead photographer at Wonderlands Studio. She is a mother, which is roughly why nobody in front of her camera ends up looking stiff, and she directs in Spanish and English without ever making anyone feel like the odd one out at their own wedding. ',
           { text: 'Read more about her work →', href: '/about-lisandra/' },
         ],
-      ],
+      ]),
     },
   ],
 
@@ -221,7 +181,7 @@ const ES: PageContent = {
     {
       kind: 'prose',
       heading: 'Foto y video con un solo equipo',
-      paragraphs: [
+      body: paragraphs([
         [
           'La mayoría de las parejas contrata al fotógrafo primero y después sale a buscar un videógrafo a las carreras, esperando que los dos se lleven bien el día de la boda. Nosotros hacemos las dos cosas. Un solo equipo, una sola dirección creativa, un solo contrato — y nadie peleándose el mismo metro de pasillo.',
         ],
@@ -233,12 +193,12 @@ const ES: PageContent = {
           },
           '.',
         ],
-      ],
+      ]),
     },
     {
       kind: 'prose',
       heading: 'Dónde cubrimos en el condado de Palm Beach',
-      paragraphs: [
+      body: paragraphs([
         [
           'Trabajamos en todo West Palm Beach y Palm Beach Island sin cargo por traslado: The Breakers, Flagler Museum, Norton Museum of Art, Kravis Center, Grandview Gardens, Ann Norton Sculpture Gardens, Worth Avenue, Clematis Street y el waterfront del downtown. También cubrimos Palm Beach Gardens, Wellington, Jupiter y Boca Raton.',
         ],
@@ -250,21 +210,21 @@ const ES: PageContent = {
           },
           '.',
         ],
-      ],
+      ]),
     },
   ],
 
   pricing: {
     heading: 'Colecciones y precios',
     note: 'Precios completos y actuales. Sin cargos escondidos en locaciones del condado.',
-    afterTable: [
+    afterTable: paragraphs([
       [
         'La mayoría elige The Essential Story. De solo foto a foto con video hay $650 de diferencia — a propósito, porque preferimos filmar tu boda a no filmarla.',
       ],
       [
         'Todas incluyen retoque profesional, galería privada en alta resolución y tamaño web, y entrega en 3 semanas. Los clips verticales para redes salen en 24–48 horas.',
       ],
-    ],
+    ]),
     addOns:
       'Adicionales: segundo fotógrafo $500 · hora extra · álbumes impresos · sesión de compromiso · cobertura de la cena de ensayo.',
     ctaLabel: 'Consultar tu fecha por WhatsApp',
@@ -299,12 +259,12 @@ const ES: PageContent = {
     {
       kind: 'prose',
       heading: 'Sobre Lisandra',
-      paragraphs: [
+      body: paragraphs([
         [
           'Lisandra es directora creativa y fotógrafa principal de Wonderlands Studio. Es mamá, que es más o menos la razón por la que nadie termina saliendo tieso en sus fotos, y dirige en español y en inglés sin que ningún familiar quede fuera de la conversación el día de su propia boda. ',
           { text: 'Conoce más de su trabajo →', href: '/es/sobre-lisandra/' },
         ],
-      ],
+      ]),
     },
   ],
 

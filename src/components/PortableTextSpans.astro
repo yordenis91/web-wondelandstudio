@@ -1,0 +1,52 @@
+---
+/**
+ * Los `children` de un bloque de Portable Text, con sus marcas aplicadas.
+ *
+ * Vive en su propio archivo porque lo usan párrafos y elementos de lista por igual, y
+ * repetir el bucle de marcas en cada sitio es la forma de que se desincronicen.
+ *
+ * Orden de anidado: el enlace por fuera, el énfasis por dentro. Así un tramo enlazado y
+ * en negrita sale como `<a><strong>…</strong></a>`, que es lo que un lector de pantalla
+ * anuncia como "enlace" y no como "negrita que además enlaza".
+ */
+import { resolveLink, type PortableTextBlock } from '../lib/richtext.ts';
+
+interface Props {
+  block: PortableTextBlock;
+}
+
+const { block } = Astro.props;
+
+const spans = block.children.map((span) => {
+  const marks = span.marks ?? [];
+  return {
+    text: span.text,
+    key: span._key,
+    href: marks.map((mark) => resolveLink(mark, block.markDefs)).find(Boolean),
+    strong: marks.includes('strong'),
+    em: marks.includes('em'),
+  };
+});
+---
+
+{
+  spans.map((span) =>
+    span.href ? (
+      <a href={span.href}>
+        {span.strong ? (
+          <strong>{span.em ? <em>{span.text}</em> : span.text}</strong>
+        ) : span.em ? (
+          <em>{span.text}</em>
+        ) : (
+          span.text
+        )}
+      </a>
+    ) : span.strong ? (
+      <strong>{span.em ? <em>{span.text}</em> : span.text}</strong>
+    ) : span.em ? (
+      <em>{span.text}</em>
+    ) : (
+      span.text
+    ),
+  )
+}

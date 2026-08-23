@@ -1,0 +1,221 @@
+---
+/**
+ * Plantilla de `/pricing/` (`pageType: aggregate`, deck de precios §5).
+ *
+ * La única página que muestra el catálogo completo en un solo lugar: boda y
+ * quinceañera en escalera de tiers (`PricingTable`), maternidad y eventos sociales como
+ * listas simples (mismo componente, sin columna de cobertura ni de incluye cuando no
+ * aplica), marca con sus dos tablas (`PricingTable` + `SubscriptionTable`).
+ *
+ * Regla dura del deck: esta página **nunca** redeclara un precio en su propio
+ * `hasOfferCatalog` — no lo tiene. `aggregatePageGraph()` solo referencia cada `Service`
+ * ya declarado en su página hoja por `@id` (`WebPage.about[]`). Si esta página alguna
+ * vez declarara su propio catálogo, una actualización de precio habría que hacerla en
+ * dos sitios — el bug exacto que el proyecto existe para arreglar.
+ */
+import Layout from './Layout.astro';
+import Header from './Header.astro';
+import Hero from './Hero.astro';
+import Breadcrumbs from './Breadcrumbs.astro';
+import AnswerBlock from './AnswerBlock.astro';
+import PricingSection from './PricingSection.astro';
+import PricingTable from './PricingTable.astro';
+import SubscriptionTable from './SubscriptionTable.astro';
+import FAQ from './FAQ.astro';
+import CTAWhatsApp from './CTAWhatsApp.astro';
+
+import type { AggregatePageContent } from '../lib/pageContent.ts';
+import type { Lang } from '../i18n/routes.ts';
+import type { PricingEntry } from '../lib/queries.ts';
+import type { MonthlyLevelRow } from '../data/brandPricing.ts';
+import { ROUTES } from '../i18n/routes.ts';
+import { aggregatePageGraph } from '../lib/schema.ts';
+
+interface Props {
+  path: string;
+  lang: Lang;
+  content: AggregatePageContent;
+  weddingPricing: readonly PricingEntry[];
+  weddingHighlight: string;
+  quinceaneraPricing: readonly PricingEntry[];
+  maternityFamilyPricing: readonly PricingEntry[];
+  socialEventsPricing: readonly PricingEntry[];
+  brandSessions: readonly PricingEntry[];
+  brandMonthlyLevels: readonly MonthlyLevelRow[];
+  heroImage: { src: string; width: number; height: number };
+  utmCampaign: string;
+}
+
+const {
+  path,
+  lang,
+  content,
+  weddingPricing,
+  weddingHighlight,
+  quinceaneraPricing,
+  maternityFamilyPricing,
+  socialEventsPricing,
+  brandSessions,
+  brandMonthlyLevels,
+  heroImage,
+  utmCampaign,
+} = Astro.props;
+
+/** Las cuatro páginas hoja activas que esta página referencia por `@id`, en el idioma de la página. */
+const ACTIVE_SERVICE_ROUTE_IDS = [
+  'wpb-wedding-photographer',
+  'wpb-wedding-videographer',
+  'wpb-brand-photography',
+  'psl-maternity-photographer',
+] as const;
+
+const servicePaths = ACTIVE_SERVICE_ROUTE_IDS.map((id) => {
+  const route = ROUTES.find((r) => r.id === id)!;
+  return lang === 'en' ? route.en : route.es;
+});
+
+const jsonLd = aggregatePageGraph({
+  path,
+  name: content.h1,
+  servicePaths,
+  faqs: content.faqs,
+  breadcrumbs: content.breadcrumbs,
+});
+---
+
+<Layout
+  path={path}
+  title={content.metaTitle}
+  description={content.metaDescription}
+  jsonLd={jsonLd}
+>
+  <Header slot="header" path={path} />
+
+  <Hero
+    eyebrow={content.hero.eyebrow}
+    heading={content.h1}
+    intro={undefined}
+    image={{
+      src: heroImage.src,
+      alt: content.hero.alt,
+      width: heroImage.width,
+      height: heroImage.height,
+    }}
+  />
+
+  <div class="container">
+    <Breadcrumbs items={content.breadcrumbs} lang={lang} />
+
+    <AnswerBlock text={content.answerParagraph} />
+
+    <section class="prose">
+      <h2>{content.howToReadHeading}</h2>
+      <p>{content.howToReadBody}</p>
+    </section>
+
+    <PricingSection
+      id="weddings"
+      heading={content.weddings.heading}
+      linkLabel={content.weddings.linkLabel}
+      linkHref={content.weddings.linkHref}
+    >
+      <PricingTable
+        entries={weddingPricing}
+        lang={lang}
+        caption={content.weddings.heading}
+        highlight={weddingHighlight}
+      />
+    </PricingSection>
+
+    <PricingSection
+      id="quinceanera"
+      heading={content.quinceaneras.heading}
+      note={content.quinceaneras.note}
+      linkLabel={content.quinceaneras.linkLabel}
+      linkHref={content.quinceaneras.linkHref}
+    >
+      <PricingTable entries={quinceaneraPricing} lang={lang} caption={content.quinceaneras.heading} />
+    </PricingSection>
+
+    <PricingSection id="maternity" heading={content.maternityFamily.heading}>
+      <PricingTable
+        entries={maternityFamilyPricing}
+        lang={lang}
+        caption={content.maternityFamily.heading}
+      />
+    </PricingSection>
+
+    <PricingSection id="social-events" heading={content.socialEvents.heading}>
+      <PricingTable
+        entries={socialEventsPricing}
+        lang={lang}
+        caption={content.socialEvents.heading}
+      />
+    </PricingSection>
+
+    <PricingSection
+      id="branding"
+      heading={content.branding.heading}
+      linkLabel={content.branding.linkLabel}
+      linkHref={content.branding.linkHref}
+    >
+      <h3>{content.branding.sessionsHeading}</h3>
+      <PricingTable entries={brandSessions} lang={lang} caption={content.branding.sessionsHeading} />
+
+      <h3>{content.branding.monthlyHeading}</h3>
+      <SubscriptionTable
+        levels={brandMonthlyLevels}
+        lang={lang}
+        caption={content.branding.monthlyNote}
+        levelLabel={content.branding.levelLabel}
+        photoLabel={content.branding.photoLabel}
+        videoLabel={content.branding.videoLabel}
+      />
+    </PricingSection>
+
+    <section class="prose">
+      <h2>{content.alwaysIncludedHeading}</h2>
+      <p>{content.alwaysIncludedBody}</p>
+    </section>
+
+    <section class="prose">
+      <h2>{content.paymentHeading}</h2>
+      <p>{content.paymentBody}</p>
+    </section>
+
+    <FAQ faqs={content.faqs} heading={content.faqHeading} />
+
+    <section class="final-cta">
+      <h2>{content.finalCta.heading}</h2>
+      <p>{content.finalCta.body}</p>
+      <CTAWhatsApp
+        label={content.finalCta.label}
+        message={content.finalCta.message}
+        location="final-cta"
+        utm={{ source: 'site', medium: 'cta-final', campaign: utmCampaign }}
+        variant="fill"
+      />
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .prose,
+  .final-cta {
+    padding-block: var(--space-6);
+  }
+
+  .prose p,
+  .final-cta p {
+    max-width: 70ch;
+    line-height: 1.7;
+  }
+
+  .pricing-agg-section h3 {
+    margin-block-start: var(--space-4);
+  }
+
+  .final-cta {
+    border-block-start: 1px solid var(--color-border);
+  }
+</style>

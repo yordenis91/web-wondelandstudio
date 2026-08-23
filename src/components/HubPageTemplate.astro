@@ -1,0 +1,211 @@
+---
+/**
+ * Plantilla de hub de ciudad (`pageType: hub`).
+ *
+ * A diferencia de una página hoja, el hub no vende un servicio: reparte al visitante
+ * hacia la página hoja correcta y sostiene la entidad `PhotographyBusiness` completa de
+ * la sede (deck de hubs §1). Por eso el JSON-LD usa `hubPageGraph()` — declara el
+ * `PhotographyBusiness` entero, no solo lo referencia por `@id` como hacen las hojas.
+ *
+ * La sección "Trabajos recientes" del deck (`[Grid de portfolio filtrado por city]`) se
+ * omite: no hay todavía imágenes reales de `galleryItem` para ninguna de las dos sedes,
+ * y una grilla de portafolio vacía o con placeholders es peor que su ausencia — mismo
+ * principio que ya aplica `TestimonialList.astro` a los testimonios sin verificar.
+ */
+import Layout from './Layout.astro';
+import Header from './Header.astro';
+import Hero from './Hero.astro';
+import Breadcrumbs from './Breadcrumbs.astro';
+import AnswerBlock from './AnswerBlock.astro';
+import PortableText from './PortableText.astro';
+import ServiceCard from './ServiceCard.astro';
+import FAQ from './FAQ.astro';
+import CTAWhatsApp from './CTAWhatsApp.astro';
+
+import type { HubPageContent } from '../lib/pageContent.ts';
+import type { Lang, City } from '../i18n/routes.ts';
+import { getServiceMatrix, getMatrixHref } from '../i18n/routes.ts';
+import { getLocation } from '../data/business.ts';
+import { isPending } from '../data/tokens.ts';
+import { hubPageGraph } from '../lib/schema.ts';
+
+interface Props {
+  path: string;
+  lang: Lang;
+  city: City;
+  content: HubPageContent;
+  heroImage: { src: string; width: number; height: number };
+  utmCampaign: string;
+}
+
+const { path, lang, city, content, heroImage, utmCampaign } = Astro.props;
+
+const matrix = getServiceMatrix(city);
+const location = getLocation(city);
+
+const activeServicePaths = matrix
+  .filter((entry) => entry.status === 'active')
+  .map((entry) => getMatrixHref(entry, lang));
+
+const jsonLd = hubPageGraph({
+  city,
+  activeServicePaths,
+  faqs: content.faqs,
+  breadcrumbs: content.breadcrumbs,
+});
+
+/** Resuelve una card contra la matriz: activa si al menos un servicio lo es. */
+function resolveCard(services: readonly string[]) {
+  const entries = services
+    .map((service) => matrix.find((entry) => entry.service === service))
+    .filter((entry): entry is NonNullable<typeof entry> => entry !== undefined);
+  const activeEntries = entries.filter((entry) => entry.status === 'active');
+  const fromPrice = Math.min(...entries.map((entry) => entry.fromPrice));
+  return {
+    id: entries[0]?.hubAnchor.slice(1),
+    fromPrice,
+    comingSoon: activeEntries.length === 0,
+    links: activeEntries.map((entry) => getMatrixHref(entry, lang)),
+  };
+}
+
+const streetKnown = !isPending(location.address.streetAddress);
+const postalKnown = !isPending(location.address.postalCode);
+const phoneKnown = !isPending(location.phone.display);
+
+const directionsQuery = streetKnown
+  ? `${location.address.streetAddress}, ${location.address.addressLocality}, ${location.address.addressRegion} ${postalKnown ? location.address.postalCode : ''}`
+  : `${location.address.addressLocality}, ${location.address.addressRegion}`;
+const directionsHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(directionsQuery)}`;
+---
+
+<Layout
+  path={path}
+  title={content.metaTitle}
+  description={content.metaDescription}
+  jsonLd={jsonLd}
+>
+  <Header slot="header" path={path} />
+
+  <Hero
+    eyebrow={content.hero.eyebrow}
+    heading={content.h1}
+    intro={undefined}
+    image={{
+      src: heroImage.src,
+      alt: content.hero.alt,
+      width: heroImage.width,
+      height: heroImage.height,
+    }}
+  />
+
+  <div class="container">
+    <Breadcrumbs items={content.breadcrumbs} lang={lang} />
+
+    <AnswerBlock text={content.answerParagraph} />
+
+    <section class="services">
+      <h2>{content.servicesHeading}</h2>
+      <ul class="services__list">
+        {
+          content.cards.map((card) => {
+            const resolved = resolveCard(card.services);
+            const links =
+              card.linkLabels?.map((label, index) => ({
+                label,
+                href: resolved.links[index] ?? '#',
+              })) ?? [];
+            return (
+              <ServiceCard
+                id={resolved.id}
+                title={card.title}
+                fromPrice={resolved.fromPrice}
+                lang={lang}
+                comingSoon={resolved.comingSoon}
+                description={resolved.comingSoon ? undefined : card.description}
+                links={resolved.comingSoon ? [] : links}
+                comingSoonBody={resolved.comingSoon ? card.comingSoonBody : undefined}
+              />
+            );
+          })
+        }
+      </ul>
+    </section>
+
+    <section class="prose">
+      <h2>{content.venuesHeading}</h2>
+      <PortableText blocks={content.venuesBody} />
+    </section>
+
+    <section class="studio">
+      <h2>{content.studioHeading}</h2>
+      <p>{content.studioIntro}</p>
+      <p class="studio__address">
+        {streetKnown && (
+          <>
+            {location.address.streetAddress}
+            <br />
+          </>
+        )}
+        {location.address.addressLocality}, {location.address.addressRegion}
+        {postalKnown && ` ${location.address.postalCode}`}
+      </p>
+      <p class="studio__links">
+        <a href={directionsHref}>{content.directionsLabel}</a>
+        {phoneKnown && (
+          <>
+            {' · '}
+            <a href={`tel:${location.phone.e164}`}>{location.phone.display}</a>
+          </>
+        )}
+      </p>
+    </section>
+
+    <FAQ faqs={content.faqs} heading={content.faqHeading} />
+
+    <section class="final-cta">
+      <h2>{content.finalCta.heading}</h2>
+      <p>{content.finalCta.body}</p>
+      <CTAWhatsApp
+        label={content.finalCta.label}
+        message={content.finalCta.message}
+        location="final-cta"
+        utm={{ source: 'site', medium: 'cta-final', campaign: utmCampaign }}
+        variant="fill"
+      />
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .services,
+  .prose,
+  .studio,
+  .final-cta {
+    padding-block: var(--space-6);
+  }
+
+  .services__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .studio p {
+    max-width: 60ch;
+    line-height: 1.7;
+  }
+
+  .studio__address {
+    font-style: normal;
+  }
+
+  .final-cta {
+    border-block-start: 1px solid var(--color-border);
+  }
+
+  .final-cta p {
+    max-width: 70ch;
+    line-height: 1.7;
+  }
+</style>

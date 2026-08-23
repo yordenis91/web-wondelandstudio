@@ -1,0 +1,31 @@
+---
+/**
+ * `/port-st-lucie/maternity-photographer/`
+ *
+ * Contenido literal de `docs/copy/psl-maternity-photographer-copydeck.md` (versión EN).
+ * `pageType: event`, mismo molde que boda — sin página hermana (no hay split foto/video
+ * para maternidad).
+ */
+import ServicePageTemplate from '../../../components/ServicePageTemplate.astro';
+import { PSL_MATERNITY_PHOTOGRAPHER } from '../../../content/psl-maternity-photographer.ts';
+import { getMaternityPricing, getMaternityOffers } from '../../../data/maternityPricing.ts';
+
+const lang = 'en' as const;
+const path = '/port-st-lucie/maternity-photographer/';
+---
+
+<ServicePageTemplate
+  path={path}
+  lang={lang}
+  city="psl"
+  content={PSL_MATERNITY_PHOTOGRAPHER[lang]}
+  pricing={getMaternityPricing(lang)}
+  offers={getMaternityOffers(lang)}
+  serviceName="Maternity Photography in Port St. Lucie"
+  serviceType="Maternity Photography"
+  areaServed="Port St. Lucie"
+  areaServedType="City"
+  testimonialCategory="maternity"
+  heroImage={{ src: '/hero-placeholder.svg', width: 1600, height: 900 }}
+  utmCampaign="psl-maternity-photographer-en"
+/>
