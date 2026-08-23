@@ -1,0 +1,169 @@
+---
+/**
+ * Plantilla de `/about-lisandra/` (`pageType: about`, deck §4).
+ *
+ * La más liviana de las cinco plantillas: sin `PricingTable`, `SubscriptionTable` ni
+ * `ServiceCard`, solo texto e imagen. Primera página del sitio que declara la `Person`
+ * de Lisandra completa — el resto del sitio la referencia por `@id`
+ * (`Organization.founder`), y ese `@id` tiene que coincidir carácter por carácter con el
+ * que se declara aquí. Los dos leen de la misma constante (`BUSINESS.founderSchemaId`
+ * en `data/business.ts`), así que la alineación es estructural, no una convención que
+ * haya que recordar mantener.
+ */
+import Layout from './Layout.astro';
+import Header from './Header.astro';
+import Hero from './Hero.astro';
+import Breadcrumbs from './Breadcrumbs.astro';
+import AnswerBlock from './AnswerBlock.astro';
+import PortableText from './PortableText.astro';
+import FAQ from './FAQ.astro';
+import CTAWhatsApp from './CTAWhatsApp.astro';
+
+import type { AboutPageContent } from '../lib/pageContent.ts';
+import type { Lang } from '../i18n/routes.ts';
+import { aboutPageGraph } from '../lib/schema.ts';
+
+interface Props {
+  path: string;
+  lang: Lang;
+  content: AboutPageContent;
+  jobTitle: string;
+  heroImage: { src: string; width: number; height: number };
+  utmCampaign: string;
+}
+
+const { path, lang, content, jobTitle, heroImage, utmCampaign } = Astro.props;
+
+/**
+ * En inglés en las dos versiones de idioma, igual que `serviceType` en las páginas
+ * hoja — son términos de clasificación de schema.org, no texto de venta, así que no se
+ * traducen (a diferencia de `jobTitle`, que sí es texto legible y se localiza en el
+ * `.astro` que llama a esta plantilla).
+ */
+const KNOWS_ABOUT = [
+  'Wedding Photography',
+  'Quinceañera Photography',
+  'Maternity Photography',
+  'Brand Photography',
+] as const;
+
+const jsonLd = aboutPageGraph({
+  path,
+  jobTitle,
+  knowsAbout: [...KNOWS_ABOUT],
+  faqs: content.faqs,
+  breadcrumbs: content.breadcrumbs,
+});
+---
+
+<Layout
+  path={path}
+  title={content.metaTitle}
+  description={content.metaDescription}
+  jsonLd={jsonLd}
+>
+  <Header slot="header" path={path} />
+
+  <Hero
+    eyebrow={content.hero.eyebrow}
+    heading={content.h1}
+    intro={undefined}
+    image={{
+      src: heroImage.src,
+      alt: content.hero.alt,
+      width: heroImage.width,
+      height: heroImage.height,
+    }}
+  />
+
+  <div class="container">
+    <Breadcrumbs items={content.breadcrumbs} lang={lang} />
+
+    <AnswerBlock text={content.answerParagraph} />
+
+    <section class="prose">
+      <h2>{content.howSheWorksHeading}</h2>
+      <PortableText blocks={content.howSheWorksBody} />
+    </section>
+
+    <section class="prose">
+      <h2>{content.bilingualHeading}</h2>
+      <PortableText blocks={content.bilingualBody} />
+    </section>
+
+    <section class="specialties">
+      <h2>{content.specialtiesHeading}</h2>
+      <ul class="specialties__list">
+        {
+          content.specialties.map((s) => (
+            <li>
+              <h3>{s.title}</h3>
+              <p>
+                {s.description} <a href={s.linkHref}>{s.linkLabel}</a>
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="prose">
+      <h2>{content.studioHeading}</h2>
+      <PortableText blocks={content.studioBody} />
+    </section>
+
+    <FAQ faqs={content.faqs} heading={content.faqHeading} />
+
+    <section class="final-cta">
+      <h2>{content.finalCta.heading}</h2>
+      <p>{content.finalCta.body}</p>
+      <CTAWhatsApp
+        label={content.finalCta.label}
+        message={content.finalCta.message}
+        location="final-cta"
+        utm={{ source: 'site', medium: 'cta-final', campaign: utmCampaign }}
+        variant="fill"
+      />
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .prose,
+  .specialties,
+  .final-cta {
+    padding-block: var(--space-6);
+  }
+
+  .prose p,
+  .final-cta p {
+    max-width: 70ch;
+    line-height: 1.7;
+  }
+
+  .specialties__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .specialties__list li {
+    padding-block: var(--space-3);
+    border-block-end: 1px solid var(--color-border);
+  }
+
+  .specialties__list h3 {
+    margin-block-end: var(--space-1);
+  }
+
+  .specialties__list p {
+    max-width: 60ch;
+    line-height: 1.7;
+  }
+
+  .final-cta {
+    border-block-start: 1px solid var(--color-border);
+  }
+</style>

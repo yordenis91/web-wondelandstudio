@@ -199,3 +199,45 @@ export interface AggregatePageContent {
   readonly breadcrumbs: readonly { readonly name: string; readonly path?: string }[];
   readonly hero: { readonly eyebrow: string; readonly alt: string };
 }
+
+/**
+ * Contenido de `/about-lisandra/` (`pageType: about`, deck §4). El más liviano de los
+ * cinco: sin `PricingTable`, `SubscriptionTable` ni `ServiceCard` — solo texto,
+ * reusando `AnswerBlock` y `FAQ` que ya existen. Confirma que no todo `pageType` nuevo
+ * implica trabajo de modelo de precios.
+ *
+ * La sección "Behind the camera" del deck (`[Foto o breve galería — Lisandra
+ * trabajando]`) se omite del contenido: no hay fotos reales todavía, y es una sección
+ * 100% dependiente de imagen sin ningún texto propio que renderizar sin ellas — mismo
+ * principio que ya aplica a "Trabajos recientes" en los hubs y a los testimonios sin
+ * verificar.
+ */
+export interface AboutPageContent {
+  readonly metaTitle: string;
+  readonly metaDescription: string;
+  readonly h1: string;
+  readonly answerParagraph: string;
+  readonly howSheWorksHeading: string;
+  readonly howSheWorksBody: readonly PortableTextBlock[];
+  readonly bilingualHeading: string;
+  readonly bilingualBody: readonly PortableTextBlock[];
+  readonly specialtiesHeading: string;
+  readonly specialties: readonly {
+    readonly title: string;
+    readonly description: string;
+    readonly linkLabel: string;
+    readonly linkHref: string;
+  }[];
+  readonly studioHeading: string;
+  readonly studioBody: readonly PortableTextBlock[];
+  readonly faqHeading: string;
+  readonly faqs: readonly { readonly question: string; readonly answer: string }[];
+  readonly finalCta: {
+    readonly heading: string;
+    readonly body: string;
+    readonly label: string;
+    readonly message: string;
+  };
+  readonly breadcrumbs: readonly { readonly name: string; readonly path?: string }[];
+  readonly hero: { readonly eyebrow: string; readonly alt: string };
+}

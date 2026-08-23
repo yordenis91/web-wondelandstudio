@@ -1,0 +1,20 @@
+---
+/**
+ * `/about-lisandra/` — pageType: about. Contenido literal de
+ * `docs/copy/about-lisandra-copydeck.md` (versión EN).
+ */
+import AboutPageTemplate from '../../components/AboutPageTemplate.astro';
+import { ABOUT_LISANDRA } from '../../content/about-lisandra.ts';
+
+const lang = 'en' as const;
+const path = '/about-lisandra/';
+---
+
+<AboutPageTemplate
+  path={path}
+  lang={lang}
+  content={ABOUT_LISANDRA[lang]}
+  jobTitle="Creative Director & Lead Photographer"
+  heroImage={{ src: '/hero-placeholder.svg', width: 1600, height: 900 }}
+  utmCampaign="about-lisandra-en"
+/>
