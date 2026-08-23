@@ -40,6 +40,8 @@ export interface PageContent {
     readonly addOns: string;
     readonly ctaLabel: string;
     readonly ctaMessage: string;
+    /** Enlace secundario junto al CTA de WhatsApp, ej. "Ver trabajos recientes". */
+    readonly portfolioLink?: { readonly label: string; readonly href: string };
   };
   readonly sectionsAfterPricing: readonly SectionContent[];
   readonly testimonialsHeading: string;

@@ -73,9 +73,11 @@ export const pricingCatalog = defineType({
             defineField({
               name: 'coverage',
               title: 'Cobertura',
-              description: 'Ej. "8 horas", "1 sesión / mes"',
+              description:
+                'Ej. "8 horas", "1 sesión / mes". Opcional: un tier de un solo producto ' +
+                '(ej. maternidad) no siempre tiene una noción de duración que valga la pena ' +
+                'destacar en su propia columna.',
               type: 'string',
-              validation: (Rule) => Rule.required(),
             }),
             /**
              * `appliesTo` es un array de `{ page, includes }`, no una sola lista de

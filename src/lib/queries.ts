@@ -81,7 +81,8 @@ export interface PricingEntry {
   readonly billingType: BillingType;
   readonly track?: Track;
   readonly price: number;
-  readonly coverage: string;
+  /** Opcional: un tier de un solo producto no siempre tiene una duración que mostrar. */
+  readonly coverage?: string;
   readonly includes: readonly string[];
 }
 
@@ -99,7 +100,7 @@ export interface PricingCatalogEntry {
   readonly billingType: BillingType;
   readonly track?: Track;
   readonly price: number;
-  readonly coverage: string;
+  readonly coverage?: string;
   readonly applications: readonly {
     readonly page: { readonly _ref: string };
     readonly includes: readonly string[];

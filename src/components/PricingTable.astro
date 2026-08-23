@@ -35,6 +35,14 @@ const money = new Intl.NumberFormat(lang === 'en' ? 'en-US' : 'es-US', {
   currency: 'USD',
   maximumFractionDigits: 0,
 });
+
+/**
+ * `coverage` es opcional (un tier de un solo producto, como maternidad, no siempre
+ * tiene una duración que valga la pena destacar). La columna solo se pinta si al
+ * menos una fila la trae — una tabla sin ninguna cobertura no debería tener una
+ * columna "Cobertura" vacía de punta a punta.
+ */
+const hasCoverage = entries.some((entry) => entry.coverage !== undefined);
 ---
 
 <div class="pricing">
@@ -44,7 +52,7 @@ const money = new Intl.NumberFormat(lang === 'en' ? 'en-US' : 'es-US', {
       <tr>
         <th scope="col">{L.collection}</th>
         <th scope="col">{L.investment}</th>
-        <th scope="col">{L.coverage}</th>
+        {hasCoverage && <th scope="col">{L.coverage}</th>}
         <th scope="col">{L.includes}</th>
       </tr>
     </thead>
@@ -64,7 +72,7 @@ const money = new Intl.NumberFormat(lang === 'en' ? 'en-US' : 'es-US', {
                   <span class="pricing__unit">{L.monthly}</span>
                 )}
               </td>
-              <td>{entry.coverage}</td>
+              {hasCoverage && <td>{entry.coverage}</td>}
               <td>
                 {/* Una sola frase se pinta como frase. Una lista de un bullet parece un
                     error de maquetación, y el copy deck da texto corrido, no listas. */}

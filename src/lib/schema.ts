@@ -211,6 +211,13 @@ export interface ServiceInput {
   readonly city: CityKey;
   readonly areaServed: string;
   /**
+   * `AdministrativeArea` para un condado ("Palm Beach County, FL"), `City` para una
+   * sola ciudad ("Port St. Lucie") — el deck de maternidad (§3) pide `City` porque el
+   * área de esta página es una ciudad puntual, no un condado. Por defecto
+   * `AdministrativeArea`, que es lo que ya usaban las páginas de boda.
+   */
+  readonly areaServedType?: 'AdministrativeArea' | 'City';
+  /**
    * Uno o varios catálogos. `subscription` (branding) usa dos en paralelo — sesiones
    * únicas y cuota mensual — y por eso `hasOfferCatalog` puede ser un array.
    */
@@ -235,7 +242,7 @@ export function serviceNode(input: ServiceInput): JsonLdNode {
     name: input.name,
     serviceType: input.serviceType,
     provider: ref(getLocation(input.city).schemaId),
-    areaServed: { '@type': 'AdministrativeArea', name: input.areaServed },
+    areaServed: { '@type': input.areaServedType ?? 'AdministrativeArea', name: input.areaServed },
     hasOfferCatalog: catalogs.length === 1 ? catalogs[0] : catalogs,
     isRelatedTo: input.relatedServiceId ? ref(input.relatedServiceId) : undefined,
   });

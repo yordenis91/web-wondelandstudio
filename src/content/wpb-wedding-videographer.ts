@@ -84,6 +84,7 @@ const EN: PageContent = {
     ctaLabel: 'Check your date on WhatsApp',
     ctaMessage:
       'Hi Wonderlands Studio — I would like to check your availability for wedding film coverage in West Palm Beach.',
+    portfolioLink: { label: 'Watch recent films', href: '/portfolio/weddings/' },
   },
 
   sectionsAfterPricing: [
@@ -234,6 +235,7 @@ const ES: PageContent = {
     ctaLabel: 'Consultar tu fecha por WhatsApp',
     ctaMessage:
       'Hola Wonderlands Studio — quisiera consultar disponibilidad para cobertura de video de boda en West Palm Beach.',
+    portfolioLink: { label: 'Ver videos recientes', href: '/es/portafolio/bodas/' },
   },
 
   sectionsAfterPricing: [

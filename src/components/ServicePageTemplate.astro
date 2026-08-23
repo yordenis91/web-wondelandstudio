@@ -31,12 +31,15 @@ interface Props {
   city: City;
   content: PageContent;
   pricing: readonly PricingEntry[];
-  pricingHighlight: string;
+  /** Colección destacada ("La más elegida"). Sin ella, la tabla no marca ninguna fila. */
+  pricingHighlight?: string;
   /** Ofertas para el `@graph`, del mismo origen que la tabla visible. */
   offers: readonly OfferInput[];
   serviceName: string;
   serviceType: string;
   areaServed: string;
+  /** `City` para un área de una sola ciudad (ej. maternidad en PSL); por defecto condado. */
+  areaServedType?: 'AdministrativeArea' | 'City';
   /** Ruta de la página hermana, para el `isRelatedTo` recíproco. */
   relatedServicePath?: string;
   /** Testimonios ya consultados. Vacío mientras no haya ninguno verificado. */
@@ -58,6 +61,7 @@ const {
   serviceName,
   serviceType,
   areaServed,
+  areaServedType,
   relatedServicePath,
   testimonials = [],
   testimonialCategory,
@@ -72,6 +76,7 @@ const jsonLd = servicePageGraph({
     serviceType,
     city,
     areaServed,
+    areaServedType,
     catalogs: [{ name: serviceName, offers }],
     relatedServiceId: relatedServicePath ? serviceId(relatedServicePath) : undefined,
   },
@@ -129,12 +134,21 @@ const jsonLd = servicePageGraph({
       />
       <PortableText blocks={content.pricing.afterTable} />
       <p class="pricing-section__addons">{content.pricing.addOns}</p>
-      <CTAWhatsApp
-        label={content.pricing.ctaLabel}
-        message={content.pricing.ctaMessage}
-        location="pricing"
-        utm={{ source: 'site', medium: 'pricing', campaign: utmCampaign }}
-      />
+      <div class="pricing-section__ctas">
+        <CTAWhatsApp
+          label={content.pricing.ctaLabel}
+          message={content.pricing.ctaMessage}
+          location="pricing"
+          utm={{ source: 'site', medium: 'pricing', campaign: utmCampaign }}
+        />
+        {
+          content.pricing.portfolioLink && (
+            <a class="pricing-section__portfolio-link" href={content.pricing.portfolioLink.href}>
+              {content.pricing.portfolioLink.label}
+            </a>
+          )
+        }
+      </div>
     </section>
 
     {
@@ -189,6 +203,20 @@ const jsonLd = servicePageGraph({
 
   .pricing-section__addons {
     color: var(--color-fg-muted);
+  }
+
+  .pricing-section__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4);
+    margin-block-start: var(--space-3);
+  }
+
+  .pricing-section__portfolio-link {
+    color: var(--color-fg);
+    text-decoration-color: var(--color-border);
+    text-underline-offset: 0.2em;
   }
 
   .final-cta {
