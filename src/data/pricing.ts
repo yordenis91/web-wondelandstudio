@@ -18,13 +18,15 @@ import type { Lang } from '../i18n/routes.ts';
  * español "The Luxury Collection" es "Colección de Lujo"— así que el par se declara
  * junto y no se traduce al vuelo.
  *
- * `includes` tiene **dos ángulos**, no uno. El precio y la cobertura de "The Full
- * Experience" son el mismo número en la página de fotografía y en la de video — eso es
- * lo que la regla 2 exige que viva en un solo lugar — pero la frase de "qué incluye" no
- * es la misma texto: la página de fotografía la redacta con foco en la foto
- * ("Photography + cinematic film with vows..."), la de video con foco en el film
- * ("Cinematic film with real vows..."). Es la misma colección descrita desde dos
- * ángulos de venta, comprobado carácter por carácter contra los dos copy decks.
+ * `includes` tiene **tres ángulos**, no uno. El precio y la cobertura de "The Full
+ * Experience" son el mismo número en la página de fotografía, en la de video y en
+ * `/pricing/` — eso es lo que la regla 2 exige que viva en un solo lugar — pero la
+ * frase de "qué incluye" no es la misma texto en las tres: la página de fotografía la
+ * redacta con foco en la foto ("Photography + cinematic film with vows..."), la de
+ * video con foco en el film ("Cinematic film with real vows..."), y `/pricing/` con una
+ * redacción condensada para caber junto a otros cuatro catálogos en la misma página
+ * ("Photography + cinematic film + drone + reel"). Es la misma colección descrita desde
+ * tres ángulos de venta, comprobado carácter por carácter contra los tres copy decks.
  */
 interface Collection {
   readonly tier: Tier;
@@ -34,11 +36,12 @@ interface Collection {
   readonly includes: {
     readonly photography: Readonly<Record<Lang, string>>;
     readonly film: Readonly<Record<Lang, string>>;
+    readonly summary: Readonly<Record<Lang, string>>;
   };
 }
 
 /** Qué página está pidiendo el catálogo — decide qué redacción de `includes` usar. */
-export type PricingAngle = 'photography' | 'film';
+export type PricingAngle = 'photography' | 'film' | 'summary';
 
 /**
  * Colecciones de boda. Precio, nombre y cobertura tomados literal de
@@ -55,6 +58,7 @@ const WEDDING_COLLECTIONS: readonly Collection[] = [
     includes: {
       photography: { en: 'Photography only', es: 'Solo fotografía' },
       film: { en: 'Photography only', es: 'Solo fotografía' },
+      summary: { en: 'Photography only', es: 'Solo fotografía' },
     },
   },
   {
@@ -71,6 +75,7 @@ const WEDDING_COLLECTIONS: readonly Collection[] = [
         en: 'Short film, 3–5 min, music clip',
         es: 'Video corto de 3 a 5 min, music clip',
       },
+      summary: { en: 'Photography + short film', es: 'Fotografía + video corto' },
     },
   },
   {
@@ -86,6 +91,10 @@ const WEDDING_COLLECTIONS: readonly Collection[] = [
       film: {
         en: 'Cinematic film with real vows + drone + vertical reel',
         es: 'Video cine con votos reales + drone + reel vertical',
+      },
+      summary: {
+        en: 'Photography + cinematic film + drone + reel',
+        es: 'Fotografía + video cine + drone + reel',
       },
     },
   },
@@ -103,6 +112,10 @@ const WEDDING_COLLECTIONS: readonly Collection[] = [
         en: 'Same film, plus second photographer and printed album',
         es: 'El mismo video, más segundo fotógrafo y álbum impreso',
       },
+      summary: {
+        en: 'Everything above + second photographer + album',
+        es: 'Todo lo anterior + segundo fotógrafo + álbum',
+      },
     },
   },
   {
@@ -118,6 +131,10 @@ const WEDDING_COLLECTIONS: readonly Collection[] = [
       film: {
         en: 'Extended feature film + premium album',
         es: 'Película extendida + álbum premium',
+      },
+      summary: {
+        en: 'Photography + extended film + premium album',
+        es: 'Fotografía + video extendido + álbum premium',
       },
     },
   },

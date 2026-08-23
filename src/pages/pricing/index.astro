@@ -1,0 +1,32 @@
+---
+/**
+ * `/pricing/` — pageType: aggregate. Contenido literal de
+ * `docs/copy/pricing-copydeck.md` (versión EN).
+ */
+import AggregatePageTemplate from '../../components/AggregatePageTemplate.astro';
+import { PRICING } from '../../content/pricing.ts';
+import { getWeddingPricing, weddingHighlight } from '../../data/pricing.ts';
+import { getQuinceaneraPricing } from '../../data/quinceaneraPricing.ts';
+import { getMaternityPricing } from '../../data/maternityPricing.ts';
+import { getFamilyExtras } from '../../data/familyExtrasPricing.ts';
+import { getSocialEventsPricing } from '../../data/socialEventsPricing.ts';
+import { getBrandSessions, getBrandMonthlyLevels } from '../../data/brandPricing.ts';
+
+const lang = 'en' as const;
+const path = '/pricing/';
+---
+
+<AggregatePageTemplate
+  path={path}
+  lang={lang}
+  content={PRICING[lang]}
+  weddingPricing={getWeddingPricing(lang, 'summary')}
+  weddingHighlight={weddingHighlight(lang)}
+  quinceaneraPricing={getQuinceaneraPricing(lang)}
+  maternityFamilyPricing={[...getMaternityPricing(lang), ...getFamilyExtras(lang)]}
+  socialEventsPricing={getSocialEventsPricing(lang)}
+  brandSessions={getBrandSessions(lang)}
+  brandMonthlyLevels={getBrandMonthlyLevels(lang)}
+  heroImage={{ src: '/hero-placeholder.svg', width: 1600, height: 900 }}
+  utmCampaign="pricing-en"
+/>

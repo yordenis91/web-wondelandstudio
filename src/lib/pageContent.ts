@@ -149,3 +149,53 @@ export interface HubPageContent {
   readonly breadcrumbs: readonly { readonly name: string; readonly path?: string }[];
   readonly hero: { readonly eyebrow: string; readonly alt: string };
 }
+
+/**
+ * Contenido de `/pricing/` (`pageType: aggregate`, deck §5). Es la única página que
+ * compone las cuatro secciones de precio del sitio en un documento — boda y
+ * quinceañera en escalera de tiers, maternidad y eventos sociales como listas simples,
+ * marca con las dos tablas de `SubscriptionPageContent`. No hay un solo campo `pricing`
+ * como en las páginas hoja: cada sección tiene su propio encabezado y enlace.
+ */
+export interface AggregatePageContent {
+  readonly metaTitle: string;
+  readonly metaDescription: string;
+  readonly h1: string;
+  readonly answerParagraph: string;
+  readonly howToReadHeading: string;
+  readonly howToReadBody: string;
+  readonly weddings: { readonly heading: string; readonly linkLabel: string; readonly linkHref: string };
+  readonly quinceaneras: {
+    readonly heading: string;
+    readonly note: string;
+    readonly linkLabel: string;
+    readonly linkHref: string;
+  };
+  readonly maternityFamily: { readonly heading: string };
+  readonly socialEvents: { readonly heading: string };
+  readonly branding: {
+    readonly heading: string;
+    readonly sessionsHeading: string;
+    readonly monthlyHeading: string;
+    readonly monthlyNote: string;
+    readonly levelLabel: string;
+    readonly photoLabel: string;
+    readonly videoLabel: string;
+    readonly linkLabel: string;
+    readonly linkHref: string;
+  };
+  readonly alwaysIncludedHeading: string;
+  readonly alwaysIncludedBody: string;
+  readonly paymentHeading: string;
+  readonly paymentBody: string;
+  readonly faqHeading: string;
+  readonly faqs: readonly { readonly question: string; readonly answer: string }[];
+  readonly finalCta: {
+    readonly heading: string;
+    readonly body: string;
+    readonly label: string;
+    readonly message: string;
+  };
+  readonly breadcrumbs: readonly { readonly name: string; readonly path?: string }[];
+  readonly hero: { readonly eyebrow: string; readonly alt: string };
+}

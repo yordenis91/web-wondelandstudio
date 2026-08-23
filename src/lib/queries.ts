@@ -83,7 +83,10 @@ export interface PricingEntry {
   readonly price: number;
   /** Opcional: un tier de un solo producto no siempre tiene una duración que mostrar. */
   readonly coverage?: string;
-  readonly includes: readonly string[];
+  /** Opcional: un paquete genérico (ej. eventos sociales en /pricing/) puede no necesitar una columna de "incluye" — el nombre ya lo dice todo. */
+  readonly includes?: readonly string[];
+  /** `true` pinta "desde $X" en vez de "$X" — precio de arranque, no cerrado. */
+  readonly priceIsFrom?: boolean;
 }
 
 /**
