@@ -1,0 +1,32 @@
+---
+/**
+ * `/west-palm-beach/wedding-videographer/`
+ *
+ * Contenido literal de `docs/copy/wpb-wedding-videographer-copydeck.md` (versión EN).
+ * Página hermana de `wedding-photographer/`: mismas colecciones y mismo precio (regla 2),
+ * pero cada una redacta su propio `includes` (ángulo `'film'` aquí) y no comparte ni un
+ * párrafo ni una FAQ con la otra.
+ */
+import ServicePageTemplate from '../../../components/ServicePageTemplate.astro';
+import { WPB_WEDDING_VIDEOGRAPHER } from '../../../content/wpb-wedding-videographer.ts';
+import { getWeddingPricing, getWeddingOffers, weddingHighlight } from '../../../data/pricing.ts';
+
+const lang = 'en' as const;
+const path = '/west-palm-beach/wedding-videographer/';
+---
+
+<ServicePageTemplate
+  path={path}
+  lang={lang}
+  city="wpb"
+  content={WPB_WEDDING_VIDEOGRAPHER[lang]}
+  pricing={getWeddingPricing(lang, 'film')}
+  pricingHighlight={weddingHighlight(lang)}
+  offers={getWeddingOffers(lang, 'film')}
+  serviceName="Wedding Videography in West Palm Beach"
+  serviceType="Wedding Videography"
+  areaServed="Palm Beach County, FL"
+  relatedServicePath="/west-palm-beach/wedding-photographer/"
+  heroImage={{ src: '/hero-placeholder.svg', width: 1600, height: 900 }}
+  utmCampaign="wpb-wedding-videographer-en"
+/>

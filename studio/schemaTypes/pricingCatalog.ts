@@ -77,33 +77,64 @@ export const pricingCatalog = defineType({
               type: 'string',
               validation: (Rule) => Rule.required(),
             }),
-            defineField({
-              name: 'includes',
-              title: 'Incluye',
-              type: 'array',
-              of: [{ type: 'string' }],
-              validation: (Rule) => Rule.required().min(1),
-            }),
             /**
-             * Array, no referencia única.
+             * `appliesTo` es un array de `{ page, includes }`, no una sola lista de
+             * páginas con un `includes` compartido.
              *
-             * Una misma colección aparece en varias páginas a la vez: las colecciones de
-             * boda salen en `/west-palm-beach/wedding-photographer/`, en
-             * `/west-palm-beach/wedding-videographer/` y en `/pricing/`, y además en las
-             * dos caras de idioma de cada una. Con una referencia única había que
-             * duplicar la entrada por página — que es exactamente el bug de precios
-             * contradictorios que la regla 2 de CLAUDE.md existe para evitar.
+             * Precio, nombre y cobertura sí son un solo número para todas las páginas
+             * que muestran esta colección — eso es lo que la regla 2 exige. Pero el
+             * texto de "qué incluye" cambia de redacción según qué vende la página: la
+             * misma colección de $1,850 dice "Photography + short film" en la página de
+             * fotografía y "Short film, 3–5 min, music clip" en la de video —
+             * verificado carácter por carácter contra los dos copy decks de boda,
+             * mismo precio, mismo tier, frase distinta.
              *
-             * `unique()` impide listar dos veces la misma página por accidente.
+             * Con un `includes` único a nivel de colección, esa diferencia de
+             * redacción solo se podía resolver duplicando la colección entera —
+             * mismo precio escrito dos veces, el bug exacto que esta regla existe
+             * para evitar. Con el override por página, el precio sigue en un solo
+             * lugar y cada página redacta su propia frase.
              */
             defineField({
               name: 'appliesTo',
               title: 'Páginas donde aparece',
               description:
-                'Todas las páginas que muestran esta colección, incluidas las dos caras de idioma.',
+                'Una entrada por página que muestra esta colección (incluidas las dos caras de idioma), cada una con su propia redacción de "qué incluye".',
               type: 'array',
-              of: [defineArrayMember({ type: 'reference', to: [{ type: 'servicePage' }] })],
-              validation: (Rule) => Rule.required().min(1).unique(),
+              of: [
+                defineArrayMember({
+                  type: 'object',
+                  name: 'application',
+                  fields: [
+                    defineField({
+                      name: 'page',
+                      title: 'Página',
+                      type: 'reference',
+                      to: [{ type: 'servicePage' }],
+                      validation: (Rule) => Rule.required(),
+                    }),
+                    defineField({
+                      name: 'includes',
+                      title: 'Incluye (redacción de esta página)',
+                      type: 'array',
+                      of: [{ type: 'string' }],
+                      validation: (Rule) => Rule.required().min(1),
+                    }),
+                  ],
+                  preview: {
+                    select: { title: 'page.h1', subtitle: 'page.language' },
+                  },
+                }),
+              ],
+              validation: (Rule) =>
+                Rule.required()
+                  .min(1)
+                  .custom((apps: { page?: { _ref?: string } }[] | undefined) => {
+                    if (!apps) return true;
+                    const refs = apps.map((a) => a.page?._ref).filter(Boolean);
+                    const dupes = refs.length !== new Set(refs).size;
+                    return dupes ? 'La misma página está listada dos veces' : true;
+                  }),
             }),
           ],
           preview: {

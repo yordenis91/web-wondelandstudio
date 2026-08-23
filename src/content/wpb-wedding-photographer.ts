@@ -9,52 +9,10 @@
  * sea sustituir el import y no reescribir la página.
  */
 import { paragraphs } from '../lib/richtext.ts';
-import type { PortableTextBlock } from '../lib/richtext.ts';
 import type { Lang } from '../i18n/routes.ts';
+import type { PageContent } from '../lib/pageContent.ts';
 
-export interface ProseSectionContent {
-  readonly kind: 'prose';
-  readonly heading: string;
-  readonly note?: string;
-  /** Portable Text, la misma forma que devolverá `servicePage.sections[].body`. */
-  readonly body: readonly PortableTextBlock[];
-}
-
-export interface StepsSectionContent {
-  readonly kind: 'steps';
-  readonly heading: string;
-  readonly steps: readonly { readonly lead: string; readonly rest: string }[];
-}
-
-export type SectionContent = ProseSectionContent | StepsSectionContent;
-
-export interface PageContent {
-  readonly metaTitle: string;
-  readonly metaDescription: string;
-  readonly h1: string;
-  readonly answerParagraph: string;
-  readonly sectionsBeforePricing: readonly SectionContent[];
-  readonly pricing: {
-    readonly heading: string;
-    readonly note: string;
-    readonly afterTable: readonly PortableTextBlock[];
-    readonly addOns: string;
-    readonly ctaLabel: string;
-    readonly ctaMessage: string;
-  };
-  readonly sectionsAfterPricing: readonly SectionContent[];
-  readonly testimonialsHeading: string;
-  readonly faqHeading: string;
-  readonly faqs: readonly { readonly question: string; readonly answer: string }[];
-  readonly finalCta: {
-    readonly heading: string;
-    readonly body: string;
-    readonly label: string;
-    readonly message: string;
-  };
-  readonly breadcrumbs: readonly { readonly name: string; readonly path?: string }[];
-  readonly hero: { readonly eyebrow: string; readonly alt: string };
-}
+export type { ProseSectionContent, StepsSectionContent, SectionContent, PageContent } from '../lib/pageContent.ts';
 
 const EN: PageContent = {
   metaTitle: 'Wedding Photographer in West Palm Beach | Wonderlands Studio',

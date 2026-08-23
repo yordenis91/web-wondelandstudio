@@ -70,6 +70,11 @@ export const cityServiceMatrixQuery = /* groq */ `
 }
 `;
 
+/**
+ * Una fila de precio ya resuelta a una página: lo que consume `PricingTable.astro`. No
+ * es la forma del documento de Sanity — es el resultado de tomar una `PricingCatalogEntry`
+ * y quedarse con la redacción de `includes` de la página que la está pidiendo.
+ */
 export interface PricingEntry {
   readonly name: string;
   readonly tier?: Tier;
@@ -78,18 +83,56 @@ export interface PricingEntry {
   readonly price: number;
   readonly coverage: string;
   readonly includes: readonly string[];
-  /**
-   * Todas las páginas que muestran esta colección. Es un array porque las colecciones de
-   * boda salen a la vez en fotógrafo, videógrafo y `/pricing/`, y en las dos caras de
-   * idioma de cada una — una referencia única obligaría a duplicar la entrada por
-   * página, que es el bug de precios contradictorios que la regla 2 evita.
-   */
-  readonly appliesTo: readonly { readonly _ref: string }[];
+}
+
+/**
+ * Una entrada del catálogo tal como vive en Sanity. `applications` es un array de
+ * `{ page, includes }`, no un `includes` único a nivel de colección: precio, nombre y
+ * cobertura son un solo número para todas las páginas que muestran esta colección (regla
+ * 2), pero la redacción de "qué incluye" es propia de cada página — la misma colección
+ * de $1,850 dice "Photography + short film" en la página de fotografía y "Short film,
+ * 3–5 min, music clip" en la de video, mismo precio, frase distinta.
+ */
+export interface PricingCatalogEntry {
+  readonly name: string;
+  readonly tier?: Tier;
+  readonly billingType: BillingType;
+  readonly track?: Track;
+  readonly price: number;
+  readonly coverage: string;
+  readonly applications: readonly {
+    readonly page: { readonly _ref: string };
+    readonly includes: readonly string[];
+  }[];
 }
 
 export interface PricingCatalogDoc {
   readonly _id: string;
-  readonly entries: readonly PricingEntry[];
+  readonly entries: readonly PricingCatalogEntry[];
+}
+
+/**
+ * Resuelve una `PricingCatalogEntry` a la `PricingEntry` de una página concreta,
+ * tomando la redacción de `includes` que esa página declaró en `applications`.
+ *
+ * Devuelve `undefined` si la página no está en `applications` — la colección no aplica
+ * a esa página, en vez de mostrar el `includes` de otra por error.
+ */
+export function resolvePricingEntry(
+  entry: PricingCatalogEntry,
+  servicePageId: string,
+): PricingEntry | undefined {
+  const application = entry.applications.find((app) => app.page._ref === servicePageId);
+  if (!application) return undefined;
+  return {
+    name: entry.name,
+    tier: entry.tier,
+    billingType: entry.billingType,
+    track: entry.track,
+    price: entry.price,
+    coverage: entry.coverage,
+    includes: application.includes,
+  };
 }
 
 /** El singleton completo — una sola fuente de verdad para todos los precios (regla 2). */
