@@ -100,3 +100,52 @@ export interface SubscriptionPageContent {
   readonly breadcrumbs: readonly { readonly name: string; readonly path?: string }[];
   readonly hero: { readonly eyebrow: string; readonly alt: string };
 }
+
+/**
+ * Contenido de una tarjeta de `HubPageTemplate` — una línea de `SERVICE_MATRIX`, o
+ * varias cuando comparten anclaje (boda en WPB es foto + video, dos entradas de la
+ * matriz bajo la misma card).
+ *
+ * El precio, el `status` y el `href` de cada línea salen siempre de `SERVICE_MATRIX`
+ * (`i18n/routes.ts`) — nunca de aquí (regla 2 de CLAUDE.md, extendida a "de dónde sale
+ * el precio" además de "dónde vive"). Esta card solo aporta el texto de venta.
+ */
+export interface ServiceCardContent {
+  readonly title: string;
+  /** Slugs de `SERVICE_MATRIX` que esta card representa. La card es "activa" si al menos una lo es. */
+  readonly services: readonly string[];
+  /** Una frase. Solo se usa si la card tiene al menos un servicio activo. */
+  readonly description?: string;
+  /** Etiquetas "Ver X →", mismo orden que las entradas activas de `services`. */
+  readonly linkLabels?: readonly string[];
+  /**
+   * Cuerpo alternativo para una card 100% `planned` — lleva un enlace en línea (a
+   * WhatsApp o al ancla de otra ciudad), por eso es Portable Text y no una frase plana.
+   */
+  readonly comingSoonBody?: readonly PortableTextBlock[];
+}
+
+/** Contenido de una página `pageType: hub` (deck de hubs de ciudad, §7). */
+export interface HubPageContent {
+  readonly metaTitle: string;
+  readonly metaDescription: string;
+  readonly h1: string;
+  readonly answerParagraph: string;
+  readonly servicesHeading: string;
+  readonly cards: readonly ServiceCardContent[];
+  readonly venuesHeading: string;
+  readonly venuesBody: readonly PortableTextBlock[];
+  readonly studioHeading: string;
+  readonly studioIntro: string;
+  readonly directionsLabel: string;
+  readonly faqHeading: string;
+  readonly faqs: readonly { readonly question: string; readonly answer: string }[];
+  readonly finalCta: {
+    readonly heading: string;
+    readonly body: string;
+    readonly label: string;
+    readonly message: string;
+  };
+  readonly breadcrumbs: readonly { readonly name: string; readonly path?: string }[];
+  readonly hero: { readonly eyebrow: string; readonly alt: string };
+}

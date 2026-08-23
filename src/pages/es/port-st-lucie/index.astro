@@ -1,0 +1,20 @@
+---
+/**
+ * `/es/port-st-lucie/` — hub de ciudad. Contenido literal de
+ * `docs/copy/city-hubs-copydeck.md` §5 (versión ES, escrita nativa).
+ */
+import HubPageTemplate from '../../../components/HubPageTemplate.astro';
+import { HUB_PSL } from '../../../content/hub-psl.ts';
+
+const lang = 'es' as const;
+const path = '/es/port-st-lucie/';
+---
+
+<HubPageTemplate
+  path={path}
+  lang={lang}
+  city="psl"
+  content={HUB_PSL[lang]}
+  heroImage={{ src: '/hero-placeholder.svg', width: 1600, height: 900 }}
+  utmCampaign="psl-hub-es"
+/>

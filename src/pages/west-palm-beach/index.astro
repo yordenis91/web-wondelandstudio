@@ -1,0 +1,20 @@
+---
+/**
+ * `/west-palm-beach/` — hub de ciudad. Contenido literal de
+ * `docs/copy/city-hubs-copydeck.md` §2 (versión EN).
+ */
+import HubPageTemplate from '../../components/HubPageTemplate.astro';
+import { HUB_WPB } from '../../content/hub-wpb.ts';
+
+const lang = 'en' as const;
+const path = '/west-palm-beach/';
+---
+
+<HubPageTemplate
+  path={path}
+  lang={lang}
+  city="wpb"
+  content={HUB_WPB[lang]}
+  heroImage={{ src: '/hero-placeholder.svg', width: 1600, height: 900 }}
+  utmCampaign="wpb-hub-en"
+/>
