@@ -1,0 +1,36 @@
+---
+/**
+ * `/es/west-palm-beach/fotografia-de-marca/`
+ *
+ * Contenido literal de `docs/copy/wpb-brand-photography-copydeck.md` (versión ES,
+ * escrita nativa — no es una traducción de la inglesa).
+ */
+import SubscriptionPageTemplate from '../../../../components/SubscriptionPageTemplate.astro';
+import { WPB_BRAND_PHOTOGRAPHY } from '../../../../content/wpb-brand-photography.ts';
+import {
+  getBrandSessions,
+  getBrandMonthlyLevels,
+  getBrandSessionOffers,
+  getBrandMonthlyOffers,
+} from '../../../../data/brandPricing.ts';
+
+const lang = 'es' as const;
+const path = '/es/west-palm-beach/fotografia-de-marca/';
+---
+
+<SubscriptionPageTemplate
+  path={path}
+  lang={lang}
+  city="wpb"
+  content={WPB_BRAND_PHOTOGRAPHY[lang]}
+  sessions={getBrandSessions(lang)}
+  monthlyLevels={getBrandMonthlyLevels(lang)}
+  sessionOffers={getBrandSessionOffers(lang)}
+  monthlyOffers={getBrandMonthlyOffers(lang)}
+  serviceName="Fotografía de Marca en West Palm Beach"
+  serviceType="Branding Photography"
+  areaServed="Palm Beach County, FL"
+  testimonialCategory="branding"
+  heroImage={{ src: '/hero-placeholder.svg', width: 1600, height: 900 }}
+  utmCampaign="wpb-brand-photography-es"
+/>

@@ -54,3 +54,47 @@ export interface PageContent {
   readonly breadcrumbs: readonly { readonly name: string; readonly path?: string }[];
   readonly hero: { readonly eyebrow: string; readonly alt: string };
 }
+
+/**
+ * Contenido de una página `pageType: subscription` (branding, deck §4).
+ *
+ * Comparte `sectionsBeforePricing`/`sectionsAfterPricing`/testimonios/FAQ/CTA final con
+ * `PageContent`, pero la sección de precios no es una sola tabla: son dos catálogos en
+ * paralelo (sesiones únicas + socio mensual), cada uno con su propio encabezado, nota y
+ * texto posterior — de ahí `sessions`/`monthly` en vez de un solo campo `pricing`.
+ */
+export interface SubscriptionPageContent {
+  readonly metaTitle: string;
+  readonly metaDescription: string;
+  readonly h1: string;
+  readonly answerParagraph: string;
+  readonly sectionsBeforePricing: readonly SectionContent[];
+  readonly sessions: {
+    readonly heading: string;
+    readonly note: string;
+    readonly afterTable: readonly PortableTextBlock[];
+  };
+  readonly monthly: {
+    readonly heading: string;
+    readonly note: string;
+    readonly levelLabel: string;
+    readonly photoLabel: string;
+    readonly videoLabel: string;
+    readonly afterTable: readonly PortableTextBlock[];
+    readonly ctaLabel: string;
+    readonly ctaMessage: string;
+    readonly portfolioLink: { readonly label: string; readonly href: string };
+  };
+  readonly sectionsAfterPricing: readonly SectionContent[];
+  readonly testimonialsHeading: string;
+  readonly faqHeading: string;
+  readonly faqs: readonly { readonly question: string; readonly answer: string }[];
+  readonly finalCta: {
+    readonly heading: string;
+    readonly body: string;
+    readonly label: string;
+    readonly message: string;
+  };
+  readonly breadcrumbs: readonly { readonly name: string; readonly path?: string }[];
+  readonly hero: { readonly eyebrow: string; readonly alt: string };
+}

@@ -1,11 +1,12 @@
 ---
 /**
- * Plantilla de página de servicio (`pageType: event`).
+ * Plantilla de página de servicio recurrente (`pageType: subscription`).
  *
- * Las dos caras de idioma de una misma página comparten estructura y difieren solo en
- * contenido, así que la estructura vive aquí una vez y cada `.astro` de `pages/` queda
- * en unas pocas líneas: qué contenido, qué ruta, qué servicio hermano. Es lo que hace
- * que replicar a las 15 páginas de Fase 1 sea añadir contenido, no maquetar de nuevo.
+ * Hermana de `ServicePageTemplate.astro` (`pageType: event`): comparte cabecera, hero,
+ * secciones de prosa/pasos, testimonios, FAQ y CTA final, pero la sección de precios es
+ * estructuralmente distinta — dos catálogos en paralelo (sesiones únicas + socio
+ * mensual) en vez de una sola escalera de tiers — así que no cabía forzarla dentro de
+ * `ServicePageTemplate` sin una rama condicional en cada punto de la plantilla.
  */
 import Layout from './Layout.astro';
 import Header from './Header.astro';
@@ -16,32 +17,32 @@ import ProseSection from './ProseSection.astro';
 import PortableText from './PortableText.astro';
 import BookingSteps from './BookingSteps.astro';
 import PricingTable from './PricingTable.astro';
+import SubscriptionTable from './SubscriptionTable.astro';
 import TestimonialList from './TestimonialList.astro';
 import FAQ from './FAQ.astro';
 import CTAWhatsApp from './CTAWhatsApp.astro';
 
-import type { PageContent } from '../lib/pageContent.ts';
+import type { SubscriptionPageContent } from '../lib/pageContent.ts';
 import type { Lang, City } from '../i18n/routes.ts';
 import type { PricingEntry, TestimonialDoc } from '../lib/queries.ts';
+import type { MonthlyLevelRow } from '../data/brandPricing.ts';
 import { servicePageGraph, serviceId, type OfferInput } from '../lib/schema.ts';
 
 interface Props {
   path: string;
   lang: Lang;
   city: City;
-  content: PageContent;
-  pricing: readonly PricingEntry[];
-  pricingHighlight: string;
-  /** Ofertas para el `@graph`, del mismo origen que la tabla visible. */
-  offers: readonly OfferInput[];
+  content: SubscriptionPageContent;
+  sessions: readonly PricingEntry[];
+  monthlyLevels: readonly MonthlyLevelRow[];
+  /** Ofertas para el `@graph`: sesiones únicas + socio mensual, dos catálogos en paralelo. */
+  sessionOffers: readonly OfferInput[];
+  monthlyOffers: readonly OfferInput[];
   serviceName: string;
   serviceType: string;
   areaServed: string;
-  /** Ruta de la página hermana, para el `isRelatedTo` recíproco. */
   relatedServicePath?: string;
-  /** Testimonios ya consultados. Vacío mientras no haya ninguno verificado. */
   testimonials?: readonly TestimonialDoc[];
-  /** Categoría de testimonio a mostrar (ej. 'wedding', 'maternity'). */
   testimonialCategory: string;
   heroImage: { src: string; width: number; height: number };
   utmCampaign: string;
@@ -52,9 +53,10 @@ const {
   lang,
   city,
   content,
-  pricing,
-  pricingHighlight,
-  offers,
+  sessions,
+  monthlyLevels,
+  sessionOffers,
+  monthlyOffers,
   serviceName,
   serviceType,
   areaServed,
@@ -65,6 +67,9 @@ const {
   utmCampaign,
 } = Astro.props;
 
+const sessionsCatalogName = lang === 'en' ? 'One-Time Sessions' : 'Sesiones Únicas';
+const monthlyCatalogName = lang === 'en' ? 'Monthly Content Partnership' : 'Socio de Contenido Mensual';
+
 const jsonLd = servicePageGraph({
   service: {
     path,
@@ -72,7 +77,10 @@ const jsonLd = servicePageGraph({
     serviceType,
     city,
     areaServed,
-    catalogs: [{ name: serviceName, offers }],
+    catalogs: [
+      { name: sessionsCatalogName, offers: sessionOffers },
+      { name: monthlyCatalogName, offers: monthlyOffers },
+    ],
     relatedServiceId: relatedServicePath ? serviceId(relatedServicePath) : undefined,
   },
   faqs: content.faqs,
@@ -108,43 +116,47 @@ const jsonLd = servicePageGraph({
     {
       content.sectionsBeforePricing.map((section) =>
         section.kind === 'prose' ? (
-          <ProseSection
-            heading={section.heading}
-            note={section.note}
-            body={section.body}
-          />
+          <ProseSection heading={section.heading} note={section.note} body={section.body} />
         ) : (
           <BookingSteps heading={section.heading} steps={section.steps} />
         ),
       )
     }
 
+    <section class="pricing-section" id="sessions">
+      <h2>{content.sessions.heading}</h2>
+      <PricingTable entries={sessions} lang={lang} caption={content.sessions.note} />
+      <PortableText blocks={content.sessions.afterTable} />
+    </section>
+
     <section class="pricing-section" id="pricing">
-      <h2>{content.pricing.heading}</h2>
-      <PricingTable
-        entries={pricing}
+      <h2>{content.monthly.heading}</h2>
+      <SubscriptionTable
+        levels={monthlyLevels}
         lang={lang}
-        caption={content.pricing.note}
-        highlight={pricingHighlight}
+        caption={content.monthly.note}
+        levelLabel={content.monthly.levelLabel}
+        photoLabel={content.monthly.photoLabel}
+        videoLabel={content.monthly.videoLabel}
       />
-      <PortableText blocks={content.pricing.afterTable} />
-      <p class="pricing-section__addons">{content.pricing.addOns}</p>
-      <CTAWhatsApp
-        label={content.pricing.ctaLabel}
-        message={content.pricing.ctaMessage}
-        location="pricing"
-        utm={{ source: 'site', medium: 'pricing', campaign: utmCampaign }}
-      />
+      <PortableText blocks={content.monthly.afterTable} />
+      <div class="pricing-section__ctas">
+        <CTAWhatsApp
+          label={content.monthly.ctaLabel}
+          message={content.monthly.ctaMessage}
+          location="pricing"
+          utm={{ source: 'site', medium: 'pricing', campaign: utmCampaign }}
+        />
+        <a class="pricing-section__portfolio-link" href={content.monthly.portfolioLink.href}>
+          {content.monthly.portfolioLink.label}
+        </a>
+      </div>
     </section>
 
     {
       content.sectionsAfterPricing.map((section) =>
         section.kind === 'prose' ? (
-          <ProseSection
-            heading={section.heading}
-            note={section.note}
-            body={section.body}
-          />
+          <ProseSection heading={section.heading} note={section.note} body={section.body} />
         ) : (
           <BookingSteps heading={section.heading} steps={section.steps} />
         ),
@@ -187,8 +199,18 @@ const jsonLd = servicePageGraph({
     line-height: 1.7;
   }
 
-  .pricing-section__addons {
-    color: var(--color-fg-muted);
+  .pricing-section__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4);
+    margin-block-start: var(--space-3);
+  }
+
+  .pricing-section__portfolio-link {
+    color: var(--color-fg);
+    text-decoration-color: var(--color-border);
+    text-underline-offset: 0.2em;
   }
 
   .final-cta {

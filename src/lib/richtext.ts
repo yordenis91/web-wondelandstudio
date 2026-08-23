@@ -47,11 +47,21 @@ export interface Link {
   readonly href: string;
 }
 
-/** Un trozo de párrafo: texto suelto, o texto con destino. */
-export type Segment = string | Link;
+/** Texto en negrita: el lead-in en negrita de un párrafo ("**A single session** gets…"). */
+export interface Bold {
+  readonly text: string;
+  readonly bold: true;
+}
+
+/** Un trozo de párrafo: texto suelto, texto con destino, o texto en negrita. */
+export type Segment = string | Link | Bold;
 
 function isLink(segment: Segment): segment is Link {
-  return typeof segment !== 'string';
+  return typeof segment !== 'string' && !('bold' in segment);
+}
+
+function isBold(segment: Segment): segment is Bold {
+  return typeof segment !== 'string' && 'bold' in segment;
 }
 
 /**
@@ -64,6 +74,14 @@ function isLink(segment: Segment): segment is Link {
 export function paragraph(segments: readonly Segment[], key?: string): PortableTextBlock {
   const markDefs: PortableTextMarkDef[] = [];
   const children: PortableTextSpan[] = segments.map((segment, index) => {
+    if (isBold(segment)) {
+      return {
+        _type: 'span',
+        _key: `${key ?? 'p'}-s${index}`,
+        text: segment.text,
+        marks: ['strong'],
+      };
+    }
     if (!isLink(segment)) {
       return { _type: 'span', _key: `${key ?? 'p'}-s${index}`, text: segment, marks: [] };
     }
