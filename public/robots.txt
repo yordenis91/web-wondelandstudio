@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://wonderlandsstudio.com/sitemap.xml
