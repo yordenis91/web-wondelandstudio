@@ -90,20 +90,29 @@ function main(): void {
       }
     }
 
-    // Reciprocidad: cada alternate tiene que existir y devolver el enlace.
-    for (const [lang, href] of page.alternates) {
-      if (lang === 'x-default') continue;
+    /**
+     * Reciprocidad de verdad: ambos lados de la pareja EN/ES tienen que declarar
+     * exactamente los mismos dos enlaces. Comparar `target.alternates.get(lang)`
+     * contra la propia URL de `target` (como hacía una versión anterior de este
+     * chequeo) es una tautología — cualquier página que se autorreferencie
+     * correctamente lo pasa, apunte o no al socio real. Lo que hay que comparar es que
+     * el destino declare la MISMA pareja completa, no solo que se confirme a sí mismo.
+     */
+    const enHref = page.alternates.get('en-US');
+    const esHref = page.alternates.get('es-US');
+    for (const href of [enHref, esHref]) {
+      if (!href) continue;
 
       const target = byUrl.get(href);
       if (!target) {
-        errors.push(`${page.path} — hreflang="${lang}" apunta a ${href}, que no existe en dist/`);
+        errors.push(`${page.path} — apunta a ${href}, que no existe en dist/`);
         continue;
       }
-      const back = target.alternates.get(lang);
-      if (back !== href) {
+
+      if (target.alternates.get('en-US') !== enHref || target.alternates.get('es-US') !== esHref) {
         errors.push(
-          `${page.path} — relación no recíproca con ${target.path}: ` +
-            `esta declara ${lang}=${href}, la otra declara ${lang}=${back ?? 'nada'}`,
+          `${page.path} declara la pareja en-US=${enHref}/es-US=${esHref}, pero ${target.path} ` +
+            `declara en-US=${target.alternates.get('en-US')}/es-US=${target.alternates.get('es-US')} — no coinciden`,
         );
       }
     }

@@ -28,6 +28,10 @@ interface CategoryCopy {
   readonly metaDescription: { readonly en: string; readonly es: string };
   readonly answerParagraph: { readonly en: string; readonly es: string };
   readonly imageAlt: { readonly en: string; readonly es: string };
+  readonly finalCta: {
+    readonly en: { heading: string; body: string; label: string; message: string };
+    readonly es: { heading: string; body: string; label: string; message: string };
+  };
 }
 
 const COPY: Readonly<Record<PortfolioCategory['id'], CategoryCopy>> = {
@@ -49,6 +53,20 @@ const COPY: Readonly<Record<PortfolioCategory['id'], CategoryCopy>> = {
       en: 'Wedding photography and film by Wonderlands Studio',
       es: 'Fotografía y video de boda por Wonderlands Studio',
     },
+    finalCta: {
+      en: {
+        heading: 'Like what you see?',
+        body: 'Let’s talk about your wedding date and what coverage looks like for your day.',
+        label: 'Check your date',
+        message: 'Hi Wonderlands Studio — I saw the wedding portfolio and would like to check availability.',
+      },
+      es: {
+        heading: '¿Te gustó lo que viste?',
+        body: 'Hablemos de la fecha de tu boda y de cómo sería la cobertura para tu día.',
+        label: 'Consulta tu fecha',
+        message: 'Hola Wonderlands Studio — vi el portafolio de bodas y quisiera consultar disponibilidad.',
+      },
+    },
   },
   branding: {
     h1: { en: 'Brand Photography Portfolio', es: 'Portafolio de Fotografía de Marca' },
@@ -67,6 +85,20 @@ const COPY: Readonly<Record<PortfolioCategory['id'], CategoryCopy>> = {
     imageAlt: {
       en: 'Brand photography session by Wonderlands Studio',
       es: 'Sesión de fotografía de marca por Wonderlands Studio',
+    },
+    finalCta: {
+      en: {
+        heading: 'Like what you see?',
+        body: 'Let’s talk about your brand and what a session built around it looks like.',
+        label: 'Check your date',
+        message: 'Hi Wonderlands Studio — I saw the brand portfolio and would like to check availability.',
+      },
+      es: {
+        heading: '¿Te gustó lo que viste?',
+        body: 'Hablemos de tu marca y de cómo sería una sesión construida alrededor de ella.',
+        label: 'Consulta tu fecha',
+        message: 'Hola Wonderlands Studio — vi el portafolio de marca y quisiera consultar disponibilidad.',
+      },
     },
   },
   maternity: {
@@ -87,23 +119,22 @@ const COPY: Readonly<Record<PortfolioCategory['id'], CategoryCopy>> = {
       en: 'Maternity photography session by Wonderlands Studio',
       es: 'Sesión de fotografía de embarazo por Wonderlands Studio',
     },
+    finalCta: {
+      en: {
+        heading: 'Like what you see?',
+        body: 'Let’s talk about your due date and what a session with us looks like.',
+        label: 'Check your date',
+        message: 'Hi Wonderlands Studio — I saw the maternity portfolio and would like to check availability.',
+      },
+      es: {
+        heading: '¿Te gustó lo que viste?',
+        body: 'Hablemos de tu fecha de parto y de cómo sería una sesión con nosotros.',
+        label: 'Consulta tu fecha',
+        message: 'Hola Wonderlands Studio — vi el portafolio de embarazo y quisiera consultar disponibilidad.',
+      },
+    },
   },
 };
-
-const FINAL_CTA = {
-  en: {
-    heading: 'Like what you see?',
-    body: 'Let’s talk about your date and what a session with us looks like.',
-    label: 'Check your date',
-    message: 'Hi Wonderlands Studio — I saw the portfolio and would like to check availability.',
-  },
-  es: {
-    heading: '¿Te gustó lo que viste?',
-    body: 'Hablemos de tu fecha y de cómo sería una sesión con nosotros.',
-    label: 'Consulta tu fecha',
-    message: 'Hola Wonderlands Studio — vi el portafolio y quisiera consultar disponibilidad.',
-  },
-} as const;
 
 export function getPortfolioH1(categoryId: PortfolioCategory['id'], lang: 'en' | 'es'): string {
   return COPY[categoryId].h1[lang];
@@ -120,7 +151,7 @@ export function getPortfolioContent(
     metaDescription: copy.metaDescription[lang],
     h1: copy.h1[lang],
     answerParagraph: copy.answerParagraph[lang],
-    finalCta: FINAL_CTA[lang],
+    finalCta: copy.finalCta[lang],
     breadcrumbs,
     hero: { eyebrow: lang === 'en' ? 'Portfolio' : 'Portafolio', alt: copy.imageAlt[lang] },
   };
