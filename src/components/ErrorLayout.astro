@@ -1,0 +1,75 @@
+---
+/**
+ * Layout mínimo para páginas de error (404 por ahora).
+ *
+ * No es `Layout.astro`: esa exige un `path` registrado en `ROUTES` y emite
+ * canonical + hreflang recíproco (regla 6 de CLAUDE.md), que no tienen sentido para una
+ * página que no es contenido indexable — Google ni evalúa hreflang en una página
+ * `noindex`. En vez de forzar un 404 dentro del mapa de rutas reales (que alimenta
+ * sitemap y `hreflang.test.ts`), este layout replica solo lo técnico que sí aplica:
+ * charset, viewport, la fuente autoalojada y los dos scripts inline de `Layout.astro`
+ * (clase `.js` para el menú móvil, listener de analítica de los CTA de WhatsApp) —
+ * sin ellos el header y el CTA de esta página se comportarían distinto al resto del
+ * sitio. `scripts/check-head.ts` excluye `404.html` de la revisión de canonical/hreflang
+ * por el mismo motivo.
+ */
+import '../styles/global.css';
+
+interface Props {
+  lang: 'en' | 'es';
+  title: string;
+  description: string;
+}
+
+const { lang, title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang={lang === 'en' ? 'en-US' : 'es-US'}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="noindex, nofollow" />
+
+    <link
+      rel="preload"
+      href="/fonts/montserrat-variable.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">
+      {lang === 'en' ? 'Skip to content' : 'Saltar al contenido'}
+    </a>
+
+    <slot name="header" />
+
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+
+    <slot name="footer" />
+
+    <script is:inline>
+      document.addEventListener('click', function (event) {
+        var cta = event.target.closest('[data-wa-cta]');
+        if (!cta) return;
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: 'whatsapp_click',
+          wa_location: cta.getAttribute('data-wa-location') || '',
+          wa_page: window.location.pathname,
+        });
+      });
+    </script>
+  </body>
+</html>

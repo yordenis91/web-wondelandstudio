@@ -1,0 +1,97 @@
+---
+/**
+ * 404 ES. Ver `ErrorLayout.astro` para por qué esta página no pasa por `Layout.astro`
+ * ni por `scripts/check-head.ts`.
+ */
+import ErrorLayout from '../../components/ErrorLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import CTAWhatsApp from '../../components/CTAWhatsApp.astro';
+
+const path = '/es/404/';
+
+const links = [
+  { href: '/es/', label: 'Inicio' },
+  { href: '/es/west-palm-beach/', label: 'West Palm Beach' },
+  { href: '/es/port-st-lucie/', label: 'Port St. Lucie' },
+  { href: '/es/precios/', label: 'Precios' },
+  { href: '/es/sobre-lisandra/', label: 'Sobre Lisandra' },
+];
+---
+
+<ErrorLayout
+  lang="es"
+  title="Página No Encontrada | Wonderlands Studio"
+  description="Esta página no existe. Encuentra el camino de vuelta a los servicios de fotografía y video de Wonderlands Studio en West Palm Beach y Port St. Lucie."
+>
+  <Header slot="header" path={path} />
+  <Footer slot="footer" path={path} />
+
+  <div class="container not-found">
+    <span class="eyebrow">Error 404</span>
+    <h1>Esta página no está en la galería</h1>
+    <p class="not-found__intro">
+      El enlace que seguiste está roto, o la página se movió. Aquí puedes encontrar lo
+      que buscabas.
+    </p>
+
+    <CTAWhatsApp
+      label="Escríbenos por WhatsApp"
+      message="Hola Wonderlands Studio — llegué a un enlace roto y tenía una pregunta."
+      location="404-page"
+      utm={{ source: 'site', medium: '404', campaign: 'not-found' }}
+      variant="fill"
+    />
+
+    <nav class="not-found__links" aria-label="Páginas populares">
+      <ul>
+        {
+          links.map((link) => (
+            <li>
+              <a href={link.href}>{link.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</ErrorLayout>
+
+<style>
+  .not-found {
+    padding-block: var(--space-12) var(--space-8);
+    max-width: 40rem;
+  }
+
+  .not-found__intro {
+    color: var(--color-fg-muted);
+    font-size: var(--text-h5);
+    line-height: var(--leading-normal);
+    margin-bottom: var(--space-4);
+  }
+
+  .not-found__links {
+    margin-top: var(--space-8);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .not-found__links ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-4);
+  }
+
+  .not-found__links a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    color: var(--color-fg);
+  }
+
+  .not-found__links a:hover {
+    color: var(--color-accent);
+  }
+</style>
