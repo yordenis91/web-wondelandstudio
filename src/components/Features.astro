@@ -1,0 +1,103 @@
+---
+/**
+ * "Por qué elegirnos" — 6 puntos, rescatados y limpiados del sitio anterior (ver
+ * `content/home-features.ts`). El sitio original los mostraba en placas circulares con
+ * el ícono en el color de acento; se adapta aquí a esquinas rectas (tokens.css,
+ * `--radius: 0`, ya en todo el sitio) y el ícono se deja en un tono neutro
+ * (`--color-border`), no en acento — DESIGN_PLAN.md §1.1 documenta el acento como
+ * "regla dura, dos lugares y solo dos: el botón y el eyebrow label". Una placa de
+ * ícono por card sería un tercer uso repartido, justo lo que esa regla existe para
+ * evitar. El acento sigue vivo en el CTA de la sección, no en las seis cards.
+ */
+import type { HomeFeature } from '../content/home-features.ts';
+
+interface Props {
+  heading: string;
+  features: readonly HomeFeature[];
+}
+
+const { heading, features } = Astro.props;
+
+/**
+ * Trazos rectos donde el motivo lo permite (visor de cámara, marco de video, sol
+ * cuadrado, burbujas de chat, reloj de arena) — el corazón de "paciencia" es la única
+ * excepción real: forzarlo a líneas rectas lo vuelve un rombo ilegible, así que se le
+ * permite la curva mínima que lo mantiene reconocible como corazón. `stroke-width`
+ * uniforme en las seis para que la familia de íconos se lea como un solo set.
+ */
+const ICONS: Record<HomeFeature['icon'], string> = {
+  frame: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 8V6a1 1 0 0 1 1-1h2M20 8V6a1 1 0 0 0-1-1h-2M4 16v2a1 1 0 0 0 1 1h2M20 16v2a1 1 0 0 1-1 1h-2"/><rect x="10.5" y="10.5" width="3" height="3"/></svg>`,
+  reel: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14"/><path d="M10 9.5v5l5-2.5-5-2.5z"/></svg>`,
+  light: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="8.5" y="8.5" width="7" height="7"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg>`,
+  bilingual: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M3 4h11v8H9l-2.5 2.5V12H3V4z"/><path d="M10 10h11v8h-6l-2.5 2.5V18h-2.5v-8z"/></svg>`,
+  print: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M5 3h9l5 5v13H5V3z"/><path d="M14 3v5h5"/><path d="M8 15l2.5-2.5L13 15l3-3.5"/></svg>`,
+  hourglass: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12M6 21h12M7 3v3.5l5 5.5-5 5.5V21M17 3v3.5l-5 5.5 5 5.5V21"/></svg>`,
+};
+---
+
+<section class="features">
+  <h2>{heading}</h2>
+  <ul class="features__grid">
+    {
+      features.map((feature) => (
+        <li class="features__item">
+          <span class="features__icon" aria-hidden="true" set:html={ICONS[feature.icon]} />
+          <h3>{feature.title}</h3>
+          <p>{feature.body}</p>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .features {
+    padding-block: var(--space-8);
+    border-block-end: 1px solid var(--color-border);
+  }
+
+  .features h2 {
+    margin-block-end: var(--space-4);
+  }
+
+  .features__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+
+  .features__item {
+    padding: var(--space-4);
+    border: 1px solid var(--color-border);
+  }
+
+  .features__icon {
+    display: inline-flex;
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-border);
+    color: var(--color-fg-muted);
+    margin-block-end: var(--space-3);
+  }
+
+  .features__icon :global(svg) {
+    width: 22px;
+    height: 22px;
+  }
+
+  .features__item h3 {
+    font-size: var(--text-h5);
+    margin: 0 0 var(--space-1);
+  }
+
+  .features__item p {
+    color: var(--color-fg-muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+</style>
