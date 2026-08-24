@@ -9,6 +9,7 @@
  */
 import Layout from './Layout.astro';
 import Header from './Header.astro';
+import Footer from './Footer.astro';
 import Hero from './Hero.astro';
 import Breadcrumbs from './Breadcrumbs.astro';
 import AnswerBlock from './AnswerBlock.astro';
@@ -92,6 +93,7 @@ const jsonLd = servicePageGraph({
   jsonLd={jsonLd}
 >
   <Header slot="header" path={path} />
+  <Footer slot="footer" path={path} />
 
   <Hero
     eyebrow={content.hero.eyebrow}

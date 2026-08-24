@@ -9,6 +9,7 @@
  */
 import Layout from '../components/Layout.astro';
 import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 import Hero from '../components/Hero.astro';
 import AnswerBlock from '../components/AnswerBlock.astro';
 import FAQ from '../components/FAQ.astro';
@@ -49,6 +50,7 @@ const jsonLd = homePageGraph({ lang: 'en' });
   jsonLd={jsonLd}
 >
   <Header slot="header" path={path} />
+  <Footer slot="footer" path={path} />
 
   <Hero
     eyebrow="Photography and video studio"

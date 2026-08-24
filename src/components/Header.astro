@@ -24,8 +24,7 @@ import {
   type Lang,
   type City,
 } from '../i18n/routes.ts';
-import { BUSINESS, getLocation } from '../data/business.ts';
-import { isPending } from '../data/tokens.ts';
+import { BUSINESS, getLocation, resolvedPhone } from '../data/business.ts';
 
 interface Props {
   path: string;
@@ -85,8 +84,7 @@ function activeServicesOf(city: City) {
 
 const items = NAV[lang];
 const home = lang === 'en' ? '/' : '/es/';
-const phone = getLocation('wpb').phone;
-const showPhone = !isPending(phone.e164) && !isPending(phone.display);
+const phone = resolvedPhone(getLocation('wpb'));
 ---
 
 <header class="site-header" data-site-header>
@@ -171,7 +169,7 @@ const showPhone = !isPending(phone.e164) && !isPending(phone.display);
 
       <div class="site-header__aside">
         {
-          showPhone && (
+          phone && (
             <a class="site-header__phone" href={`tel:${phone.e164}`}>
               {phone.display}
             </a>
