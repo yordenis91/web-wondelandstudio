@@ -387,6 +387,30 @@ export function hubPageGraph(input: HubPageGraphInput): JsonLdGraph {
   ]);
 }
 
+export interface PortfolioPageGraphInput {
+  readonly path: string;
+  readonly name: string;
+  readonly breadcrumbs: readonly BreadcrumbInput[];
+}
+
+/**
+ * `pageType: portfolio` — `/portfolio/[category]/`. La más liviana de las páginas con
+ * grafo propio: es una galería, no vende un servicio ni responde preguntas, así que no
+ * lleva `Service` ni `FAQPage` — solo `CollectionPage` y las migas de pan.
+ */
+export function portfolioPageGraph(input: PortfolioPageGraphInput): JsonLdGraph {
+  return graph([
+    ...baseNodes(),
+    {
+      '@type': 'CollectionPage',
+      '@id': `${absoluteUrl(input.path)}#page`,
+      name: input.name,
+      url: absoluteUrl(input.path),
+    },
+    breadcrumbNode(input.breadcrumbs),
+  ]);
+}
+
 export interface AggregatePageGraphInput {
   readonly path: string;
   readonly name: string;

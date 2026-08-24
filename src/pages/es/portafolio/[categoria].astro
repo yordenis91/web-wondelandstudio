@@ -1,0 +1,31 @@
+---
+/**
+ * `/es/portafolio/[categoria]/` — pageType: portfolio. Ver
+ * `pages/portfolio/[category].astro` para el resto de la nota.
+ */
+import PortfolioPageTemplate from '../../../components/PortfolioPageTemplate.astro';
+import { PORTFOLIO_CATEGORIES } from '../../../i18n/routes.ts';
+import { getPortfolioContent, getPortfolioH1, getPortfolioImages } from '../../../content/portfolio.ts';
+
+export function getStaticPaths() {
+  return PORTFOLIO_CATEGORIES.map((category) => ({ params: { categoria: category.es } }));
+}
+
+const lang = 'es' as const;
+const { categoria: slug } = Astro.params;
+const category = PORTFOLIO_CATEGORIES.find((c) => c.es === slug)!;
+const path = `/es/portafolio/${category.es}/`;
+
+const breadcrumbs = [{ name: 'Inicio', path: '/es/' }, { name: getPortfolioH1(category.id, lang) }];
+const content = getPortfolioContent(category.id, lang, breadcrumbs);
+const images = getPortfolioImages(category.id, lang);
+---
+
+<PortfolioPageTemplate
+  path={path}
+  lang={lang}
+  content={content}
+  images={images}
+  heroImage={{ src: '/hero-placeholder.svg', width: 1600, height: 900 }}
+  utmCampaign={`portfolio-${category.id}-es`}
+/>
