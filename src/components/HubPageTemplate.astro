@@ -14,6 +14,7 @@
  */
 import Layout from './Layout.astro';
 import Header from './Header.astro';
+import Footer from './Footer.astro';
 import Hero from './Hero.astro';
 import Breadcrumbs from './Breadcrumbs.astro';
 import AnswerBlock from './AnswerBlock.astro';
@@ -25,8 +26,7 @@ import CTAWhatsApp from './CTAWhatsApp.astro';
 import type { HubPageContent } from '../lib/pageContent.ts';
 import type { Lang, City } from '../i18n/routes.ts';
 import { getServiceMatrix, getMatrixHref } from '../i18n/routes.ts';
-import { getLocation } from '../data/business.ts';
-import { isPending } from '../data/tokens.ts';
+import { getLocation, resolvedAddress, resolvedPhone } from '../data/business.ts';
 import { hubPageGraph } from '../lib/schema.ts';
 
 interface Props {
@@ -69,13 +69,12 @@ function resolveCard(services: readonly string[]) {
   };
 }
 
-const streetKnown = !isPending(location.address.streetAddress);
-const postalKnown = !isPending(location.address.postalCode);
-const phoneKnown = !isPending(location.phone.display);
+const address = resolvedAddress(location);
+const phone = resolvedPhone(location);
 
-const directionsQuery = streetKnown
-  ? `${location.address.streetAddress}, ${location.address.addressLocality}, ${location.address.addressRegion} ${postalKnown ? location.address.postalCode : ''}`
-  : `${location.address.addressLocality}, ${location.address.addressRegion}`;
+const directionsQuery = address.streetAddress
+  ? `${address.streetAddress}, ${address.addressLocality}, ${address.addressRegion} ${address.postalCode ?? ''}`
+  : `${address.addressLocality}, ${address.addressRegion}`;
 const directionsHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(directionsQuery)}`;
 ---
 
@@ -86,6 +85,7 @@ const directionsHref = `https://www.google.com/maps/search/?api=1&query=${encode
   jsonLd={jsonLd}
 >
   <Header slot="header" path={path} />
+  <Footer slot="footer" path={path} />
 
   <Hero
     eyebrow={content.hero.eyebrow}
@@ -141,21 +141,21 @@ const directionsHref = `https://www.google.com/maps/search/?api=1&query=${encode
       <h2>{content.studioHeading}</h2>
       <p>{content.studioIntro}</p>
       <p class="studio__address">
-        {streetKnown && (
+        {address.streetAddress && (
           <>
-            {location.address.streetAddress}
+            {address.streetAddress}
             <br />
           </>
         )}
-        {location.address.addressLocality}, {location.address.addressRegion}
-        {postalKnown && ` ${location.address.postalCode}`}
+        {address.addressLocality}, {address.addressRegion}
+        {address.postalCode && ` ${address.postalCode}`}
       </p>
       <p class="studio__links">
         <a href={directionsHref}>{content.directionsLabel}</a>
-        {phoneKnown && (
+        {phone && (
           <>
             {' · '}
-            <a href={`tel:${location.phone.e164}`}>{location.phone.display}</a>
+            <a href={`tel:${phone.e164}`}>{phone.display}</a>
           </>
         )}
       </p>

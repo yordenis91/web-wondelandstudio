@@ -1,0 +1,275 @@
+---
+/**
+ * Footer del sitio: NAP de las dos sedes, enlaces rápidos a los servicios activos y
+ * redes sociales.
+ *
+ * Mismas reglas que el resto del sitio, no una excepción para el footer:
+ *  - NAP siempre desde `data/business.ts` (regla 3 de CLAUDE.md) — nunca un teléfono o
+ *    dirección escritos a mano aquí.
+ *  - Un dato todavía sin confirmar (calle de WPB, teléfono de PSL) se omite en vez de
+ *    mostrar el token — mismo criterio que ya aplican `Header.astro` y
+ *    `HubPageTemplate.astro`, y las tres comparten `resolvedAddress()`/`resolvedPhone()`
+ *    en vez de repetir el chequeo de `isPending()` cada vez.
+ *  - Los enlaces a servicios salen de `SERVICE_MATRIX` filtrada a `status: active` —
+ *    nunca un link a una página `planned`, igual que en la nav y en los hubs.
+ *  - Cero JavaScript: es texto y enlaces, servidos tal cual.
+ */
+import {
+  getLang,
+  normalizePath,
+  getServiceMatrix,
+  getMatrixHref,
+  SERVICE_LABELS,
+  type Lang,
+  type City,
+} from '../i18n/routes.ts';
+import { BUSINESS, getLocation, resolvedAddress, resolvedPhone } from '../data/business.ts';
+
+interface Props {
+  path: string;
+}
+
+const { path } = Astro.props;
+const lang: Lang = getLang(normalizePath(path));
+
+const L = {
+  en: {
+    tagline: 'Bilingual photography & video studio serving Palm Beach County and Port St. Lucie.',
+    servicesHeading: 'Services',
+    siteHeading: 'Site',
+    directions: 'Get directions',
+    pricing: { href: '/pricing/', label: 'Pricing' },
+    about: { href: '/about-lisandra/', label: 'About Lisandra' },
+    rights: 'All rights reserved.',
+  },
+  es: {
+    tagline: 'Estudio bilingüe de fotografía y video en el condado de Palm Beach y Port St. Lucie.',
+    servicesHeading: 'Servicios',
+    siteHeading: 'Sitio',
+    directions: 'Cómo llegar',
+    pricing: { href: '/es/precios/', label: 'Precios' },
+    about: { href: '/es/sobre-lisandra/', label: 'Sobre Lisandra' },
+    rights: 'Todos los derechos reservados.',
+  },
+}[lang];
+
+const CITY_HUBS: Readonly<Record<City, { href: string; label: string }>> = {
+  wpb: { href: lang === 'en' ? '/west-palm-beach/' : '/es/west-palm-beach/', label: 'West Palm Beach' },
+  psl: { href: lang === 'en' ? '/port-st-lucie/' : '/es/port-st-lucie/', label: 'Port St. Lucie' },
+};
+
+function cityColumn(city: City) {
+  const location = getLocation(city);
+  const address = resolvedAddress(location);
+  const phone = resolvedPhone(location);
+  const services = getServiceMatrix(city)
+    .filter((entry) => entry.status === 'active')
+    .map((entry) => ({
+      href: getMatrixHref(entry, lang),
+      label: SERVICE_LABELS[entry.service]?.[lang] ?? entry.service,
+    }));
+
+  const directionsQuery = address.streetAddress
+    ? `${address.streetAddress}, ${address.addressLocality}, ${address.addressRegion} ${address.postalCode ?? ''}`
+    : `${address.addressLocality}, ${address.addressRegion}`;
+  const directionsHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(directionsQuery)}`;
+
+  return { hub: CITY_HUBS[city], address, phone, services, directionsHref };
+}
+
+const wpb = cityColumn('wpb');
+const psl = cityColumn('psl');
+
+const socialLabels: Readonly<Record<string, string>> = {
+  'instagram.com': 'Instagram',
+  'tiktok.com': 'TikTok',
+  'facebook.com': 'Facebook',
+};
+
+function socialLabel(url: string): string {
+  const host = Object.keys(socialLabels).find((h) => url.includes(h));
+  return host ? socialLabels[host]! : url;
+}
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__grid">
+    <div class="site-footer__brand">
+      <p class="site-footer__logo">{BUSINESS.legalName}</p>
+      <p class="site-footer__tagline">{L.tagline}</p>
+      <ul class="site-footer__social">
+        {
+          BUSINESS.social.map((url) => (
+            <li>
+              <a href={url} rel="noopener" target="_blank">
+                {socialLabel(url)}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    {
+      [wpb, psl].map((col) => (
+        <div class="site-footer__column">
+          <h2>
+            <a href={col.hub.href}>{col.hub.label}</a>
+          </h2>
+          <p class="site-footer__address">
+            {col.address.streetAddress && (
+              <>
+                {col.address.streetAddress}
+                <br />
+              </>
+            )}
+            {col.address.addressLocality}, {col.address.addressRegion}
+            {col.address.postalCode && ` ${col.address.postalCode}`}
+          </p>
+          <p class="site-footer__links-inline">
+            <a href={col.directionsHref}>{L.directions}</a>
+            {col.phone && (
+              <>
+                {' · '}
+                <a href={`tel:${col.phone.e164}`}>{col.phone.display}</a>
+              </>
+            )}
+          </p>
+          {col.services.length > 0 && (
+            <ul class="site-footer__services">
+              {col.services.map((service) => (
+                <li>
+                  <a href={service.href}>{service.label}</a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      ))
+    }
+
+    <div class="site-footer__column">
+      <h2>{L.siteHeading}</h2>
+      <ul class="site-footer__services">
+        <li><a href={L.pricing.href}>{L.pricing.label}</a></li>
+        <li><a href={L.about.href}>{L.about.label}</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="site-footer__bottom container">
+    <p>&copy; {year} {BUSINESS.legalName}. {L.rights}</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-block-start: 1px solid var(--color-border);
+    background: var(--color-bg-elevated);
+    padding-block-start: var(--space-8);
+  }
+
+  .site-footer__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 768px) {
+    .site-footer__grid {
+      grid-template-columns: 1.5fr repeat(3, 1fr);
+    }
+  }
+
+  .site-footer__brand {
+    grid-column: 1 / -1;
+  }
+
+  @media (min-width: 768px) {
+    .site-footer__brand {
+      grid-column: auto;
+    }
+  }
+
+  .site-footer__logo {
+    font-weight: 700;
+    font-size: var(--text-h5);
+    margin: 0 0 var(--space-2);
+  }
+
+  .site-footer__tagline {
+    color: var(--color-fg-muted);
+    max-width: 32ch;
+    line-height: 1.6;
+    margin: 0 0 var(--space-3);
+  }
+
+  .site-footer__social {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: var(--space-3);
+  }
+
+  .site-footer h2 {
+    font-size: var(--text-eyebrow);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-uppercase);
+    font-weight: 600;
+    margin: 0 0 var(--space-3);
+  }
+
+  .site-footer h2 a {
+    color: var(--color-fg);
+    text-decoration: none;
+  }
+
+  .site-footer h2 a:hover {
+    color: var(--color-accent);
+  }
+
+  .site-footer a {
+    color: var(--color-fg-muted);
+    text-decoration: none;
+  }
+
+  .site-footer a:hover {
+    color: var(--color-fg);
+  }
+
+  .site-footer__address {
+    font-style: normal;
+    color: var(--color-fg-muted);
+    margin: 0 0 var(--space-2);
+    line-height: 1.5;
+  }
+
+  .site-footer__links-inline {
+    margin: 0 0 var(--space-3);
+    font-size: var(--text-small);
+  }
+
+  .site-footer__services {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-1);
+    font-size: var(--text-small);
+  }
+
+  .site-footer__bottom {
+    margin-block-start: var(--space-8);
+    padding-block: var(--space-3);
+    border-block-start: 1px solid var(--color-border);
+  }
+
+  .site-footer__bottom p {
+    margin: 0;
+    color: var(--color-fg-muted);
+    font-size: var(--text-small);
+  }
+</style>

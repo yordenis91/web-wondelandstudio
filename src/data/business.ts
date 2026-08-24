@@ -6,7 +6,7 @@
  * propaga al HTML visible y al JSON-LD a la vez — que es lo que evita las señales NAP
  * inconsistentes que penalizan el SEO local.
  */
-import { type Pending, token } from './tokens.ts';
+import { type Pending, token, isPending } from './tokens.ts';
 
 export type CityKey = 'wpb' | 'psl';
 
@@ -141,6 +141,37 @@ export function getLocation(city: CityKey): Location {
 
 export function getAllLocations(): readonly Location[] {
   return [BUSINESS.locations.wpb, BUSINESS.locations.psl];
+}
+
+export interface ResolvedAddress {
+  readonly streetAddress?: string;
+  readonly addressLocality: string;
+  readonly addressRegion: string;
+  readonly postalCode?: string;
+}
+
+/**
+ * La dirección de una sede, con los campos todavía pendientes (`{{WPB_STREET_ADDRESS}}`,
+ * etc.) fuera del resultado en vez de como texto de placeholder. Un campo ausente aquí
+ * es correcto — un campo con el literal del token dentro no lo es (regla 4 de
+ * CLAUDE.md). Header, Footer y HubPageTemplate comparten esta función en vez de repetir
+ * el mismo `isPending()` tres veces con la oportunidad de que una copia se desincronice.
+ */
+export function resolvedAddress(location: Location): ResolvedAddress {
+  return {
+    streetAddress: isPending(location.address.streetAddress)
+      ? undefined
+      : location.address.streetAddress,
+    addressLocality: location.address.addressLocality,
+    addressRegion: location.address.addressRegion,
+    postalCode: isPending(location.address.postalCode) ? undefined : location.address.postalCode,
+  };
+}
+
+/** El teléfono de una sede, o `undefined` mientras siga sin confirmar — nunca el token literal. */
+export function resolvedPhone(location: Location): Phone | undefined {
+  if (isPending(location.phone.e164) || isPending(location.phone.display)) return undefined;
+  return { e164: location.phone.e164, display: location.phone.display };
 }
 
 export interface WhatsAppUtm {
