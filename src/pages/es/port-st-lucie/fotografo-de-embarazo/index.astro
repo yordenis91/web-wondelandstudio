@@ -8,6 +8,7 @@
 import ServicePageTemplate from '../../../../components/ServicePageTemplate.astro';
 import { PSL_MATERNITY_PHOTOGRAPHER } from '../../../../content/psl-maternity-photographer.ts';
 import { getMaternityPricing, getMaternityOffers } from '../../../../data/maternityPricing.ts';
+import { TESTIMONIALS } from '../../../../content/testimonials.ts';
 
 const lang = 'es' as const;
 const path = '/es/port-st-lucie/fotografo-de-embarazo/';
@@ -25,6 +26,7 @@ const path = '/es/port-st-lucie/fotografo-de-embarazo/';
   areaServed="Port St. Lucie"
   areaServedType="City"
   testimonialCategory="maternity"
+  testimonials={TESTIMONIALS}
   heroImage={{ src: '/hero-placeholder.svg', width: 1600, height: 900 }}
   utmCampaign="psl-maternity-photographer-es"
 />

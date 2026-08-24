@@ -9,6 +9,7 @@
 import ServicePageTemplate from '../../../components/ServicePageTemplate.astro';
 import { WPB_WEDDING_PHOTOGRAPHER } from '../../../content/wpb-wedding-photographer.ts';
 import { getWeddingPricing, getWeddingOffers, weddingHighlight } from '../../../data/pricing.ts';
+import { TESTIMONIALS } from '../../../content/testimonials.ts';
 
 const lang = 'en' as const;
 const path = '/west-palm-beach/wedding-photographer/';
@@ -22,6 +23,7 @@ const path = '/west-palm-beach/wedding-photographer/';
   pricing={getWeddingPricing(lang, 'photography')}
   pricingHighlight={weddingHighlight(lang)}
   testimonialCategory="wedding"
+  testimonials={TESTIMONIALS}
   offers={getWeddingOffers(lang, 'photography')}
   serviceName="Wedding Photography in West Palm Beach"
   serviceType="Wedding Photography"

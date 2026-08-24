@@ -9,6 +9,7 @@
 import ServicePageTemplate from '../../../components/ServicePageTemplate.astro';
 import { PSL_MATERNITY_PHOTOGRAPHER } from '../../../content/psl-maternity-photographer.ts';
 import { getMaternityPricing, getMaternityOffers } from '../../../data/maternityPricing.ts';
+import { TESTIMONIALS } from '../../../content/testimonials.ts';
 
 const lang = 'en' as const;
 const path = '/port-st-lucie/maternity-photographer/';
@@ -26,6 +27,7 @@ const path = '/port-st-lucie/maternity-photographer/';
   areaServed="Port St. Lucie"
   areaServedType="City"
   testimonialCategory="maternity"
+  testimonials={TESTIMONIALS}
   heroImage={{ src: '/hero-placeholder.svg', width: 1600, height: 900 }}
   utmCampaign="psl-maternity-photographer-en"
 />

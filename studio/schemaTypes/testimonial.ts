@@ -32,6 +32,7 @@ export const testimonial = defineType({
     defineField({
       name: 'city',
       title: 'Ciudad',
+      description: 'Opcional — no todos los testimonios traen ciudad confirmada.',
       type: 'string',
       group: 'content',
       options: {
@@ -40,7 +41,6 @@ export const testimonial = defineType({
           { title: 'Port St. Lucie', value: 'psl' },
         ],
       },
-      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'category',
