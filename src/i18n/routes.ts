@@ -149,6 +149,20 @@ export const PORTFOLIO_CATEGORIES = [
 export type PortfolioCategory = (typeof PORTFOLIO_CATEGORIES)[number];
 
 /**
+ * Nombre corto de cada línea de `SERVICE_MATRIX`, para el submenú de la nav (Header.astro).
+ * Solo se pintan las entradas `active` — mismo criterio que en el hub: nunca un link a
+ * una página `planned`, tampoco en la nav.
+ */
+export const SERVICE_LABELS: Readonly<Record<string, Readonly<Record<Lang, string>>>> = {
+  'wedding-photographer': { en: 'Wedding Photographer', es: 'Fotógrafo de Bodas' },
+  'wedding-videographer': { en: 'Wedding Videographer', es: 'Videógrafo de Bodas' },
+  'brand-photography': { en: 'Brand Photography', es: 'Fotografía de Marca' },
+  'maternity-photographer': { en: 'Maternity Photography', es: 'Fotógrafo de Embarazo' },
+  'video-production': { en: 'Video Production', es: 'Producción de Video' },
+  'quinceanera-photographer': { en: 'Quinceañera Photography', es: 'Fotografía de Quinceañera' },
+};
+
+/**
  * Matriz servicio × ciudad. `active` tiene página; `planned` existe comercialmente pero
  * todavía no tiene URL, así que el hub la muestra sin enlace (docs/PLAN.md §3.2).
  * Un deck nunca enlaza a una entrada `planned`: enlaza al ancla del hub.

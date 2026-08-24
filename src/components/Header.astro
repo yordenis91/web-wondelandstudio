@@ -14,7 +14,16 @@
  * muerto. La clase `.js` la pone `Layout.astro` antes del primer pintado, así que no
  * hay parpadeo de menú abierto→cerrado.
  */
-import { getAlternate, getLang, normalizePath, type Lang } from '../i18n/routes.ts';
+import {
+  getAlternate,
+  getLang,
+  normalizePath,
+  getServiceMatrix,
+  getMatrixHref,
+  SERVICE_LABELS,
+  type Lang,
+  type City,
+} from '../i18n/routes.ts';
 import { BUSINESS, getLocation } from '../data/business.ts';
 import { isPending } from '../data/tokens.ts';
 
@@ -30,25 +39,49 @@ const other: Lang = lang === 'en' ? 'es' : 'en';
 /** El equivalente en el otro idioma. Layout ya falló el build si no existiera. */
 const otherHref = getAlternate(canonicalPath, other) ?? (other === 'en' ? '/' : '/es/');
 
-const NAV = {
+interface NavLink {
+  readonly kind: 'link';
+  readonly href: string;
+  readonly label: string;
+}
+
+/** Un hub en la nav lleva submenú — sus páginas de servicio `active`, nunca `planned`. */
+interface NavHub {
+  readonly kind: 'hub';
+  readonly href: string;
+  readonly label: string;
+  readonly city: City;
+}
+
+const NAV: Readonly<Record<Lang, readonly (NavLink | NavHub)[]>> = {
   en: [
-    { href: '/west-palm-beach/', label: 'West Palm Beach' },
-    { href: '/port-st-lucie/', label: 'Port St. Lucie' },
-    { href: '/pricing/', label: 'Pricing' },
-    { href: '/about-lisandra/', label: 'About' },
+    { kind: 'hub', href: '/west-palm-beach/', label: 'West Palm Beach', city: 'wpb' },
+    { kind: 'hub', href: '/port-st-lucie/', label: 'Port St. Lucie', city: 'psl' },
+    { kind: 'link', href: '/pricing/', label: 'Pricing' },
+    { kind: 'link', href: '/about-lisandra/', label: 'About' },
   ],
   es: [
-    { href: '/es/west-palm-beach/', label: 'West Palm Beach' },
-    { href: '/es/port-st-lucie/', label: 'Port St. Lucie' },
-    { href: '/es/precios/', label: 'Precios' },
-    { href: '/es/sobre-lisandra/', label: 'Sobre Lisandra' },
+    { kind: 'hub', href: '/es/west-palm-beach/', label: 'West Palm Beach', city: 'wpb' },
+    { kind: 'hub', href: '/es/port-st-lucie/', label: 'Port St. Lucie', city: 'psl' },
+    { kind: 'link', href: '/es/precios/', label: 'Precios' },
+    { kind: 'link', href: '/es/sobre-lisandra/', label: 'Sobre Lisandra' },
   ],
-} as const;
+};
 
 const L = {
-  en: { nav: 'Main', menu: 'Menu' },
-  es: { nav: 'Principal', menu: 'Menú' },
+  en: { nav: 'Main', menu: 'Menu', overview: 'All {city} services', toggle: 'Show {city} services' },
+  es: { nav: 'Principal', menu: 'Menú', overview: 'Todos los servicios de {city}', toggle: 'Ver servicios de {city}' },
 }[lang];
+
+/** Las páginas de servicio activas de un hub, resueltas a href + etiqueta. */
+function activeServicesOf(city: City) {
+  return getServiceMatrix(city)
+    .filter((entry) => entry.status === 'active')
+    .map((entry) => ({
+      href: getMatrixHref(entry, lang),
+      label: SERVICE_LABELS[entry.service]?.[lang] ?? entry.service,
+    }));
+}
 
 const items = NAV[lang];
 const home = lang === 'en' ? '/' : '/es/';
@@ -82,12 +115,53 @@ const showPhone = !isPending(phone.e164) && !isPending(phone.display);
         <ul class="site-header__nav">
           {
             items.map((item) => {
-              const current = normalizePath(item.href) === canonicalPath;
+              if (item.kind === 'link') {
+                const current = normalizePath(item.href) === canonicalPath;
+                return (
+                  <li>
+                    <a href={item.href} aria-current={current ? 'page' : undefined}>
+                      {item.label}
+                    </a>
+                  </li>
+                );
+              }
+
+              const services = activeServicesOf(item.city);
+              const onHub = normalizePath(item.href) === canonicalPath;
+              const onService = services.some((s) => normalizePath(s.href) === canonicalPath);
+              const current = onHub || onService;
+
               return (
-                <li>
+                <li class="site-header__nav-item">
                   <a href={item.href} aria-current={current ? 'page' : undefined}>
                     {item.label}
                   </a>
+                  {services.length > 0 && (
+                    <details class="nav-dropdown">
+                      <summary aria-label={L.toggle.replace('{city}', item.label)}>
+                        <span aria-hidden="true">▾</span>
+                      </summary>
+                      <ul class="nav-dropdown__panel">
+                        <li>
+                          <a href={item.href} class="nav-dropdown__overview">
+                            {L.overview.replace('{city}', item.label)}
+                          </a>
+                        </li>
+                        {services.map((service) => (
+                          <li>
+                            <a
+                              href={service.href}
+                              aria-current={
+                                normalizePath(service.href) === canonicalPath ? 'page' : undefined
+                              }
+                            >
+                              {service.label}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </details>
+                  )}
                 </li>
               );
             })
@@ -166,6 +240,88 @@ const showPhone = !isPending(phone.e164) && !isPending(phone.display);
   .site-header__nav a:hover,
   .site-header__nav a[aria-current='page'] {
     color: var(--color-fg);
+  }
+
+  /* ── Submenú de hub ────────────────────────────────────────────────────────
+     `<details>/<summary>` nativo, mismo principio que FAQ.astro: funciona sin
+     JavaScript, con teclado, y el contenido está en el HTML servido — un buscador no
+     necesita ejecutar nada para ver que "West Palm Beach" enlaza también a "Fotógrafo
+     de Bodas". El enlace al hub vive aparte del `<summary>`, para no perder el click
+     directo que ya tenía la nav: `<summary>` solo abre/cierra la lista. */
+  .site-header__nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.35em;
+    position: relative;
+  }
+
+  .nav-dropdown {
+    position: relative;
+  }
+
+  .nav-dropdown summary {
+    display: block;
+    cursor: pointer;
+    list-style: none;
+    color: var(--color-fg-muted);
+    font-size: 0.7em;
+    line-height: 1;
+    padding: var(--space-1);
+    margin: calc(var(--space-1) * -1);
+  }
+
+  .nav-dropdown summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .nav-dropdown summary:hover,
+  .nav-dropdown[open] summary {
+    color: var(--color-fg);
+  }
+
+  .nav-dropdown summary:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .nav-dropdown__panel {
+    list-style: none;
+    margin: 0;
+    padding: var(--space-2);
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  .nav-dropdown__overview {
+    color: var(--color-accent) !important;
+  }
+
+  @media (min-width: 768px) {
+    .nav-dropdown__panel {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      min-width: 240px;
+      margin-block-start: var(--space-2);
+      background: var(--color-bg-elevated);
+      border: 1px solid var(--color-border);
+      z-index: 20;
+      display: none;
+    }
+
+    /* Abre al pasar el mouse sobre todo el item (conveniencia, zona de hover amplia,
+       no solo la flecha) o con `[open]` nativo — clic o teclado siguen funcionando
+       exactamente igual sin esta regla, es puramente aditiva. */
+    .site-header__nav-item:hover .nav-dropdown__panel,
+    .nav-dropdown[open] .nav-dropdown__panel {
+      display: grid;
+    }
+
+    .nav-dropdown__panel a {
+      display: block;
+      padding-block: var(--space-1);
+      white-space: nowrap;
+    }
   }
 
   .site-header__aside {
@@ -283,6 +439,21 @@ const showPhone = !isPending(phone.e164) && !isPending(phone.display);
       display: block;
       padding-block: var(--space-1);
       font-size: var(--text-body);
+    }
+
+    /* El panel del submenú baja a su propia fila bajo el link + la flecha, en vez de
+       apretarse en la misma fila flex (no hay posicionamiento absoluto en móvil). */
+    .site-header__nav-item {
+      flex-wrap: wrap;
+    }
+
+    .nav-dropdown {
+      flex: 1 0 100%;
+    }
+
+    .nav-dropdown__panel {
+      padding-inline-start: var(--space-3);
+      border-inline-start: 1px solid var(--color-border);
     }
   }
 
