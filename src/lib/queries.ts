@@ -201,7 +201,8 @@ export interface TestimonialDoc {
   readonly _id: string;
   readonly text: string;
   readonly author: string;
-  readonly city: City;
+  /** No todos los testimonios traen ciudad confirmada — se omite, nunca se inventa. */
+  readonly city?: City;
   readonly category: string;
   readonly verified: boolean;
 }

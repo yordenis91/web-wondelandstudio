@@ -8,6 +8,7 @@
 import ServicePageTemplate from '../../../../components/ServicePageTemplate.astro';
 import { WPB_WEDDING_VIDEOGRAPHER } from '../../../../content/wpb-wedding-videographer.ts';
 import { getWeddingPricing, getWeddingOffers, weddingHighlight } from '../../../../data/pricing.ts';
+import { TESTIMONIALS } from '../../../../content/testimonials.ts';
 
 const lang = 'es' as const;
 const path = '/es/west-palm-beach/videografo-de-bodas/';
@@ -21,6 +22,7 @@ const path = '/es/west-palm-beach/videografo-de-bodas/';
   pricing={getWeddingPricing(lang, 'film')}
   pricingHighlight={weddingHighlight(lang)}
   testimonialCategory="wedding"
+  testimonials={TESTIMONIALS}
   offers={getWeddingOffers(lang, 'film')}
   serviceName="Videografía de Bodas en West Palm Beach"
   serviceType="Wedding Videography"

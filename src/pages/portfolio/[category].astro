@@ -1,0 +1,34 @@
+---
+/**
+ * `/portfolio/[category]/` — pageType: portfolio.
+ *
+ * Todavía no enlazada desde nav ni footer: existe y compila, pero nadie llega aquí
+ * hasta que haya fotos reales que mostrar (las imágenes son `hero-placeholder.svg`
+ * repetido — ver `content/portfolio.ts`).
+ */
+import PortfolioPageTemplate from '../../components/PortfolioPageTemplate.astro';
+import { PORTFOLIO_CATEGORIES } from '../../i18n/routes.ts';
+import { getPortfolioContent, getPortfolioH1, getPortfolioImages } from '../../content/portfolio.ts';
+
+export function getStaticPaths() {
+  return PORTFOLIO_CATEGORIES.map((category) => ({ params: { category: category.en } }));
+}
+
+const lang = 'en' as const;
+const { category: slug } = Astro.params;
+const category = PORTFOLIO_CATEGORIES.find((c) => c.en === slug)!;
+const path = `/portfolio/${category.en}/`;
+
+const breadcrumbs = [{ name: 'Home', path: '/' }, { name: getPortfolioH1(category.id, lang) }];
+const content = getPortfolioContent(category.id, lang, breadcrumbs);
+const images = getPortfolioImages(category.id, lang);
+---
+
+<PortfolioPageTemplate
+  path={path}
+  lang={lang}
+  content={content}
+  images={images}
+  heroImage={{ src: '/hero-placeholder.svg', width: 1600, height: 900 }}
+  utmCampaign={`portfolio-${category.id}-en`}
+/>

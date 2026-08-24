@@ -13,10 +13,12 @@ import Footer from '../components/Footer.astro';
 import Hero from '../components/Hero.astro';
 import AnswerBlock from '../components/AnswerBlock.astro';
 import Features from '../components/Features.astro';
+import TestimonialList from '../components/TestimonialList.astro';
 import FAQ from '../components/FAQ.astro';
 import CTAWhatsApp from '../components/CTAWhatsApp.astro';
 import { homePageGraph } from '../lib/schema.ts';
 import { HOME_FEATURES } from '../content/home-features.ts';
+import { TESTIMONIALS } from '../content/testimonials.ts';
 
 const path = '/';
 
@@ -78,6 +80,7 @@ const jsonLd = homePageGraph({ lang: 'en' });
   <div class="container">
     <AnswerBlock text={answer} />
     <Features heading="Why choose us" features={HOME_FEATURES.en} />
+    <TestimonialList testimonials={TESTIMONIALS} heading="What clients say" category="general" limit={6} />
     <FAQ faqs={faqs} heading="Frequently asked questions" />
   </div>
 </Layout>

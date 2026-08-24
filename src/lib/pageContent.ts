@@ -201,6 +201,27 @@ export interface AggregatePageContent {
 }
 
 /**
+ * Contenido de `/portfolio/[category]/` (`pageType: portfolio`). La más liviana de
+ * todas: es una galería, no vende un servicio concreto, así que no lleva FAQ ni tabla
+ * de precios — solo el texto que sostiene la página mientras las fotos son un
+ * placeholder (ver `content/portfolio.ts`) y el CTA final, igual que el resto del sitio.
+ */
+export interface PortfolioPageContent {
+  readonly metaTitle: string;
+  readonly metaDescription: string;
+  readonly h1: string;
+  readonly answerParagraph: string;
+  readonly finalCta: {
+    readonly heading: string;
+    readonly body: string;
+    readonly label: string;
+    readonly message: string;
+  };
+  readonly breadcrumbs: readonly { readonly name: string; readonly path?: string }[];
+  readonly hero: { readonly eyebrow: string; readonly alt: string };
+}
+
+/**
  * Contenido de `/about-lisandra/` (`pageType: about`, deck §4). El más liviano de los
  * cinco: sin `PricingTable`, `SubscriptionTable` ni `ServiceCard` — solo texto,
  * reusando `AnswerBlock` y `FAQ` que ya existen. Confirma que no todo `pageType` nuevo

@@ -1,0 +1,93 @@
+---
+/**
+ * Plantilla de `/portfolio/[category]/` (`pageType: portfolio`).
+ *
+ * La más liviana de todas: hero, migas, un párrafo y la galería — sin FAQ ni precio,
+ * porque esta página no vende un servicio concreto, solo lo muestra. El grid usa
+ * `discoverColor` (`Gallery.astro`, DESIGN_PLAN §1.2): es exactamente el patrón que ese
+ * prop existe para servir.
+ */
+import Layout from './Layout.astro';
+import Header from './Header.astro';
+import Footer from './Footer.astro';
+import Hero from './Hero.astro';
+import Breadcrumbs from './Breadcrumbs.astro';
+import AnswerBlock from './AnswerBlock.astro';
+import Gallery from './Gallery.astro';
+import CTAWhatsApp from './CTAWhatsApp.astro';
+
+import type { PortfolioPageContent } from '../lib/pageContent.ts';
+import type { Lang } from '../i18n/routes.ts';
+import { portfolioPageGraph } from '../lib/schema.ts';
+
+interface Props {
+  path: string;
+  lang: Lang;
+  content: PortfolioPageContent;
+  images: readonly { src: string; alt: string; width: number; height: number }[];
+  heroImage: { src: string; width: number; height: number };
+  utmCampaign: string;
+}
+
+const { path, lang, content, images, heroImage, utmCampaign } = Astro.props;
+
+const jsonLd = portfolioPageGraph({
+  path,
+  name: content.h1,
+  breadcrumbs: content.breadcrumbs,
+});
+---
+
+<Layout
+  path={path}
+  title={content.metaTitle}
+  description={content.metaDescription}
+  jsonLd={jsonLd}
+>
+  <Header slot="header" path={path} />
+  <Footer slot="footer" path={path} />
+
+  <Hero
+    eyebrow={content.hero.eyebrow}
+    heading={content.h1}
+    intro={undefined}
+    image={{
+      src: heroImage.src,
+      alt: content.hero.alt,
+      width: heroImage.width,
+      height: heroImage.height,
+    }}
+  />
+
+  <div class="container">
+    <Breadcrumbs items={content.breadcrumbs} lang={lang} />
+
+    <AnswerBlock text={content.answerParagraph} />
+
+    <Gallery images={images} discoverColor />
+
+    <section class="final-cta">
+      <h2>{content.finalCta.heading}</h2>
+      <p>{content.finalCta.body}</p>
+      <CTAWhatsApp
+        label={content.finalCta.label}
+        message={content.finalCta.message}
+        location="final-cta"
+        utm={{ source: 'site', medium: 'cta-final', campaign: utmCampaign }}
+        variant="fill"
+      />
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .final-cta {
+    padding-block: var(--space-6);
+    border-block-start: 1px solid var(--color-border);
+  }
+
+  .final-cta p {
+    max-width: 70ch;
+    line-height: 1.7;
+  }
+</style>
