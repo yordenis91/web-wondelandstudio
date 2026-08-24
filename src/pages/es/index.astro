@@ -11,9 +11,11 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import Hero from '../../components/Hero.astro';
 import AnswerBlock from '../../components/AnswerBlock.astro';
+import Features from '../../components/Features.astro';
 import FAQ from '../../components/FAQ.astro';
 import CTAWhatsApp from '../../components/CTAWhatsApp.astro';
 import { homePageGraph } from '../../lib/schema.ts';
+import { HOME_FEATURES } from '../../content/home-features.ts';
 
 const path = '/es/';
 
@@ -73,6 +75,7 @@ const jsonLd = homePageGraph({ lang: 'es' });
 
   <div class="container">
     <AnswerBlock text={answer} />
+    <Features heading="Por qué elegirnos" features={HOME_FEATURES.es} />
     <FAQ faqs={faqs} heading="Preguntas frecuentes" />
   </div>
 </Layout>

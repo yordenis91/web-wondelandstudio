@@ -9,6 +9,10 @@
  * Es la red que pide la regla 6 de CLAUDE.md. `Layout.astro` ya hace imposible declarar
  * una cara sin la otra, pero eso solo cubre las rutas que pasan por él; esto cubre lo
  * que realmente se sirve.
+ *
+ * `404.html` (EN y ES) queda fuera: no es contenido indexable, pasa por
+ * `ErrorLayout.astro` en vez de `Layout.astro` y lleva `noindex` — canonical y
+ * hreflang no aplican a una página que Google no va a indexar.
  */
 import { readdirSync, readFileSync, existsSync } from 'node:fs';
 import { join, relative } from 'node:path';
@@ -65,7 +69,9 @@ function main(): void {
     process.exit(1);
   }
 
-  const pages = findHtml(DIST).map(parseHead);
+  const pages = findHtml(DIST)
+    .filter((file) => !file.endsWith('404.html'))
+    .map(parseHead);
   const byUrl = new Map(pages.map((p) => [`${SITE}${p.path}`, p]));
   const errors: string[] = [];
 

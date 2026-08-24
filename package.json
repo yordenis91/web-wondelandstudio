@@ -9,12 +9,15 @@
     "check:tokens": "node scripts/check-tokens.ts",
     "check:tokens:dist": "node scripts/check-tokens.ts --only dist",
     "check:types": "astro check",
-    "build": "npm run check:tokens && astro build && npm run check:tokens:dist && npm run check:head",
+    "build": "npm run check:tokens && astro build && node scripts/fix-es-404.ts && npm run check:tokens:dist && npm run check:head",
+    "fix:es-404": "node scripts/fix-es-404.ts",
     "preview": "astro preview",
     "astro": "astro",
     "sanity:dev": "cd studio && npm run dev",
     "sanity:deploy": "cd studio && npm run deploy",
-    "check:head": "node scripts/check-head.ts"
+    "check:head": "node scripts/check-head.ts",
+    "sanity:migrate": "node scripts/migrate-to-sanity.ts",
+    "sanity:migrate:apply": "node scripts/migrate-to-sanity.ts --apply"
   },
   "dependencies": {
     "astro": "^5.15.6",
@@ -28,6 +31,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "@sanity/client": "^6.22.2",
     "@types/node": "^26.2.0",
     "typescript": "^5.9.3"
   }

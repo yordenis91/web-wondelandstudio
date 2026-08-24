@@ -1,0 +1,97 @@
+---
+/**
+ * 404 EN. Ver `ErrorLayout.astro` para por qué esta página no pasa por `Layout.astro`
+ * ni por `scripts/check-head.ts`.
+ */
+import ErrorLayout from '../components/ErrorLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import CTAWhatsApp from '../components/CTAWhatsApp.astro';
+
+const path = '/404/';
+
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/west-palm-beach/', label: 'West Palm Beach' },
+  { href: '/port-st-lucie/', label: 'Port St. Lucie' },
+  { href: '/pricing/', label: 'Pricing' },
+  { href: '/about-lisandra/', label: 'About Lisandra' },
+];
+---
+
+<ErrorLayout
+  lang="en"
+  title="Page Not Found | Wonderlands Studio"
+  description="This page doesn't exist. Find your way back to Wonderlands Studio's photography and video services in West Palm Beach and Port St. Lucie."
+>
+  <Header slot="header" path={path} />
+  <Footer slot="footer" path={path} />
+
+  <div class="container not-found">
+    <span class="eyebrow">Error 404</span>
+    <h1>This page isn't in the gallery</h1>
+    <p class="not-found__intro">
+      The link you followed is broken, or the page has moved. Here's how to find what
+      you were looking for.
+    </p>
+
+    <CTAWhatsApp
+      label="Message us on WhatsApp"
+      message="Hi Wonderlands Studio — I landed on a broken link and had a question."
+      location="404-page"
+      utm={{ source: 'site', medium: '404', campaign: 'not-found' }}
+      variant="fill"
+    />
+
+    <nav class="not-found__links" aria-label="Popular pages">
+      <ul>
+        {
+          links.map((link) => (
+            <li>
+              <a href={link.href}>{link.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</ErrorLayout>
+
+<style>
+  .not-found {
+    padding-block: var(--space-12) var(--space-8);
+    max-width: 40rem;
+  }
+
+  .not-found__intro {
+    color: var(--color-fg-muted);
+    font-size: var(--text-h5);
+    line-height: var(--leading-normal);
+    margin-bottom: var(--space-4);
+  }
+
+  .not-found__links {
+    margin-top: var(--space-8);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .not-found__links ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-4);
+  }
+
+  .not-found__links a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    color: var(--color-fg);
+  }
+
+  .not-found__links a:hover {
+    color: var(--color-accent);
+  }
+</style>
