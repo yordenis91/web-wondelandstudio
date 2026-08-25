@@ -10,5 +10,8 @@ dist/
 # Astro
 .astro/
 
+# Estado local de `wrangler dev`
+.wrangler/
+
 # Configuración local del asistente / Claude
 .claude/
