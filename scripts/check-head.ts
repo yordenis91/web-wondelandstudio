@@ -10,9 +10,12 @@
  * una cara sin la otra, pero eso solo cubre las rutas que pasan por él; esto cubre lo
  * que realmente se sirve.
  *
- * `404.html` (EN y ES) queda fuera: no es contenido indexable, pasa por
- * `ErrorLayout.astro` en vez de `Layout.astro` y lleva `noindex` — canonical y
- * hreflang no aplican a una página que Google no va a indexar.
+ * Cualquier página con `<meta name="robots" content="noindex...">` queda fuera —
+ * 404 y las páginas de gracias del formulario (`ErrorLayout.astro` en vez de
+ * `Layout.astro`) son las que hoy llevan esa etiqueta. Canonical y hreflang no
+ * aplican a una página que Google no va a indexar; detectarlo por el propio `noindex`
+ * en vez de por nombre de archivo cubre cualquier página así, presente o futura, sin
+ * tener que acordarse de añadirla a una lista aparte.
  */
 import { readdirSync, readFileSync, existsSync } from 'node:fs';
 import { join, relative } from 'node:path';
@@ -26,6 +29,7 @@ interface PageHead {
   readonly path: string;
   readonly canonical?: string;
   readonly alternates: ReadonlyMap<string, string>;
+  readonly noindex: boolean;
 }
 
 function findHtml(dir: string): string[] {
@@ -45,6 +49,10 @@ function toSitePath(file: string): string {
   return `/${withoutIndex}`;
 }
 
+function isNoindex(head: string): boolean {
+  return /<meta\s+name="robots"\s+content="noindex/i.test(head);
+}
+
 function parseHead(file: string): PageHead {
   const html = readFileSync(file, 'utf8');
   const head = html.slice(0, html.indexOf('</head>'));
@@ -60,7 +68,7 @@ function parseHead(file: string): PageHead {
     alternates.set(match[1]!, match[2]!);
   }
 
-  return { file, path: toSitePath(file), canonical, alternates };
+  return { file, path: toSitePath(file), canonical, alternates, noindex: isNoindex(head) };
 }
 
 function main(): void {
@@ -70,8 +78,8 @@ function main(): void {
   }
 
   const pages = findHtml(DIST)
-    .filter((file) => !file.endsWith('404.html'))
-    .map(parseHead);
+    .map(parseHead)
+    .filter((page) => !page.noindex);
   const byUrl = new Map(pages.map((p) => [`${SITE}${p.path}`, p]));
   const errors: string[] = [];
 

@@ -1,17 +1,18 @@
 ---
 /**
- * Layout mínimo para páginas de error (404 por ahora).
+ * Layout mínimo para páginas que no son contenido: 404 y las páginas de gracias del
+ * formulario de contacto (`/thank-you/`, `/es/gracias/`).
  *
  * No es `Layout.astro`: esa exige un `path` registrado en `ROUTES` y emite
  * canonical + hreflang recíproco (regla 6 de CLAUDE.md), que no tienen sentido para una
  * página que no es contenido indexable — Google ni evalúa hreflang en una página
- * `noindex`. En vez de forzar un 404 dentro del mapa de rutas reales (que alimenta
- * sitemap y `hreflang.test.ts`), este layout replica solo lo técnico que sí aplica:
- * charset, viewport, la fuente autoalojada y los dos scripts inline de `Layout.astro`
- * (clase `.js` para el menú móvil, listener de analítica de los CTA de WhatsApp) —
- * sin ellos el header y el CTA de esta página se comportarían distinto al resto del
- * sitio. `scripts/check-head.ts` excluye `404.html` de la revisión de canonical/hreflang
- * por el mismo motivo.
+ * `noindex`. En vez de forzar estas páginas dentro del mapa de rutas reales (que
+ * alimenta sitemap y `hreflang.test.ts`), este layout replica solo lo técnico que sí
+ * aplica: charset, viewport, la fuente autoalojada y los dos scripts inline de
+ * `Layout.astro` (clase `.js` para el menú móvil, listener de analítica de los CTA de
+ * WhatsApp) — sin ellos el header y el CTA de estas páginas se comportarían distinto al
+ * resto del sitio. `scripts/check-head.ts` excluye cualquier página con `noindex` de la
+ * revisión de canonical/hreflang por el mismo motivo.
  */
 import '../styles/global.css';
 

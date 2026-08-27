@@ -57,6 +57,8 @@ export interface BusinessData {
   readonly whatsapp: { readonly e164: string; readonly display: string };
   readonly social: readonly string[];
   readonly locations: Readonly<Record<CityKey, Location>>;
+  /** URL del Worker de Cloudflare que procesa el formulario de contacto. Ver `worker-contact/`. */
+  readonly contactFormEndpoint: Pending<string>;
 }
 
 const SITE_URL = 'https://wonderlandsstudio.com';
@@ -132,6 +134,10 @@ export const BUSINESS: BusinessData = {
     'https://www.facebook.com/wonderlandsSTUDIO',
   ],
   locations: { wpb: WPB, psl: PSL },
+  // Pendiente: la URL real la da `wrangler deploy` al desplegar worker-contact/ — ver
+  // docs/CONTACT_FORM_SETUP.md. Mientras siga así, ContactForm.astro no renderiza el
+  // formulario (mismo criterio que un teléfono o dirección sin confirmar).
+  contactFormEndpoint: token('CONTACT_FORM_ENDPOINT'),
 };
 
 /** La sede, por clave de ciudad. Única forma legítima de leer un NAP. */
@@ -172,6 +178,11 @@ export function resolvedAddress(location: Location): ResolvedAddress {
 export function resolvedPhone(location: Location): Phone | undefined {
   if (isPending(location.phone.e164) || isPending(location.phone.display)) return undefined;
   return { e164: location.phone.e164, display: location.phone.display };
+}
+
+/** El endpoint del formulario, o `undefined` mientras `worker-contact/` no esté desplegado. */
+export function resolvedContactFormEndpoint(): string | undefined {
+  return isPending(BUSINESS.contactFormEndpoint) ? undefined : BUSINESS.contactFormEndpoint;
 }
 
 export interface WhatsAppUtm {
