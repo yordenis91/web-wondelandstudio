@@ -1,0 +1,139 @@
+---
+/**
+ * Formulario de contacto — sin JavaScript de cliente, ni para enviarlo ni para
+ * validarlo. `<form method="POST" action={endpoint}>` es una navegación normal del
+ * navegador: `worker-contact/` procesa el POST y responde con un 302 a la página de
+ * gracias. `required` en los campos hace la validación del lado del visitante; el
+ * Worker la repite del lado servidor (regla 1 de CLAUDE.md extendida al formulario, no
+ * solo al contenido — nada aquí depende de que el JS cargue).
+ *
+ * No se renderiza nada mientras `BUSINESS.contactFormEndpoint` siga sin confirmar
+ * (`resolvedContactFormEndpoint()` devuelve `undefined`) — un formulario que postea a
+ * `{{CONTACT_FORM_ENDPOINT}}` sin resolver es peor que no tener formulario. Mismo
+ * criterio que ya aplican `Header`, `Footer` y `HubPageTemplate` con teléfono/dirección.
+ *
+ * El campo `company` es honeypot: oculto por CSS, invisible y sin foco para una
+ * persona, casi siempre relleno por un bot. `worker-contact/` descarta en silencio
+ * cualquier envío que lo traiga con contenido — sin CAPTCHA, sin JS de verificación.
+ */
+import { BUSINESS, resolvedContactFormEndpoint } from '../data/business.ts';
+import type { Lang } from '../i18n/routes.ts';
+
+interface Props {
+  lang: Lang;
+  /** Ruta de la página donde vive el formulario — viaja oculto para que el email de aviso diga de dónde vino. */
+  page: string;
+}
+
+const { lang, page } = Astro.props;
+const endpoint = resolvedContactFormEndpoint();
+
+const L = {
+  en: {
+    name: 'Name',
+    phone: 'Phone',
+    email: 'Email (optional)',
+    message: 'Tell us about your event',
+    submit: 'Send message',
+  },
+  es: {
+    name: 'Nombre',
+    phone: 'Teléfono',
+    email: 'Correo (opcional)',
+    message: 'Cuéntanos sobre tu evento',
+    submit: 'Enviar mensaje',
+  },
+}[lang];
+---
+
+{
+  endpoint && (
+    <form class="contact-form" method="POST" action={endpoint}>
+      <div class="contact-form__row">
+        <label for="cf-name">{L.name}</label>
+        <input id="cf-name" type="text" name="name" autocomplete="name" required />
+      </div>
+
+      <div class="contact-form__row">
+        <label for="cf-phone">{L.phone}</label>
+        <input id="cf-phone" type="tel" name="phone" autocomplete="tel" required />
+      </div>
+
+      <div class="contact-form__row">
+        <label for="cf-email">{L.email}</label>
+        <input id="cf-email" type="email" name="email" autocomplete="email" />
+      </div>
+
+      <div class="contact-form__row">
+        <label for="cf-message">{L.message}</label>
+        <textarea id="cf-message" name="message" rows="5" required />
+      </div>
+
+      <div class="contact-form__honeypot" aria-hidden="true">
+        <label for="cf-company">Company</label>
+        <input id="cf-company" type="text" name="company" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <input type="hidden" name="lang" value={lang} />
+      <input type="hidden" name="page" value={`${BUSINESS.siteUrl}${page}`} />
+
+      <button type="submit" class="button button--fill">
+        {L.submit}
+      </button>
+    </form>
+  )
+}
+
+<style>
+  .contact-form {
+    display: grid;
+    gap: var(--space-3);
+    max-width: 32rem;
+  }
+
+  .contact-form__row {
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  .contact-form label {
+    font-size: var(--text-small);
+    color: var(--color-fg-muted);
+  }
+
+  .contact-form input,
+  .contact-form textarea {
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    color: var(--color-fg);
+    font: inherit;
+    padding: 0.75rem;
+  }
+
+  .contact-form input:focus-visible,
+  .contact-form textarea:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .contact-form textarea {
+    resize: vertical;
+  }
+
+  .contact-form button {
+    justify-self: start;
+  }
+
+  /* Honeypot: fuera de la vista de una persona, presente para un bot que rellena
+     cualquier <input> que encuentre. `display:none` sería tan sospechoso para un bot
+     medianamente sofisticado como no tenerlo — este patrón (posición absoluta fuera de
+     pantalla) es el que suelen ignorar igual, sin darse cuenta de que lo delata. */
+  .contact-form__honeypot {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    left: -9999px;
+  }
+</style>

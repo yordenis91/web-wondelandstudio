@@ -40,6 +40,7 @@ const L = {
     directions: 'Get directions',
     pricing: { href: '/pricing/', label: 'Pricing' },
     about: { href: '/about-lisandra/', label: 'About Lisandra' },
+    contact: { href: '/contact/', label: 'Contact' },
     rights: 'All rights reserved.',
   },
   es: {
@@ -49,6 +50,7 @@ const L = {
     directions: 'Cómo llegar',
     pricing: { href: '/es/precios/', label: 'Precios' },
     about: { href: '/es/sobre-lisandra/', label: 'Sobre Lisandra' },
+    contact: { href: '/es/contacto/', label: 'Contacto' },
     rights: 'Todos los derechos reservados.',
   },
 }[lang];
@@ -155,6 +157,7 @@ const year = new Date().getFullYear();
       <ul class="site-footer__services">
         <li><a href={L.pricing.href}>{L.pricing.label}</a></li>
         <li><a href={L.about.href}>{L.about.label}</a></li>
+        <li><a href={L.contact.href}>{L.contact.label}</a></li>
       </ul>
     </div>
   </div>

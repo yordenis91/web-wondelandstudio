@@ -1,0 +1,9 @@
+{
+  "name": "wonderlands-contact-form",
+  "compatibility_date": "2026-08-20",
+  "main": "src/index.ts",
+  "vars": {
+    "FROM_EMAIL": "contact@wonderlandsstudio.com",
+    "SITE_URL": "https://wonderlandsstudio.com"
+  }
+}

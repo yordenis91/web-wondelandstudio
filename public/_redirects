@@ -1,0 +1,18 @@
+# Redirecciones 301 del WordPress anterior a la estructura nueva del sitio.
+#
+# La estructura de URLs cambió por completo (slugs descriptivos largos bajo la raíz →
+# `/ciudad/servicio/` con slugs cortos, ver `i18n/routes.ts`). Sin estas reglas, todo el
+# link equity y el posicionamiento que ya tiene wonderlandsstudio.com en Google se pierde
+# el día que se apague el sitio viejo — 301, no 302: le dice al buscador que el cambio es
+# permanente y transfiere la señal a la URL nueva, un 302 no.
+#
+# El sitio anterior era una sola página en dos idiomas (confirmado por el cliente el
+# 2026-08-25) — no un WordPress con decenas de URLs indexadas:
+#   EN  https://wonderlandsstudio.com/                                                    (home)
+#   ES  https://wonderlandsstudio.com/es/fotografo-y-videografo-bilingue-en-west-palm-beach-y-port-st-lucie/
+#
+# La versión EN ya vive en `/` en el sitio nuevo — mismo path, no necesita regla. Solo la
+# ES cambió de URL, así que el mapeo completo es esta única línea.
+#
+# Sintaxis: <origen> <destino> <código>, una regla por línea.
+/es/fotografo-y-videografo-bilingue-en-west-palm-beach-y-port-st-lucie/  /es/  301

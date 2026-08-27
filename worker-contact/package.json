@@ -1,0 +1,15 @@
+{
+  "name": "wonderlands-contact-form",
+  "type": "module",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260827.1",
+    "typescript": "^5.9.3",
+    "wrangler": "^4.126.0"
+  }
+}

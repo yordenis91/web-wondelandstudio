@@ -1,0 +1,60 @@
+---
+/**
+ * `/es/gracias/` — ver `pages/thank-you/index.astro` para el resto de la nota.
+ */
+import ErrorLayout from '../../../components/ErrorLayout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import CTAWhatsApp from '../../../components/CTAWhatsApp.astro';
+
+const path = '/es/gracias/';
+---
+
+<ErrorLayout
+  lang="es"
+  title="Mensaje Enviado | Wonderlands Studio"
+  description="Gracias por escribirnos — te contactaremos pronto."
+>
+  <Header slot="header" path={path} />
+  <Footer slot="footer" path={path} />
+
+  <div class="container thank-you">
+    <span class="eyebrow">Mensaje Enviado</span>
+    <h1>Gracias — te contactaremos pronto</h1>
+    <p class="thank-you__intro">
+      Normalmente respondemos dentro de un día hábil. Si es urgente, escríbenos por
+      WhatsApp.
+    </p>
+
+    <CTAWhatsApp
+      label="Escríbenos por WhatsApp"
+      message="Hola Wonderlands Studio — acabo de enviar un mensaje por el formulario de contacto."
+      location="thank-you-page"
+      utm={{ source: 'site', medium: 'thank-you', campaign: 'contact-form' }}
+      variant="fill"
+    />
+
+    <a class="thank-you__back" href="/es/">Volver al inicio</a>
+  </div>
+</ErrorLayout>
+
+<style>
+  .thank-you {
+    padding-block: var(--space-12) var(--space-8);
+    max-width: 40rem;
+  }
+
+  .thank-you__intro {
+    color: var(--color-fg-muted);
+    font-size: var(--text-h5);
+    line-height: var(--leading-normal);
+    margin-bottom: var(--space-4);
+  }
+
+  .thank-you__back {
+    display: block;
+    margin-top: var(--space-4);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>

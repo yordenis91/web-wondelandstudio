@@ -1,0 +1,93 @@
+---
+/**
+ * `/contact/` — pageType: contact.
+ *
+ * Dos vías, ninguna subordinada a la otra: WhatsApp para quien quiere resolver ya
+ * (el resto del sitio ya lo ofrece en cada CTA), y el formulario para quien prefiere
+ * escribir con calma — fecha, presupuesto, varias preguntas a la vez. Esta es la única
+ * página que las pone una junto a la otra a propósito.
+ */
+import Layout from '../../components/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import Hero from '../../components/Hero.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AnswerBlock from '../../components/AnswerBlock.astro';
+import ContactForm from '../../components/ContactForm.astro';
+import CTAWhatsApp from '../../components/CTAWhatsApp.astro';
+import { contactPageGraph } from '../../lib/schema.ts';
+
+const lang = 'en' as const;
+const path = '/contact/';
+
+const answer =
+  'Reach Wonderlands Studio however is easiest for you. Message us on WhatsApp for a ' +
+  'quick reply, or send the form below with your date and details — we cover Palm ' +
+  'Beach County from West Palm Beach and the Treasure Coast from Port St. Lucie.';
+
+const breadcrumbs = [{ name: 'Home', path: '/' }, { name: 'Contact' }];
+
+const jsonLd = contactPageGraph({ path, name: 'Contact Wonderlands Studio', breadcrumbs });
+---
+
+<Layout
+  path={path}
+  title="Contact Us | Wonderlands Studio"
+  description="Get in touch with Wonderlands Studio — WhatsApp for a quick reply, or send us a message with your date and details."
+  jsonLd={jsonLd}
+>
+  <Header slot="header" path={path} />
+  <Footer slot="footer" path={path} />
+
+  <Hero
+    eyebrow="Contact"
+    heading="Let's Talk About Your Date"
+    intro="Whichever way is easiest for you."
+    image={{
+      src: '/hero-placeholder.svg',
+      alt: 'Contact Wonderlands Studio',
+      width: 1600,
+      height: 900,
+    }}
+  />
+
+  <div class="container">
+    <Breadcrumbs items={breadcrumbs} lang={lang} />
+
+    <AnswerBlock text={answer} />
+
+    <section class="contact-path">
+      <h2>Message us on WhatsApp</h2>
+      <p>Fastest way to reach us — usually a reply within the same day.</p>
+      <CTAWhatsApp
+        label="Message us on WhatsApp"
+        message="Hi Wonderlands Studio — I'd like to get in touch."
+        location="contact-page"
+        utm={{ source: 'site', medium: 'contact-page', campaign: 'whatsapp' }}
+        variant="fill"
+      />
+    </section>
+
+    <section class="contact-path">
+      <h2>Or send us a message</h2>
+      <p>Prefer to write it out? Tell us about your date and we'll get back to you.</p>
+      <ContactForm lang={lang} page={path} />
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .contact-path {
+    padding-block: var(--space-6);
+    border-block-end: 1px solid var(--color-border);
+  }
+
+  .contact-path:last-child {
+    border-block-end: none;
+  }
+
+  .contact-path p {
+    color: var(--color-fg-muted);
+    margin-bottom: var(--space-3);
+  }
+</style>

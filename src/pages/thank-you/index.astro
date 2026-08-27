@@ -1,0 +1,67 @@
+---
+/**
+ * `/thank-you/` — a donde `worker-contact/` redirige tras un envío correcto del
+ * formulario. No es contenido: nadie llega aquí por un enlace ni por búsqueda, solo
+ * por un POST exitoso, así que va por `ErrorLayout.astro` igual que las 404 — mismo
+ * motivo (`noindex`, sin canonical/hreflang que declarar).
+ *
+ * Lleva su propio CTA de WhatsApp: alguien que acaba de escribir un mensaje largo en
+ * el formulario puede seguir queriendo una respuesta inmediata — las dos vías no son
+ * excluyentes ni siquiera después de elegir una.
+ */
+import ErrorLayout from '../../components/ErrorLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import CTAWhatsApp from '../../components/CTAWhatsApp.astro';
+
+const path = '/thank-you/';
+---
+
+<ErrorLayout
+  lang="en"
+  title="Message Sent | Wonderlands Studio"
+  description="Thanks for reaching out — we'll be in touch soon."
+>
+  <Header slot="header" path={path} />
+  <Footer slot="footer" path={path} />
+
+  <div class="container thank-you">
+    <span class="eyebrow">Message Sent</span>
+    <h1>Thanks — we'll be in touch soon</h1>
+    <p class="thank-you__intro">
+      We usually reply within one business day. If it's urgent, message us on WhatsApp
+      instead.
+    </p>
+
+    <CTAWhatsApp
+      label="Message us on WhatsApp"
+      message="Hi Wonderlands Studio — I just sent a message through the contact form."
+      location="thank-you-page"
+      utm={{ source: 'site', medium: 'thank-you', campaign: 'contact-form' }}
+      variant="fill"
+    />
+
+    <a class="thank-you__back" href="/">Back to home</a>
+  </div>
+</ErrorLayout>
+
+<style>
+  .thank-you {
+    padding-block: var(--space-12) var(--space-8);
+    max-width: 40rem;
+  }
+
+  .thank-you__intro {
+    color: var(--color-fg-muted);
+    font-size: var(--text-h5);
+    line-height: var(--leading-normal);
+    margin-bottom: var(--space-4);
+  }
+
+  .thank-you__back {
+    display: block;
+    margin-top: var(--space-4);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>

@@ -411,6 +411,26 @@ export function portfolioPageGraph(input: PortfolioPageGraphInput): JsonLdGraph 
   ]);
 }
 
+export interface ContactPageGraphInput {
+  readonly path: string;
+  readonly name: string;
+  readonly breadcrumbs: readonly BreadcrumbInput[];
+}
+
+/** `pageType: contact` — `/contact/`. Igual de liviana que `portfolioPageGraph`: solo `ContactPage` + migas. */
+export function contactPageGraph(input: ContactPageGraphInput): JsonLdGraph {
+  return graph([
+    ...baseNodes(),
+    {
+      '@type': 'ContactPage',
+      '@id': `${absoluteUrl(input.path)}#page`,
+      name: input.name,
+      url: absoluteUrl(input.path),
+    },
+    breadcrumbNode(input.breadcrumbs),
+  ]);
+}
+
 export interface AggregatePageGraphInput {
   readonly path: string;
   readonly name: string;

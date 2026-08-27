@@ -19,7 +19,7 @@ export const CITIES = ['wpb', 'psl'] as const;
 export type City = (typeof CITIES)[number];
 
 /** Qué es la página. No confundir con `servicePage.pageType` de Sanity. */
-export const ROUTE_KINDS = ['home', 'hub', 'service', 'pricing', 'about', 'portfolio'] as const;
+export const ROUTE_KINDS = ['home', 'hub', 'service', 'pricing', 'about', 'portfolio', 'contact'] as const;
 export type RouteKind = (typeof ROUTE_KINDS)[number];
 
 /** Un segmento es un slug (`wedding-photographer`) o un parámetro (`[category]`). */
@@ -117,6 +117,7 @@ const RAW_ROUTES = [
   },
 
   { id: 'pricing', en: '/pricing/', es: '/es/precios/', kind: 'pricing', city: null, service: null },
+  { id: 'contact', en: '/contact/', es: '/es/contacto/', kind: 'contact', city: null, service: null },
   {
     id: 'about-lisandra',
     en: '/about-lisandra/',
