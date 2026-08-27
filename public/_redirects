@@ -6,13 +6,13 @@
 # el día que se apague el sitio viejo — 301, no 302: le dice al buscador que el cambio es
 # permanente y transfiere la señal a la URL nueva, un 302 no.
 #
-# Solo hay una regla real por ahora: la única URL del sitio anterior que se confirmó en
-# esta sesión (ver conversación del 2026-08-24). Falta el resto — el sitio de WordPress
-# no es alcanzable desde este entorno (bloqueo de red), así que no se puede completar el
-# mapeo sin la lista real de URLs indexadas. La forma más confiable de conseguirla: el
-# reporte de "Pages" de Google Search Console (indexadas vs. no indexadas), o pedirle al
-# hosting actual el sitemap.xml de WordPress (normalmente en /sitemap_index.xml o
-# /sitemap.xml si usa Yoast/RankMath) y pegar aquí cada URL con su destino nuevo.
+# El sitio anterior era una sola página en dos idiomas (confirmado por el cliente el
+# 2026-08-25) — no un WordPress con decenas de URLs indexadas:
+#   EN  https://wonderlandsstudio.com/                                                    (home)
+#   ES  https://wonderlandsstudio.com/es/fotografo-y-videografo-bilingue-en-west-palm-beach-y-port-st-lucie/
+#
+# La versión EN ya vive en `/` en el sitio nuevo — mismo path, no necesita regla. Solo la
+# ES cambió de URL, así que el mapeo completo es esta única línea.
 #
 # Sintaxis: <origen> <destino> <código>, una regla por línea.
 /es/fotografo-y-videografo-bilingue-en-west-palm-beach-y-port-st-lucie/  /es/  301
