@@ -1,12 +1,17 @@
 # Formulario de contacto — puesta en marcha
 
+**Estado: desplegado (2026-08-25).** `BUSINESS.contactFormEndpoint` en
+`src/data/business.ts` ya apunta al Worker real y el formulario está activo en
+`/contact/` y `/es/contacto/`. Esta guía queda como referencia para redesplegar, rotar
+la API key de Resend, o si alguna vez hay que mover el Worker a otra cuenta.
+
 `worker-contact/` es un Worker de Cloudflare independiente del sitio: recibe el POST de
 `ContactForm.astro`, valida, envía un correo con [Resend](https://resend.com) y
 redirige a la página de gracias. El sitio y el Worker se despliegan por separado — el
 sitio no necesita saber nada de Resend, solo la URL final del Worker.
 
 Mientras estos pasos no estén hechos, `ContactForm.astro` no renderiza el formulario en
-ninguna página (`BUSINESS.contactFormEndpoint` sigue siendo `{{CONTACT_FORM_ENDPOINT}}`)
+ninguna página (`BUSINESS.contactFormEndpoint` sigue siendo un placeholder sin resolver)
 — es el mismo criterio que ya aplica el sitio a un teléfono o dirección sin confirmar.
 
 ## 1. Cuenta de Resend
@@ -48,20 +53,13 @@ https://wonderlands-contact-form.<tu-subdominio>.workers.dev
 
 ## 3. Conectar el Worker al sitio
 
-Copia esa URL y pásamela (o edítala tú mismo): en `src/data/business.ts`, sustituye
+Copia esa URL y pásamela (o edítala tú mismo): en `src/data/business.ts`, sustituye el
+valor de `contactFormEndpoint` por la URL real, y borra
+`'CONTACT_FORM_ENDPOINT'` de `PENDING_TOKEN_NAMES` en `src/data/tokens.ts` si sigue ahí.
+El próximo `pnpm build` ya renderiza el formulario en `/contact/` y `/es/contacto/`.
 
-```ts
-contactFormEndpoint: token('CONTACT_FORM_ENDPOINT'),
-```
-
-por
-
-```ts
-contactFormEndpoint: 'https://wonderlands-contact-form.<tu-subdominio>.workers.dev',
-```
-
-y borra `'CONTACT_FORM_ENDPOINT'` de `PENDING_TOKEN_NAMES` en `src/data/tokens.ts`. El
-próximo `pnpm build` ya renderiza el formulario en `/contact/` y `/es/contacto/`.
+**Ya hecho** — el Worker vive en
+`https://wonderlands-contact-form.correosoyordenis.workers.dev`.
 
 ## Límites conocidos (v1)
 

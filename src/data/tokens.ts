@@ -19,7 +19,6 @@ export const PENDING_TOKEN_NAMES = [
   'WPB_LAT',
   'WPB_LNG',
   'PSL_PHONE_772',
-  'CONTACT_FORM_ENDPOINT',
 ] as const;
 
 export type PendingTokenName = (typeof PENDING_TOKEN_NAMES)[number];
