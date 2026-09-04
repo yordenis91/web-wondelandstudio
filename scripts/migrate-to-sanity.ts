@@ -142,8 +142,16 @@ interface CatalogEntry {
   readonly appliesTo: Application[];
 }
 
-function ref(id: string): { readonly _type: 'reference'; readonly _ref: string } {
-  return { _type: 'reference', _ref: id };
+/**
+ * Débil (`_weak: true`) a propósito: apunta hacia adelante a un `servicePage` que
+ * todavía no existe (esa migración sigue pendiente — ver la nota al principio del
+ * archivo). Una referencia fuerte hace que Sanity rechace la mutación entera si el
+ * destino no existe todavía; una débil se escribe igual y se resuelve sola en cuanto el
+ * documento aparezca. Mismo criterio que `weak: true` en el campo `appliesTo.page` del
+ * schema (`studio/schemaTypes/pricingCatalog.ts`) — los dos lados tienen que coincidir.
+ */
+function ref(id: string): { readonly _type: 'reference'; readonly _ref: string; readonly _weak: true } {
+  return { _type: 'reference', _ref: id, _weak: true };
 }
 
 /**
@@ -393,11 +401,30 @@ async function main() {
     return;
   }
 
+  /**
+   * Un documento a la vez, cada uno con su propio try/catch: son independientes entre
+   * sí (los 9 testimonios no dependen de que `pricingCatalog` escriba bien), así que el
+   * fallo de uno no debe impedir que se intenten los demás. Antes de la referencia
+   * débil en `ref()`, un fallo de `pricingCatalog` cortaba el loop entero y los
+   * testimonios ni se intentaban — este es ese bug, arreglado.
+   */
+  const failed: string[] = [];
   for (const doc of docs) {
-    await client!.createOrReplace(doc as never);
-    console.log(`  ✓ ${doc._id}`);
+    try {
+      await client!.createOrReplace(doc as never);
+      console.log(`  ✓ ${doc._id}`);
+    } catch (error) {
+      failed.push(doc._id as string);
+      console.error(`  ✗ ${doc._id} — ${error instanceof Error ? error.message : error}`);
+    }
   }
-  console.log('\nListo.\n');
+
+  if (failed.length > 0) {
+    console.error(`\n${failed.length} documento(s) fallaron: ${failed.join(', ')}\n`);
+    process.exitCode = 1;
+  } else {
+    console.log('\nListo.\n');
+  }
 }
 
 main().catch((error) => {

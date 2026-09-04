@@ -113,6 +113,16 @@ export const pricingCatalog = defineType({
                       title: 'Página',
                       type: 'reference',
                       to: [{ type: 'servicePage' }],
+                      /**
+                       * Débil a propósito: `pricingCatalog` se migra antes de que
+                       * `servicePage` exista (ver migrate-to-sanity.ts), así que esta
+                       * referencia apunta hacia adelante a un documento que todavía no
+                       * está creado. Una referencia fuerte (el default) hace que Sanity
+                       * rechace la escritura entera si el destino no existe; una débil
+                       * se guarda igual y se resuelve sola en cuanto el documento
+                       * aparezca — sin eso, el migrate:apply falla en pricingCatalog.
+                       */
+                      weak: true,
                       validation: (Rule) => Rule.required(),
                     }),
                     defineField({
