@@ -134,10 +134,8 @@ export const BUSINESS: BusinessData = {
     'https://www.facebook.com/wonderlandsSTUDIO',
   ],
   locations: { wpb: WPB, psl: PSL },
-  // Pendiente: la URL real la da `wrangler deploy` al desplegar worker-contact/ — ver
-  // docs/CONTACT_FORM_SETUP.md. Mientras siga así, ContactForm.astro no renderiza el
-  // formulario (mismo criterio que un teléfono o dirección sin confirmar).
-  contactFormEndpoint: token('CONTACT_FORM_ENDPOINT'),
+  // worker-contact/ desplegado el 2026-08-25 (ver docs/CONTACT_FORM_SETUP.md).
+  contactFormEndpoint: 'https://wonderlands-contact-form.correosoyordenis.workers.dev',
 };
 
 /** La sede, por clave de ciudad. Única forma legítima de leer un NAP. */

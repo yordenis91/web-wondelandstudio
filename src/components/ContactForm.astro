@@ -9,8 +9,9 @@
  *
  * No se renderiza nada mientras `BUSINESS.contactFormEndpoint` siga sin confirmar
  * (`resolvedContactFormEndpoint()` devuelve `undefined`) — un formulario que postea a
- * `{{CONTACT_FORM_ENDPOINT}}` sin resolver es peor que no tener formulario. Mismo
- * criterio que ya aplican `Header`, `Footer` y `HubPageTemplate` con teléfono/dirección.
+ * un placeholder sin resolver es peor que no tener formulario. Mismo criterio que ya
+ * aplican `Header`, `Footer` y `HubPageTemplate` con teléfono/dirección. Desplegado el
+ * 2026-08-25 — ver `docs/CONTACT_FORM_SETUP.md`.
  *
  * El campo `company` es honeypot: oculto por CSS, invisible y sin foco para una
  * persona, casi siempre relleno por un bot. `worker-contact/` descarta en silencio
