@@ -23,7 +23,8 @@ export const pricingCatalog = defineType({
           type: 'object',
           name: 'pricingEntry',
           fields: [
-            defineField({ name: 'name', title: 'Nombre', type: 'string', validation: (Rule) => Rule.required() }),
+            defineField({ name: 'name', title: 'Nombre (EN)', type: 'string', validation: (Rule) => Rule.required() }),
+            defineField({ name: 'nameEs', title: 'Nombre (ES)', type: 'string', validation: (Rule) => Rule.required() }),
             defineField({
               name: 'tier',
               title: 'Tier',
@@ -150,12 +151,12 @@ export const pricingCatalog = defineType({
             }),
           ],
           preview: {
-            select: { title: 'name', tier: 'tier', price: 'price', billingType: 'billingType' },
-            prepare({ title, tier, price, billingType }) {
+            select: { title: 'name', nameEs: 'nameEs', tier: 'tier', price: 'price', billingType: 'billingType' },
+            prepare({ title, nameEs, tier, price, billingType }) {
               const suffix = billingType === 'monthly' ? '/mes' : '';
               return {
                 title,
-                subtitle: `${tier ? `${tier} · ` : ''}$${price}${suffix}`,
+                subtitle: `${nameEs && nameEs !== title ? `${nameEs} · ` : ''}${tier ? `${tier} · ` : ''}$${price}${suffix}`,
               };
             },
           },

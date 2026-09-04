@@ -134,6 +134,7 @@ interface CatalogEntry {
   readonly _key: string;
   readonly _type: 'pricingEntry';
   readonly name: string;
+  readonly nameEs: string;
   readonly tier?: string;
   readonly billingType: 'oneTime' | 'monthly';
   readonly track?: 'photo-led' | 'video-led';
@@ -168,14 +169,6 @@ function requireIncludes(value: readonly string[] | undefined, label: string): r
   return value;
 }
 
-/**
- * `pricingCatalog.entries[].name` es un solo string, sin variante EN/ES (a diferencia
- * de casi todo lo demás en el sitio). Se usa el nombre EN como canónico — coincide con
- * el ES en todos los productos **excepto** "The Luxury Collection" / "Colección de
- * Lujo". Ese caso queda marcado en el resumen final: el schema necesita un segundo
- * campo (`nameES`) para no perder esa traducción cuando el frontend empiece a leer de
- * aquí en vez de `data/pricing.ts`.
- */
 const WEDDING_TIERS = ['elopement', 'essential', 'full', 'tradition', 'luxury'] as const;
 
 function buildWeddingEntries(): CatalogEntry[] {
@@ -186,6 +179,7 @@ function buildWeddingEntries(): CatalogEntry[] {
     _key: `wedding-${tier}`,
     _type: 'pricingEntry' as const,
     name: en.photography[i]!.name,
+    nameEs: es.photography[i]!.name,
     tier,
     billingType: 'oneTime' as const,
     price: en.photography[i]!.price,
@@ -209,6 +203,7 @@ function buildBrandSessionEntries(): CatalogEntry[] {
     _key: `brand-session-${entry.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
     _type: 'pricingEntry' as const,
     name: entry.name,
+    nameEs: es[i]!.name,
     billingType: 'oneTime' as const,
     price: entry.price,
     coverage: entry.coverage,
@@ -244,6 +239,7 @@ function buildBrandMonthlyEntries(): CatalogEntry[] {
         _key: `brand-monthly-${row.level.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${track}`,
         _type: 'pricingEntry',
         name: cellEn.name,
+        nameEs: cellEs.name,
         billingType: 'monthly',
         track: track === 'photo' ? 'photo-led' : 'video-led',
         price: cellEn.price,
@@ -267,6 +263,7 @@ function buildMaternityEntries(): CatalogEntry[] {
     _key: `maternity-${entry.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
     _type: 'pricingEntry' as const,
     name: entry.name,
+    nameEs: es[i]!.name,
     billingType: 'oneTime' as const,
     price: entry.price,
     appliesTo: [
@@ -287,6 +284,7 @@ function buildQuinceaneraEntries(): CatalogEntry[] {
     _key: `quinceanera-${entry.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
     _type: 'pricingEntry' as const,
     name: entry.name,
+    nameEs: es[i]!.name,
     billingType: 'oneTime' as const,
     price: entry.price,
     coverage: entry.coverage,
@@ -306,6 +304,7 @@ function buildFamilyExtraEntries(): CatalogEntry[] {
     _key: `family-${entry.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
     _type: 'pricingEntry' as const,
     name: entry.name,
+    nameEs: es[i]!.name,
     billingType: 'oneTime' as const,
     price: entry.price,
     appliesTo: [
@@ -329,6 +328,7 @@ function buildSocialEventEntries(): CatalogEntry[] {
     _key: `social-${entry.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
     _type: 'pricingEntry' as const,
     name: entry.name,
+    nameEs: es[i]!.name,
     billingType: 'oneTime' as const,
     price: entry.price,
     appliesTo: [
