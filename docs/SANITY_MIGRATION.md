@@ -129,13 +129,16 @@ página necesita primero terminar el schema de `servicePage` (ver más abajo).
 
 ## 8. Lo que queda pendiente después de esto
 
-Dos huecos reales encontrados al preparar la migración, para decidir antes de seguir:
+Un hueco real encontrado al preparar la migración, para decidir antes de seguir:
 
 1. **`servicePage` necesita campos nuevos** para poder migrar el contenido de las 18
    páginas sin perder nada: `pricing`/`sessions`/`monthly` (según `pageType`),
    `finalCta`, `hero`, `breadcrumbs`, y una variante `steps` en `sections`. Es trabajo
    de schema, no de este script.
-2. **`pricingCatalog.entries[].name` es un solo string**, sin variante EN/ES — coincide
-   en todos los productos excepto "The Luxury Collection" / "Colección de Lujo". Si el
-   frontend llega a leer `name` directamente de Sanity, esa colección se vería mal en
-   una de las dos versiones de idioma. Necesita un segundo campo (`nameES`) o similar.
+
+(`pricingCatalog.entries[].name` sin variante ES ya se arregló — el schema tiene
+`name`/`nameEs` y el script llena los dos desde cada fuente bilingüe en `src/data/`. La
+nota original decía que solo afectaba a "The Luxury Collection", pero al revisar todas
+las fuentes también difieren "Impulso Visual (Entry/Entrada)", "La Autoridad
+(Executive/Ejecutiva)", los tres extras de familia y los cuatro servicios de eventos
+sociales — el fix cubre los siete builders, no solo el de boda.)
