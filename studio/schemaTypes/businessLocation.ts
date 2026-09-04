@@ -1,12 +1,14 @@
 import { defineField, defineType } from 'sanity';
 
 /**
- * Copia editorial del NAP por sede, para referencia del equipo dentro del Studio.
+ * NAP por sede, editable en el Studio.
  *
- * Regla 3 de CLAUDE.md: el NAP que se renderiza en el sitio sale de `src/data/business.ts`,
- * nunca de aquí a mano en una plantilla. Este documento no alimenta el build directamente;
- * sirve para que Sanity tenga registrada la misma fuente de verdad (mismos nombres de
- * campo que `Location` en business.ts) y detectar divergencias entre código y CMS.
+ * Regla 3 de CLAUDE.md: el NAP que se renderiza en el sitio sale siempre de
+ * `src/data/business.ts` — ninguna plantilla lo escribe a mano. Este documento no
+ * alimenta el build en tiempo real (el sitio es 100% estático, no depende de que
+ * Sanity esté disponible para compilar); `pnpm sanity:sync` es el puente: trae lo que
+ * Lisandra edite aquí y actualiza `business.ts`, así que sigue habiendo una sola
+ * fuente en el momento del build, solo que ahora se puede refrescar sin tocar código.
  */
 export const businessLocation = defineType({
   name: 'businessLocation',
