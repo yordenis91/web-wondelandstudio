@@ -54,6 +54,8 @@ export interface BusinessData {
   /** `@id` de la `Person` (Lisandra). Se declara completa solo en `/about-lisandra/`. */
   readonly founderSchemaId: string;
   readonly founder: string;
+  /** Contenedor de Google Tag Manager. Se instala una sola vez, en `Layout.astro`. */
+  readonly gtmId: string;
   readonly whatsapp: { readonly e164: string; readonly display: string };
   readonly social: readonly string[];
   readonly locations: Readonly<Record<CityKey, Location>>;
@@ -127,6 +129,7 @@ export const BUSINESS: BusinessData = {
   schemaId: `${SITE_URL}/#organization`,
   founderSchemaId: `${SITE_URL}/about-lisandra/#lisandra`,
   founder: 'Lisandra',
+  gtmId: 'GTM-PR44DVLT',
   whatsapp: { e164: '+15612603245', display: '+1 561 260 3245' },
   social: [
     'https://www.instagram.com/wonderlandsSTUDIO',

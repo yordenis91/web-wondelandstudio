@@ -64,6 +64,27 @@ const ogLocaleAlt = lang === 'en' ? 'es_US' : 'en_US';
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     {/*
+      Google Tag Manager, lo más arriba del <head> posible — es la instalación estándar
+      de Google, para que capture los eventos tempranos de la página. El script en sí
+      carga async (`j.async = true`), así que no bloquea el primer pintado ni empuja el
+      LCP — el listener de `[data-wa-cta]` de más abajo ya empuja a `dataLayer` desde
+      antes de que existiera un contenedor real que lo leyera; esto es lo que por fin
+      lo recibe.
+    */}
+    <script is:inline define:vars={{ gtmId: BUSINESS.gtmId }}>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, 'script', 'dataLayer', gtmId);
+    </script>
+
+    {/*
       Marca que hay JavaScript, antes del primer pintado. El menú móvil solo se colapsa
       si esta clase está: sin JS la navegación se sirve desplegada y usable, y como esto
       corre en el <head> y no al final del body, nunca se ve el menú abierto un instante
@@ -125,6 +146,16 @@ const ogLocaleAlt = lang === 'en' ? 'es_US' : 'en_US';
     }
   </head>
   <body>
+    <noscript>
+      <iframe
+        src={`https://www.googletagmanager.com/ns.html?id=${BUSINESS.gtmId}`}
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden"
+        title="Google Tag Manager"
+      />
+    </noscript>
+
     <a class="skip-link" href="#main">
       {lang === 'en' ? 'Skip to content' : 'Saltar al contenido'}
     </a>
