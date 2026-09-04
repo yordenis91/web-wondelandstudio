@@ -118,9 +118,16 @@ git add -A && git commit -m "sync: ..." && git push
 ```
 
 Deliberadamente no es un fetch en tiempo de build — el sitio sigue siendo 100%
-estático y no depende de que Sanity esté arriba para compilar. Es un paso manual, con
-el diff de git como revisión, igual que cualquier otro cambio de contenido en este
-proyecto.
+estático y no depende de que Sanity esté arriba para compilar.
+
+**Esto ya no hace falta correrlo a mano.** `.github/workflows/sanity-sync.yml` lo corre
+solo cada 6 horas (o al instante con "Run workflow" en la pestaña Actions del repo,
+para quien tenga acceso a GitHub). El workflow aplica el sync, valida con el mismo
+`pnpm build` + `pnpm test` que corre en local, y solo si todo pasa hace commit y push a
+`main` — si el sync dejara el sitio roto, el job falla antes de tocar `main`. El diff de
+cada sync automático sigue quedando en el historial de git como cualquier otro commit,
+así que la revisión no se pierde, solo deja de depender de que alguien la dispare a
+mano.
 
 **Precios y el copy de cada página (títulos, párrafos, FAQs) siguen sin este mecanismo**
 — viven en código y se editan pidiéndoselo directamente a quien mantiene el sitio.
