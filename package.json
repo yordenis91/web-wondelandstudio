@@ -20,7 +20,9 @@
     "test": "npm run build && node --test tests/*.test.ts",
     "lighthouse": "npm run build && node scripts/lighthouse-audit.ts",
     "sanity:migrate": "node scripts/migrate-to-sanity.ts",
-    "sanity:migrate:apply": "node scripts/migrate-to-sanity.ts --apply"
+    "sanity:migrate:apply": "node scripts/migrate-to-sanity.ts --apply",
+    "sanity:sync": "node scripts/sync-from-sanity.ts",
+    "sanity:sync:apply": "node scripts/sync-from-sanity.ts --apply"
   },
   "dependencies": {
     "astro": "^5.15.6",

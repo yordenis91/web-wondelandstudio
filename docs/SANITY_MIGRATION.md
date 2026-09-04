@@ -11,6 +11,8 @@ Migra lo que el schema actual (`studio/schemaTypes/`) puede representar sin pér
 - `pricingCatalog` — 1 documento singleton, todas las colecciones y precios del sitio
   (boda, quinceañera, maternidad + extras de familia, eventos sociales, marca — sesiones
   únicas y socio mensual).
+- `testimonial` — 9 documentos, los testimonios reales ya cargados en el sitio
+  (`src/content/testimonials.ts`).
 
 **No migra `servicePage` todavía.** El schema actual no tiene campos para `pricing`,
 `finalCta`, `hero` ni `breadcrumbs` — lo más importante de cada página — y `sections` no
@@ -94,7 +96,38 @@ inventa el dato, lo deja vacío). PSL no debería mostrar ninguna sede con telé
 pendiente en el Studio de `businessLocation` — aunque el sitio público sigue sin
 mostrar el teléfono de PSL hasta que Lisandra lo confirme.
 
-## 7. Lo que queda pendiente después de esto
+## 7. Lo que Lisandra edita después — traer los cambios de vuelta
+
+La migración de arriba es de una sola vía, código → Sanity, y solo hace falta correrla
+una vez (o de nuevo si se agregan testimonios nuevos a mano en el código). El día a día
+va al revés: Lisandra cambia un precio, un testimonio, el teléfono de PSL, algo en el
+Studio, y ese cambio tiene que volver al sitio.
+
+Para eso está `scripts/sync-from-sanity.ts` (`npm run sanity:sync` / `sanity:sync:apply`)
+— trae de Sanity el NAP y los testimonios y actualiza `src/data/business.ts` y
+`src/content/testimonials.ts`. No hace falta un `SANITY_API_TOKEN` para esto (el dataset
+es de lectura pública), solo `SANITY_STUDIO_PROJECT_ID`/`SANITY_STUDIO_DATASET` — ya
+están en `studio/.env`.
+
+```bash
+export $(cat studio/.env | xargs)
+npm run sanity:sync            # dry run — imprime qué cambiaría
+npm run sanity:sync:apply      # escribe de verdad
+git diff                        # revisa el cambio como cualquier otro
+git add -A && git commit -m "sync: ..." && git push
+```
+
+Deliberadamente no es un fetch en tiempo de build — el sitio sigue siendo 100%
+estático y no depende de que Sanity esté arriba para compilar. Es un paso manual, con
+el diff de git como revisión, igual que cualquier otro cambio de contenido en este
+proyecto.
+
+**Precios y el copy de cada página (títulos, párrafos, FAQs) siguen sin este mecanismo**
+— viven en código y se editan pidiéndoselo directamente a quien mantiene el sitio.
+Extender esto a precios es el siguiente paso natural cuando haga falta; el copy de
+página necesita primero terminar el schema de `servicePage` (ver más abajo).
+
+## 8. Lo que queda pendiente después de esto
 
 Dos huecos reales encontrados al preparar la migración, para decidir antes de seguir:
 

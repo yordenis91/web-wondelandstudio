@@ -1,6 +1,7 @@
 /**
  * Migra a Sanity lo que el schema actual puede representar sin pérdida:
- * `businessLocation` (2 docs) y `pricingCatalog` (1 doc, singleton).
+ * `businessLocation` (2 docs), `pricingCatalog` (1 doc, singleton) y `testimonial`
+ * (9 docs, `src/content/testimonials.ts`).
  *
  * Deliberadamente NO migra `servicePage` todavía. Al revisar `studio/schemaTypes/servicePage.ts`
  * contra lo que las plantillas reales necesitan (`lib/pageContent.ts`), el schema no
@@ -28,6 +29,7 @@
 import { createClient, type SanityClient } from '@sanity/client';
 
 import { getAllLocations, resolvedAddress, resolvedPhone } from '../src/data/business.ts';
+import { TESTIMONIALS } from '../src/content/testimonials.ts';
 import { ROUTES } from '../src/i18n/routes.ts';
 import { getWeddingPricing, weddingHighlight } from '../src/data/pricing.ts';
 import { getBrandSessions, getBrandMonthlyLevels } from '../src/data/brandPricing.ts';
@@ -344,6 +346,23 @@ function buildPricingCatalogDoc() {
   };
 }
 
+/**
+ * `TestimonialDoc._id` ya es un slug estable (`yailin-blanco-wedding`) — se reutiliza
+ * tal cual como `_id` de Sanity, así que `createOrReplace` es idempotente igual que con
+ * el resto de los documentos.
+ */
+function buildTestimonialDocs() {
+  return TESTIMONIALS.map((t) => ({
+    _id: t._id,
+    _type: 'testimonial' as const,
+    text: t.text,
+    author: t.author,
+    city: t.city,
+    category: t.category,
+    verified: t.verified,
+  }));
+}
+
 /* -------------------------------------------------------------------------- */
 /* Runner                                                                       */
 /* -------------------------------------------------------------------------- */
@@ -351,7 +370,8 @@ function buildPricingCatalogDoc() {
 async function main() {
   const locations = buildLocationDocs();
   const catalog = buildPricingCatalogDoc();
-  const docs = [...locations, catalog];
+  const testimonials = buildTestimonialDocs();
+  const docs = [...locations, catalog, ...testimonials];
 
   console.log(`\n${APPLY ? 'APLICANDO' : 'DRY RUN'} — proyecto ${projectId}/${dataset}\n`);
 
@@ -359,7 +379,9 @@ async function main() {
     const summary =
       doc._type === 'businessLocation'
         ? `${(doc as ReturnType<typeof buildLocationDocs>[number]).name}`
-        : `${(doc as ReturnType<typeof buildPricingCatalogDoc>).entries.length} colecciones/tiers, ${(doc as ReturnType<typeof buildPricingCatalogDoc>).entries.reduce((n, e) => n + e.appliesTo.length, 0)} referencias a página`;
+        : doc._type === 'testimonial'
+          ? `${(doc as ReturnType<typeof buildTestimonialDocs>[number]).author}`
+          : `${(doc as ReturnType<typeof buildPricingCatalogDoc>).entries.length} colecciones/tiers, ${(doc as ReturnType<typeof buildPricingCatalogDoc>).entries.reduce((n, e) => n + e.appliesTo.length, 0)} referencias a página`;
     console.log(`  · ${doc._type} (${doc._id}) — ${summary}`);
   }
 
