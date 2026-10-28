@@ -91,7 +91,22 @@ const phone = resolvedPhone(getLocation('wpb'));
 
 <header class="site-header" data-site-header>
   <div class="site-header__bar container">
-    <a class="site-header__logo" href={home}>{BUSINESS.legalName}</a>
+    {/*
+      El logo reemplaza al texto; el nombre va en el `alt` para que lector de pantalla y
+      buscador lo sigan leyendo. Ancho y alto explícitos: reservan el hueco y no hay CLS.
+      Es la imagen que se carga con prioridad normal — el LCP es el hero, no esto.
+    */}
+    <a class="site-header__logo" href={home}>
+      <img
+        src="/logo/wonderlands-360.webp"
+        srcset="/logo/wonderlands-180.webp 180w, /logo/wonderlands-360.webp 360w"
+        sizes="108px"
+        width="108"
+        height="72"
+        alt={BUSINESS.legalName}
+        decoding="async"
+      />
+    </a>
 
     {/*
       `hidden` en el HTML servido: sin JS el botón no existe para nadie —ni visualmente
@@ -212,10 +227,15 @@ const phone = resolvedPhone(getLocation('wpb'));
   }
 
   .site-header__logo {
-    font-weight: 700;
-    text-decoration: none;
-    letter-spacing: 0.02em;
+    display: block;
+    line-height: 0;
     margin-inline-end: auto;
+  }
+
+  .site-header__logo img {
+    display: block;
+    width: 108px;
+    height: 72px;
   }
 
   .site-header__panel {
