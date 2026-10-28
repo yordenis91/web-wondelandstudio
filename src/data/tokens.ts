@@ -18,7 +18,6 @@ export const PENDING_TOKEN_NAMES = [
   'WPB_POSTAL_CODE',
   'WPB_LAT',
   'WPB_LNG',
-  'PSL_PHONE_772',
 ] as const;
 
 export type PendingTokenName = (typeof PENDING_TOKEN_NAMES)[number];

@@ -2,7 +2,7 @@
 **Wonderlands Studio · Página piloto para validación de formato**
 
 > **Tokens sin resolver** — el build debe fallar si alguno de estos llega a producción:
-> `{{WPB_STREET_ADDRESS}}` · `{{WPB_POSTAL_CODE}}` · `{{WPB_LAT}}` · `{{WPB_LNG}}` · `{{PSL_PHONE_772}}`
+> `{{WPB_STREET_ADDRESS}}` · `{{WPB_POSTAL_CODE}}` · `{{WPB_LAT}}` · `{{WPB_LNG}}`
 > Dirección PSL confirmada: 943 SE Brookedge Avenue E, Port Saint Lucie, FL 34983
 
 ---
@@ -255,7 +255,7 @@ Un solo bloque `@graph`. Las entidades de organización y sucursales se importan
       "name": "Wonderlands Studio — Port St. Lucie",
       "parentOrganization": { "@id": "https://wonderlandsstudio.com/#organization" },
       "url": "https://wonderlandsstudio.com/port-st-lucie/",
-      "telephone": "{{PSL_PHONE_772}}",
+      "telephone": "+15612603245",
       "knowsLanguage": ["en-US", "es-US"],
       "address": {
         "@type": "PostalAddress",

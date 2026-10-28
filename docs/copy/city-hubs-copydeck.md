@@ -166,7 +166,7 @@ son `planned`.
 Wonderlands Studio serves Port St. Lucie, Florida, from our studio at 943 SE Brookedge
 Avenue E, with a focus on quinceañeras, maternity and family photography for the area's
 growing Hispanic community. Collections start at $500. We also cover weddings throughout
-Tradition and St. Lucie West. Bilingual studio. `{{PSL_PHONE_772}}`.
+Tradition and St. Lucie West. Bilingual studio. (561) 260-3245.
 
 ## H2 — What we shoot in Port St. Lucie
 
@@ -190,7 +190,7 @@ for local venues.
 ## H2 — Our Port St. Lucie studio
 
 `943 SE Brookedge Avenue E, Port Saint Lucie, FL 34983`
-[Get directions] · `{{PSL_PHONE_772}}`
+[Get directions] · (561) 260-3245
 
 *Decisión confirmada por Lisandra: la dirección se muestra en texto visible en la
 página, igual que en West Palm Beach. El JSON-LD la lleva también, para consistencia de
@@ -215,7 +215,7 @@ Yes — West Palm Beach is our primary wedding market, with full collections and
 
 ## CTA final
 **Planning a session in Port St. Lucie?** Message us in English or Spanish and we'll
-confirm availability the same day. [WhatsApp `{{PSL_PHONE_772}}`]
+confirm availability the same day. [WhatsApp (561) 260-3245]
 
 ---
 
@@ -308,7 +308,7 @@ disponibilidad.*
 Wonderlands Studio atiende Port St. Lucie, Florida, desde nuestro estudio en 943 SE
 Brookedge Avenue E, con un enfoque en quinceañeras para la creciente comunidad hispana
 de la zona, además de embarazo y familia. Las colecciones de embarazo empiezan en $500.
-También cubrimos bodas en Tradition y St. Lucie West. Estudio bilingüe. `{{PSL_PHONE_772}}`.
+También cubrimos bodas en Tradition y St. Lucie West. Estudio bilingüe. (561) 260-3245.
 
 ## H2 — Qué cubrimos en Port St. Lucie
 
@@ -333,7 +333,7 @@ traslado en locaciones locales.
 ## H2 — Nuestro estudio en Port St. Lucie
 
 `943 SE Brookedge Avenue E, Port Saint Lucie, FL 34983`
-[Cómo llegar] · `{{PSL_PHONE_772}}`
+[Cómo llegar] · (561) 260-3245
 
 ## H2 — Trabajos recientes en Port St. Lucie
 *[Grid filtrado por city: psl.]*
@@ -354,7 +354,7 @@ completos. [Ver bodas en West Palm Beach →](/es/west-palm-beach/fotografo-de-b
 
 ## CTA final
 **¿Planeando una sesión en Port St. Lucie?** Escríbenos en español o inglés y
-confirmamos disponibilidad el mismo día. [WhatsApp `{{PSL_PHONE_772}}`]
+confirmamos disponibilidad el mismo día. [WhatsApp (561) 260-3245]
 
 ---
 
