@@ -5,4 +5,6 @@ const dataset = process.env.SANITY_STUDIO_DATASET ?? 'production';
 
 export default defineCliConfig({
   api: { projectId, dataset },
+  studioHost: 'wonderlands-studio',
+  deployment: { appId: 'gvunmwfsxao9m5qtl09vkmvq' },
 });
