@@ -31,6 +31,10 @@ import { createClient, type SanityClient } from '@sanity/client';
 import { getAllLocations, resolvedAddress, resolvedPhone } from '../src/data/business.ts';
 import { TESTIMONIALS } from '../src/content/testimonials.ts';
 import { ROUTES } from '../src/i18n/routes.ts';
+import { EVENT_PAGES, eventPageToDoc } from './lib/service-pages.ts';
+import { WPB_WEDDING_PHOTOGRAPHER } from '../src/content/wpb-wedding-photographer.ts';
+import { WPB_WEDDING_VIDEOGRAPHER } from '../src/content/wpb-wedding-videographer.ts';
+import { PSL_MATERNITY_PHOTOGRAPHER } from '../src/content/psl-maternity-photographer.ts';
 import { getWeddingPricing, weddingHighlight } from '../src/data/pricing.ts';
 import { getBrandSessions, getBrandMonthlyLevels } from '../src/data/brandPricing.ts';
 import { getMaternityPricing } from '../src/data/maternityPricing.ts';
@@ -372,6 +376,24 @@ function buildTestimonialDocs() {
 }
 
 /* -------------------------------------------------------------------------- */
+/* servicePage (pageType: event)                                               */
+/* -------------------------------------------------------------------------- */
+
+const EVENT_CONTENT = {
+  'wpb-wedding-photographer': WPB_WEDDING_PHOTOGRAPHER,
+  'wpb-wedding-videographer': WPB_WEDDING_VIDEOGRAPHER,
+  'psl-maternity-photographer': PSL_MATERNITY_PHOTOGRAPHER,
+} as const;
+
+function buildEventPageDocs() {
+  return EVENT_PAGES.flatMap((def) =>
+    (['en', 'es'] as const).map((lang) =>
+      eventPageToDoc(def, lang, EVENT_CONTENT[def.routeId as keyof typeof EVENT_CONTENT][lang]),
+    ),
+  );
+}
+
+/* -------------------------------------------------------------------------- */
 /* Runner                                                                       */
 /* -------------------------------------------------------------------------- */
 
@@ -379,7 +401,8 @@ async function main() {
   const locations = buildLocationDocs();
   const catalog = buildPricingCatalogDoc();
   const testimonials = buildTestimonialDocs();
-  const docs = [...locations, catalog, ...testimonials];
+  const eventPages = buildEventPageDocs();
+  const docs: { _id: string; _type: string }[] = [...locations, catalog, ...testimonials, ...eventPages];
 
   console.log(`\n${APPLY ? 'APLICANDO' : 'DRY RUN'} — proyecto ${projectId}/${dataset}\n`);
 
@@ -387,7 +410,9 @@ async function main() {
     const summary =
       doc._type === 'businessLocation'
         ? `${(doc as ReturnType<typeof buildLocationDocs>[number]).name}`
-        : doc._type === 'testimonial'
+        : doc._type === 'servicePage'
+          ? `${(doc as { h1: string }).h1}`
+          : doc._type === 'testimonial'
           ? `${(doc as ReturnType<typeof buildTestimonialDocs>[number]).author}`
           : `${(doc as ReturnType<typeof buildPricingCatalogDoc>).entries.length} colecciones/tiers, ${(doc as ReturnType<typeof buildPricingCatalogDoc>).entries.reduce((n, e) => n + e.appliesTo.length, 0)} referencias a página`;
     console.log(`  · ${doc._type} (${doc._id}) — ${summary}`);

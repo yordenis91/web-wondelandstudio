@@ -21,6 +21,7 @@ import FAQ from './FAQ.astro';
 import CTAWhatsApp from './CTAWhatsApp.astro';
 
 import type { AboutPageContent } from '../lib/pageContent.ts';
+import type { HeroImage } from '../lib/images.ts';
 import type { Lang } from '../i18n/routes.ts';
 import { aboutPageGraph } from '../lib/schema.ts';
 
@@ -29,7 +30,7 @@ interface Props {
   lang: Lang;
   content: AboutPageContent;
   jobTitle: string;
-  heroImage: { src: string; width: number; height: number };
+  heroImage: HeroImage;
   utmCampaign: string;
 }
 
@@ -76,6 +77,7 @@ const jsonLd = aboutPageGraph({
       width: heroImage.width,
       height: heroImage.height,
     }}
+    sources={heroImage.sources}
   />
 
   <div class="container">

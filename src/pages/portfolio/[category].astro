@@ -9,6 +9,7 @@
 import PortfolioPageTemplate from '../../components/PortfolioPageTemplate.astro';
 import { PORTFOLIO_CATEGORIES } from '../../i18n/routes.ts';
 import { getPortfolioContent, getPortfolioH1, getPortfolioImages } from '../../content/portfolio.ts';
+import { photo, type PhotoId } from '../../lib/images.ts';
 
 export function getStaticPaths() {
   return PORTFOLIO_CATEGORIES.map((category) => ({ params: { category: category.en } }));
@@ -22,6 +23,13 @@ const path = `/portfolio/${category.en}/`;
 const breadcrumbs = [{ name: 'Home', path: '/' }, { name: getPortfolioH1(category.id, lang) }];
 const content = getPortfolioContent(category.id, lang, breadcrumbs);
 const images = getPortfolioImages(category.id, lang);
+
+/** Una foto por categoría hasta que haya galería real; la quinceañera aún no tiene categoría. */
+const HERO_PHOTO: Record<(typeof PORTFOLIO_CATEGORIES)[number]['id'], PhotoId> = {
+  weddings: 'wedding',
+  branding: 'brand-studio',
+  maternity: 'maternity',
+};
 ---
 
 <PortfolioPageTemplate
@@ -29,6 +37,6 @@ const images = getPortfolioImages(category.id, lang);
   lang={lang}
   content={content}
   images={images}
-  heroImage={{ src: '/hero-placeholder.svg', width: 1600, height: 900 }}
+  heroImage={photo(HERO_PHOTO[category.id])}
   utmCampaign={`portfolio-${category.id}-en`}
 />

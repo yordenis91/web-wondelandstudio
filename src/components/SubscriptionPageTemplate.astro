@@ -24,6 +24,7 @@ import FAQ from './FAQ.astro';
 import CTAWhatsApp from './CTAWhatsApp.astro';
 
 import type { SubscriptionPageContent } from '../lib/pageContent.ts';
+import type { HeroImage } from '../lib/images.ts';
 import type { Lang, City } from '../i18n/routes.ts';
 import type { PricingEntry, TestimonialDoc } from '../lib/queries.ts';
 import type { MonthlyLevelRow } from '../data/brandPricing.ts';
@@ -45,7 +46,7 @@ interface Props {
   relatedServicePath?: string;
   testimonials?: readonly TestimonialDoc[];
   testimonialCategory: string;
-  heroImage: { src: string; width: number; height: number };
+  heroImage: HeroImage;
   utmCampaign: string;
 }
 
@@ -108,6 +109,7 @@ const jsonLd = servicePageGraph({
       width: heroImage.width,
       height: heroImage.height,
     }}
+    sources={heroImage.sources}
   />
 
   <div class="container">

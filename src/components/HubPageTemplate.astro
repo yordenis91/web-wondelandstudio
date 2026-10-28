@@ -24,6 +24,7 @@ import FAQ from './FAQ.astro';
 import CTAWhatsApp from './CTAWhatsApp.astro';
 
 import type { HubPageContent } from '../lib/pageContent.ts';
+import type { HeroImage } from '../lib/images.ts';
 import type { Lang, City } from '../i18n/routes.ts';
 import { getServiceMatrix, getMatrixHref } from '../i18n/routes.ts';
 import { getLocation, resolvedAddress, resolvedPhone } from '../data/business.ts';
@@ -34,7 +35,7 @@ interface Props {
   lang: Lang;
   city: City;
   content: HubPageContent;
-  heroImage: { src: string; width: number; height: number };
+  heroImage: HeroImage;
   utmCampaign: string;
 }
 
@@ -97,6 +98,7 @@ const directionsHref = `https://www.google.com/maps/search/?api=1&query=${encode
       width: heroImage.width,
       height: heroImage.height,
     }}
+    sources={heroImage.sources}
   />
 
   <div class="container">

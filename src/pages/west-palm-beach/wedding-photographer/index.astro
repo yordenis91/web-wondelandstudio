@@ -10,6 +10,7 @@ import ServicePageTemplate from '../../../components/ServicePageTemplate.astro';
 import { WPB_WEDDING_PHOTOGRAPHER } from '../../../content/wpb-wedding-photographer.ts';
 import { getWeddingPricing, getWeddingOffers, weddingHighlight } from '../../../data/pricing.ts';
 import { TESTIMONIALS } from '../../../content/testimonials.ts';
+import { photo } from '../../../lib/images.ts';
 
 const lang = 'en' as const;
 const path = '/west-palm-beach/wedding-photographer/';
@@ -29,6 +30,6 @@ const path = '/west-palm-beach/wedding-photographer/';
   serviceType="Wedding Photography"
   areaServed="Palm Beach County, FL"
   relatedServicePath="/west-palm-beach/wedding-videographer/"
-  heroImage={{ src: '/hero-placeholder.svg', width: 1600, height: 900 }}
+  heroImage={photo('wedding')}
   utmCampaign="wpb-wedding-photographer-en"
 />

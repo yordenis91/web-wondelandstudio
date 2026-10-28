@@ -28,6 +28,8 @@
 import { createClient } from '@sanity/client';
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
 import { join, extname } from 'node:path';
+import { EVENT_PAGES, eventPageFromDoc, generatedContentSource, servicePageId } from './lib/service-pages.ts';
+import type { PageContent } from '../src/lib/pageContent.ts';
 
 const APPLY = process.argv.includes('--apply');
 
@@ -264,6 +266,41 @@ async function syncTestimonials(): Promise<number> {
   return docs.length;
 }
 
+/**
+ * Páginas `event`: cada una son dos documentos (`en`/`es`) que se juntan en un solo
+ * `src/content/sanity/<routeId>.ts`. Si falta un idioma el script lanza en vez de escribir
+ * una página a medias — mejor un sync que falla que un sitio con una cara sin contenido.
+ *
+ * Los documentos con `.` en el `_id` NO son legibles sin token aunque el dataset sea
+ * público, así que este fetch usa `SANITY_API_TOKEN` si está definido (con permiso de
+ * lectura basta).
+ */
+async function syncEventPages(): Promise<number> {
+  let count = 0;
+  for (const def of EVENT_PAGES) {
+    const content: Partial<Record<'en' | 'es', PageContent>> = {};
+    for (const lang of ['en', 'es'] as const) {
+      const id = servicePageId(lang, def.routeId);
+      const doc = await client.fetch<Record<string, unknown> | null>(`*[_id == $id][0]`, { id });
+      if (!doc) {
+        throw new Error(
+          `sync-from-sanity: no encuentro ${id} en Sanity. ¿Corriste la migración? ` +
+            `(si el documento existe, falta SANITY_API_TOKEN: los _id con "." no son públicos).`,
+        );
+      }
+      content[lang] = eventPageFromDoc(doc);
+    }
+    if (APPLY) {
+      writeFileSync(
+        `src/content/sanity/${def.routeId}.ts`,
+        generatedContentSource(def, content as Record<'en' | 'es', PageContent>),
+      );
+    }
+    count += 1;
+  }
+  return count;
+}
+
 async function main(): Promise<void> {
   console.log(`\n${APPLY ? 'APLICANDO' : 'DRY RUN'} — proyecto ${projectId}/${dataset}\n`);
 
@@ -288,6 +325,9 @@ async function main(): Promise<void> {
 
   const testimonialCount = await syncTestimonials();
   console.log(`testimonials.ts: ${testimonialCount} testimonio(s) en Sanity.`);
+
+  const pageCount = await syncEventPages();
+  console.log(`páginas event: ${pageCount} página(s) × 2 idiomas desde Sanity.`);
 
   if (!APPLY) {
     console.log('\nDry run — nada escrito. Corre con --apply para escribir de verdad.\n');

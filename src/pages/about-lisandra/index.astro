@@ -5,6 +5,7 @@
  */
 import AboutPageTemplate from '../../components/AboutPageTemplate.astro';
 import { ABOUT_LISANDRA } from '../../content/about-lisandra.ts';
+import { photo } from '../../lib/images.ts';
 
 const lang = 'en' as const;
 const path = '/about-lisandra/';
@@ -15,6 +16,6 @@ const path = '/about-lisandra/';
   lang={lang}
   content={ABOUT_LISANDRA[lang]}
   jobTitle="Creative Director & Lead Photographer"
-  heroImage={{ src: '/hero-placeholder.svg', width: 1600, height: 900 }}
+  heroImage={photo('lisandra')}
   utmCampaign="about-lisandra-en"
 />

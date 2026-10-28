@@ -26,6 +26,7 @@ import FAQ from './FAQ.astro';
 import CTAWhatsApp from './CTAWhatsApp.astro';
 
 import type { AggregatePageContent } from '../lib/pageContent.ts';
+import type { HeroImage } from '../lib/images.ts';
 import type { Lang } from '../i18n/routes.ts';
 import type { PricingEntry } from '../lib/queries.ts';
 import type { MonthlyLevelRow } from '../data/brandPricing.ts';
@@ -43,7 +44,7 @@ interface Props {
   socialEventsPricing: readonly PricingEntry[];
   brandSessions: readonly PricingEntry[];
   brandMonthlyLevels: readonly MonthlyLevelRow[];
-  heroImage: { src: string; width: number; height: number };
+  heroImage: HeroImage;
   utmCampaign: string;
 }
 
@@ -103,6 +104,7 @@ const jsonLd = aggregatePageGraph({
       width: heroImage.width,
       height: heroImage.height,
     }}
+    sources={heroImage.sources}
   />
 
   <div class="container">

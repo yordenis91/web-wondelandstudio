@@ -8,6 +8,7 @@
 import SubscriptionPageTemplate from '../../../components/SubscriptionPageTemplate.astro';
 import { WPB_BRAND_PHOTOGRAPHY } from '../../../content/wpb-brand-photography.ts';
 import { TESTIMONIALS } from '../../../content/testimonials.ts';
+import { photo } from '../../../lib/images.ts';
 import {
   getBrandSessions,
   getBrandMonthlyLevels,
@@ -33,6 +34,6 @@ const path = '/west-palm-beach/brand-photography/';
   areaServed="Palm Beach County, FL"
   testimonialCategory="branding"
   testimonials={TESTIMONIALS}
-  heroImage={{ src: '/hero-placeholder.svg', width: 1600, height: 900 }}
+  heroImage={photo('brand-studio')}
   utmCampaign="wpb-brand-photography-en"
 />

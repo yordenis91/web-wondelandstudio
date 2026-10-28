@@ -185,7 +185,7 @@ const EN: SubscriptionPageContent = {
 
   hero: {
     eyebrow: 'Branding photography, bilingual studio',
-    alt: 'Executive headshot session in the Wonderlands Studio West Palm Beach studio',
+    alt: 'Woman seated on a wooden stool with a tablet during a brand photography session in studio',
   },
 };
 
@@ -363,7 +363,7 @@ const ES: SubscriptionPageContent = {
 
   hero: {
     eyebrow: 'Fotografía de marca, estudio bilingüe',
-    alt: 'Sesión de headshot ejecutivo en el estudio de Wonderlands Studio en West Palm Beach',
+    alt: 'Mujer sentada en un taburete de madera con una tablet durante una sesión de fotografía de marca en estudio',
   },
 };
 
