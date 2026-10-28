@@ -24,6 +24,7 @@ import {
   type City,
 } from '../i18n/routes.ts';
 import { BUSINESS, getLocation, resolvedAddress, resolvedPhone } from '../data/business.ts';
+import SocialLinks from './SocialLinks.astro';
 
 interface Props {
   path: string;
@@ -82,36 +83,26 @@ function cityColumn(city: City) {
 const wpb = cityColumn('wpb');
 const psl = cityColumn('psl');
 
-const socialLabels: Readonly<Record<string, string>> = {
-  'instagram.com': 'Instagram',
-  'tiktok.com': 'TikTok',
-  'facebook.com': 'Facebook',
-};
-
-function socialLabel(url: string): string {
-  const host = Object.keys(socialLabels).find((h) => url.includes(h));
-  return host ? socialLabels[host]! : url;
-}
-
 const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
   <div class="container site-footer__grid">
     <div class="site-footer__brand">
-      <p class="site-footer__logo">{BUSINESS.legalName}</p>
+      <a class="site-footer__logo" href={lang === 'en' ? '/' : '/es/'}>
+        <img
+          src="/logo/wonderlands-360.webp"
+          srcset="/logo/wonderlands-360.webp 360w, /logo/wonderlands-540.webp 540w"
+          sizes="150px"
+          width="150"
+          height="100"
+          alt={BUSINESS.legalName}
+          loading="lazy"
+          decoding="async"
+        />
+      </a>
       <p class="site-footer__tagline">{L.tagline}</p>
-      <ul class="site-footer__social">
-        {
-          BUSINESS.social.map((url) => (
-            <li>
-              <a href={url} rel="noopener" target="_blank">
-                {socialLabel(url)}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
+      <SocialLinks />
     </div>
 
     {
@@ -197,9 +188,15 @@ const year = new Date().getFullYear();
   }
 
   .site-footer__logo {
-    font-weight: 700;
-    font-size: var(--text-h5);
+    display: inline-block;
+    line-height: 0;
     margin: 0 0 var(--space-2);
+  }
+
+  .site-footer__logo img {
+    display: block;
+    width: 150px;
+    height: 100px;
   }
 
   .site-footer__tagline {
@@ -207,14 +204,6 @@ const year = new Date().getFullYear();
     max-width: 32ch;
     line-height: 1.6;
     margin: 0 0 var(--space-3);
-  }
-
-  .site-footer__social {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    gap: var(--space-3);
   }
 
   .site-footer h2 {

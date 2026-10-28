@@ -61,3 +61,18 @@ writeFileSync(
     `export const PHOTOS = ${JSON.stringify(manifest, null, 2)} as const;\n` +
     `export type PhotoId = keyof typeof PHOTOS;\n`,
 );
+
+/**
+ * Logo: blanco sobre transparente (`imagenes/w_logo.webp`), pensado para el fondo oscuro del
+ * sitio. Se generan tres anchos en `public/logo/` — la cabecera lo pinta a ~90px y el
+ * footer a ~140px, así que con 180/360/540 cubre 1x y 2x sin servir de más.
+ */
+const LOGO_WIDTHS = [180, 360, 540] as const;
+mkdirSync('public/logo', { recursive: true });
+for (const w of LOGO_WIDTHS) {
+  await sharp(join('imagenes', 'w_logo.webp'))
+    .resize({ width: w })
+    .webp({ quality: 85, alphaQuality: 90 })
+    .toFile(join('public/logo', `wonderlands-${w}.webp`));
+}
+console.log(`logo: ${LOGO_WIDTHS.join(', ')}px`);

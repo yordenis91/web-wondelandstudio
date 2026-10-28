@@ -1,0 +1,101 @@
+---
+/**
+ * Redes sociales como iconos. Las URLs salen de `BUSINESS.social` (una sola fuente, la
+ * misma que alimenta `sameAs` en el JSON-LD).
+ *
+ * Los iconos son SVG en línea: cero peticiones y cero JavaScript. El nombre de la red va en
+ * un `visually-hidden` dentro del enlace — un icono solo no se anuncia en un lector de
+ * pantalla, y así el texto sigue en el HTML servido.
+ */
+import { BUSINESS } from '../data/business.ts';
+
+interface Network {
+  readonly name: string;
+  readonly paths: readonly string[];
+}
+
+/** Trazos de 24x24 con `stroke="currentColor"`: heredan el color del enlace y su hover. */
+const NETWORKS: Readonly<Record<string, Network>> = {
+  'instagram.com': {
+    name: 'Instagram',
+    paths: [
+      'M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5z',
+      'M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z',
+      'M17.5 6.5h.01',
+    ],
+  },
+  'tiktok.com': {
+    name: 'TikTok',
+    paths: [
+      'M21 7.917v4.034a9.948 9.948 0 0 1-5-1.951v4.5a6.5 6.5 0 1 1-8-6.326v4.326a2.5 2.5 0 1 0 4 2v-11.5h4.083a6.005 6.005 0 0 0 4.917 4.917z',
+    ],
+  },
+  'facebook.com': {
+    name: 'Facebook',
+    paths: ['M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z'],
+  },
+};
+
+const links = BUSINESS.social.flatMap((url) => {
+  const host = Object.keys(NETWORKS).find((h) => url.includes(h));
+  return host ? [{ url, network: NETWORKS[host]! }] : [];
+});
+---
+
+<ul class="social-links">
+  {
+    links.map(({ url, network }) => (
+      <li>
+        <a href={url} rel="noopener" target="_blank">
+          <svg
+            viewBox="0 0 24 24"
+            width="22"
+            height="22"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.75"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            focusable="false"
+          >
+            {network.paths.map((d) => (
+              <path d={d} />
+            ))}
+          </svg>
+          <span class="visually-hidden">{network.name}</span>
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .social-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: var(--space-1);
+  }
+
+  /* 44x44: área de toque cómoda en móvil aunque el icono sea de 22px. */
+  .social-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    color: var(--color-fg-muted);
+    transition: color 0.3s ease;
+  }
+
+  .social-links a:hover {
+    color: var(--color-accent);
+  }
+
+  .social-links a:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+</style>
