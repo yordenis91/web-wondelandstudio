@@ -37,14 +37,27 @@ const KEY_ROUTES = [
   { path: '/pricing/', label: 'Pricing (EN)' },
 ] as const;
 
+/** Mata el proceso y todos sus hijos (el grupo creado por `detached`). */
+function killGroup(proc: ChildProcess): void {
+  if (proc.pid === undefined) return;
+  try {
+    process.kill(-proc.pid);
+  } catch {
+    proc.kill();
+  }
+}
+
 function startPreviewServer(): Promise<ChildProcess> {
   return new Promise((resolve, reject) => {
+    // `detached` crea un grupo de procesos propio: `npx` lanza `astro preview` como hijo, y
+    // matar solo a `npx` lo dejaba vivo (y con él el puerto y la memoria) en cada corrida.
     const proc = spawn('npx', ['astro', 'preview', '--port', String(PORT)], {
       stdio: ['ignore', 'pipe', 'pipe'],
+      detached: true,
     });
 
     const timeout = setTimeout(() => {
-      proc.kill();
+      killGroup(proc);
       reject(new Error('astro preview no arrancó a tiempo (30s)'));
     }, 30_000);
 
@@ -138,7 +151,7 @@ async function main(): Promise<void> {
     }
   } finally {
     if (chrome) chrome.kill();
-    if (previewProc) previewProc.kill();
+    if (previewProc) killGroup(previewProc);
   }
 }
 
