@@ -41,7 +41,7 @@ Wonderlands Studio photographs maternity sessions in Port St. Lucie, Florida, fr
 studio near Tradition. Collections start at $500 for an editorial photography session,
 with a $1,450 option that adds cinematic video and a follow-up session after birth. Every
 session includes wardrobe guidance, professional retouching and a private gallery.
-Bilingual studio. `{{PSL_PHONE_772}}`.
+Bilingual studio. (561) 260-3245.
 
 ## H2 — An editorial session, not a snapshot
 
@@ -139,7 +139,7 @@ weddings by about nine months).
 
 ## CTA final
 **Ready to document this season?** Send us your due date and we'll help you find the
-right week to book. [WhatsApp `{{PSL_PHONE_772}}`]
+right week to book. [WhatsApp (561) 260-3245]
 
 ---
 
@@ -162,7 +162,7 @@ Wonderlands Studio fotografía sesiones de embarazo en Port St. Lucie, Florida, 
 nuestro estudio cerca de Tradition. Las colecciones empiezan en $500 por una sesión
 editorial de fotografía, con una opción de $1,450 que suma video cinematográfico y una
 sesión de seguimiento después del nacimiento. Cada sesión incluye guía de vestuario,
-retoque profesional y galería privada. Estudio bilingüe. `{{PSL_PHONE_772}}`.
+retoque profesional y galería privada. Estudio bilingüe. (561) 260-3245.
 
 ## H2 — Una sesión editorial, no una foto rápida
 
@@ -268,7 +268,7 @@ las bodas).
 
 ## CTA final
 **¿Lista para documentar esta etapa?** Mándanos tu fecha probable de parto y te
-ayudamos a encontrar la semana correcta para reservar. [WhatsApp `{{PSL_PHONE_772}}`]
+ayudamos a encontrar la semana correcta para reservar. [WhatsApp (561) 260-3245]
 
 ---
 
@@ -300,7 +300,7 @@ Mismo patrón que boda — `pageType: event`, un solo `OfferCatalog` en escalera
 
 ## 4. Checklist
 
-- [ ] Cero tokens sin resolver (`{{PSL_PHONE_772}}`)
+- [ ] Cero tokens sin resolver
 - [ ] FAQ únicas frente a las 5 páginas hoja ya escritas
 - [ ] Sin `Review`/`AggregateRating` hasta reseñas verificadas
 - [ ] hreflang recíproco EN↔ES

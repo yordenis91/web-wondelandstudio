@@ -113,10 +113,10 @@ const PSL: Location = {
     longitude: -80.3315,
   },
   phone: {
-    // Pendiente: Lisandra tiene que confirmar si existe una línea 772 propia de PSL o
-    // si esta sede usa el mismo número de WPB. Ver docs/PLAN.md §7.
-    e164: token('PSL_PHONE_772'),
-    display: token('PSL_PHONE_772'),
+    // Provisional: PSL usa el mismo número que WPB hasta que Lisandra confirme si existe
+    // una línea 772 propia. Cuando exista, es lo único que hay que cambiar aquí.
+    e164: '+15612603245',
+    display: '(561) 260-3245',
   },
   schemaId: `${SITE_URL}/port-st-lucie/#location`,
   areasServed: ['Port St. Lucie', 'Tradition', 'St. Lucie West', 'Fort Pierce'],

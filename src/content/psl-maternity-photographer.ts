@@ -7,7 +7,7 @@
  * split foto/video, así que `relatedServicePath` no se pasa.
  *
  * Una desviación deliberada del texto literal del deck: el párrafo-respuesta y el CTA
- * final del deck terminan en `{{PSL_PHONE_772}}` — el teléfono propio de PSL todavía sin
+ * final del deck terminan en `PSL_PHONE_772` — el teléfono propio de PSL todavía sin
  * confirmar (`src/data/business.ts`). Regla 4 de CLAUDE.md: un token sin resolver que
  * llegue a `dist/` aborta el build, así que copiarlo literal aquí no es una opción. En
  * vez de inventar un número, el párrafo-respuesta cierra sin ese teléfono y el CTA usa

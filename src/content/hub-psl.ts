@@ -5,7 +5,7 @@
  * `content/hub-wpb.ts`, invertido: aquí lo `active` en Fase 1 es solo maternidad.
  *
  * Misma desviación deliberada que en `content/psl-maternity-photographer.ts`: el
- * párrafo-respuesta y el CTA final del deck terminan en `{{PSL_PHONE_772}}`, el teléfono
+ * párrafo-respuesta y el CTA final del deck terminan en `PSL_PHONE_772`, el teléfono
  * propio de PSL todavía sin confirmar por Lisandra. Regla 4 de CLAUDE.md — un token sin
  * resolver que llegue a `dist/` aborta el build. El párrafo cierra sin ese teléfono y el
  * CTA usa el WhatsApp del negocio, compartido entre las dos sedes y ya confirmado.
