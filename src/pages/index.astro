@@ -17,6 +17,7 @@ import TestimonialList from '../components/TestimonialList.astro';
 import FAQ from '../components/FAQ.astro';
 import CTAWhatsApp from '../components/CTAWhatsApp.astro';
 import { homePageGraph } from '../lib/schema.ts';
+import { photo } from '../lib/images.ts';
 import { HOME_FEATURES } from '../content/home-features.ts';
 import { TESTIMONIALS } from '../content/testimonials.ts';
 
@@ -45,6 +46,8 @@ const faqs = [
 ];
 
 const jsonLd = homePageGraph({ lang: 'en' });
+
+const heroPhoto = photo('wedding');
 ---
 
 <Layout
@@ -62,11 +65,12 @@ const jsonLd = homePageGraph({ lang: 'en' });
     heading="Photographer & Videographer in South Florida"
     intro="Editorial photography and cinematic film for weddings, families and brands across Palm Beach County and Port St. Lucie."
     image={{
-      src: '/hero-home.webp',
+      src: heroPhoto.src,
       alt: 'Wonderlands Studio photography and video coverage in South Florida',
-      width: 1600,
-      height: 900,
+      width: heroPhoto.width,
+      height: heroPhoto.height,
     }}
+    sources={heroPhoto.sources}
   >
     <CTAWhatsApp
       label="Check your date"

@@ -317,6 +317,11 @@ const phone = resolvedPhone(getLocation('wpb'));
       display: grid;
     }
 
+    /* Si hay un submenú abierto por clic, el hover de otro item no abre un segundo. */
+    .site-header__nav:has(.nav-dropdown[open]) .nav-dropdown:not([open]) .nav-dropdown__panel {
+      display: none;
+    }
+
     .nav-dropdown__panel a {
       display: block;
       padding-block: var(--space-1);
@@ -468,6 +473,30 @@ const phone = resolvedPhone(getLocation('wpb'));
 
 <script is:inline>
   (function () {
+    // Submenús: solo uno abierto a la vez. Cada <details> es independiente por defecto,
+    // así que al abrir uno se cierran los demás; clic fuera también cierra. Va antes del
+    // return de abajo para que funcione aunque no exista el botón móvil.
+    var dropdowns = Array.prototype.slice.call(document.querySelectorAll('.nav-dropdown'));
+    dropdowns.forEach(function (d) {
+      d.addEventListener('toggle', function () {
+        if (!d.open) return;
+        dropdowns.forEach(function (other) {
+          if (other !== d) other.open = false;
+        });
+      });
+    });
+    document.addEventListener('click', function (event) {
+      dropdowns.forEach(function (d) {
+        if (d.open && !d.closest('.site-header__nav-item').contains(event.target)) d.open = false;
+      });
+    });
+    document.addEventListener('keydown', function (event) {
+      if (event.key !== 'Escape') return;
+      dropdowns.forEach(function (d) {
+        d.open = false;
+      });
+    });
+
     var toggle = document.querySelector('[data-nav-toggle]');
     var panel = document.querySelector('[data-nav-panel]');
     if (!toggle || !panel) return;

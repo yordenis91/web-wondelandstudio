@@ -68,18 +68,26 @@ const { eyebrow, heading, headingAccent, intro, image, sources = [] } = Astro.pr
     object-fit: cover;
   }
 
+  /* Degradado bajo el texto: garantiza contraste AA sobre cualquier foto, sin apagar la
+     imagen entera con un velo plano. Es una capa a todo el ancho del hero (no un fondo
+     del contenedor), para que no se vea el borde de un rectángulo sobre la foto. */
+  .hero::before {
+    content: '';
+    grid-area: 1 / 1;
+    position: relative;
+    pointer-events: none;
+    background: linear-gradient(
+      to top,
+      rgb(10 10 10 / 0.88) 0%,
+      rgb(10 10 10 / 0.6) 45%,
+      rgb(10 10 10 / 0) 100%
+    );
+  }
+
   .hero__content {
     position: relative;
     align-self: end;
     padding-block: var(--space-8);
-    /* Degradado bajo el texto: garantiza contraste AA sobre cualquier foto, sin
-       apagar la imagen entera con un velo plano. */
-    background: linear-gradient(
-      to top,
-      rgb(10 10 10 / 0.85) 0%,
-      rgb(10 10 10 / 0.55) 55%,
-      rgb(10 10 10 / 0) 100%
-    );
   }
 
   .hero__heading {

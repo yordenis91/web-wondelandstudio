@@ -16,6 +16,7 @@ import TestimonialList from '../../components/TestimonialList.astro';
 import FAQ from '../../components/FAQ.astro';
 import CTAWhatsApp from '../../components/CTAWhatsApp.astro';
 import { homePageGraph } from '../../lib/schema.ts';
+import { photo } from '../../lib/images.ts';
 import { HOME_FEATURES } from '../../content/home-features.ts';
 import { TESTIMONIALS } from '../../content/testimonials.ts';
 
@@ -43,6 +44,8 @@ const faqs = [
 ];
 
 const jsonLd = homePageGraph({ lang: 'es' });
+
+const heroPhoto = photo('wedding');
 ---
 
 <Layout
@@ -60,11 +63,12 @@ const jsonLd = homePageGraph({ lang: 'es' });
     heading="Fotógrafo y Videógrafo en el Sur de Florida"
     intro="Fotografía editorial y video cinematográfico para bodas, familias y marcas en el condado de Palm Beach y Port St. Lucie."
     image={{
-      src: '/hero-placeholder.svg',
+      src: heroPhoto.src,
       alt: 'Cobertura de fotografía y video de Wonderlands Studio en el sur de Florida',
-      width: 1600,
-      height: 900,
+      width: heroPhoto.width,
+      height: heroPhoto.height,
     }}
+    sources={heroPhoto.sources}
   >
     <CTAWhatsApp
       label="Consulta tu fecha"
