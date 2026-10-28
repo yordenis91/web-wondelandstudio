@@ -1,12 +1,17 @@
 import { defineArrayMember, defineField, defineType } from 'sanity';
 
 import { SeoPreviewInput } from '../components/SeoPreviewInput';
+import { breadcrumbsField, finalCtaField, heroField, sectionsField } from './fields/pageBlocks';
+import { portableBodyField } from './fields/portableBody';
 import {
   MAX_WORDS,
   MIN_WORDS,
   WordCountInput,
   countWords,
 } from '../components/WordCountInput';
+
+/** Solo `event` y `subscription` tienen secciones de texto antes/después del precio. */
+const hasNoSections = (pageType?: string) => pageType !== 'event' && pageType !== 'subscription';
 
 /**
  * Una por combinación servicio+ciudad+idioma (CLAUDE.md, modelo de contenido).
@@ -111,114 +116,8 @@ export const servicePage = defineType({
         }),
       ],
     }),
-    defineField({
-      name: 'sections',
-      title: 'Secciones',
-      type: 'array',
-      group: 'content',
-      of: [
-        defineArrayMember({
-          type: 'object',
-          name: 'section',
-          fields: [
-            defineField({ name: 'title', title: 'Título', type: 'string', validation: (Rule) => Rule.required() }),
-            /**
-             * Portable Text, no texto plano.
-             *
-             * Los copy decks llevan enlaces dentro de los párrafos ("entra directamente
-             * a [video de bodas en West Palm Beach](...)"), y un `text` plano no los
-             * puede representar: obligaba a partir el párrafo o a perder el enlace.
-             *
-             * Deliberadamente pobre: solo párrafos, listas, negrita, cursiva y enlace.
-             * Sin encabezados —el H2 de la sección es el campo `title`, y permitir otro
-             * aquí rompería la jerarquía de la página— y sin estilos de color, que es
-             * decisión de diseño y no de contenido.
-             */
-            defineField({
-              name: 'body',
-              title: 'Cuerpo',
-              type: 'array',
-              of: [
-                defineArrayMember({
-                  type: 'block',
-                  styles: [{ title: 'Párrafo', value: 'normal' }],
-                  lists: [
-                    { title: 'Viñetas', value: 'bullet' },
-                    { title: 'Numerada', value: 'number' },
-                  ],
-                  marks: {
-                    decorators: [
-                      { title: 'Negrita', value: 'strong' },
-                      { title: 'Cursiva', value: 'em' },
-                    ],
-                    annotations: [
-                      {
-                        name: 'link',
-                        type: 'object',
-                        title: 'Enlace',
-                        fields: [
-                          defineField({
-                            name: 'href',
-                            title: 'Destino',
-                            type: 'string',
-                            description:
-                              'Ruta interna con barra inicial y final (/es/precios/), ancla (#wedding), o URL completa.',
-                            /**
-                             * Un enlace interno sin barra final acaba en una redirección
-                             * o en un 404, porque el sitio se sirve con
-                             * `trailingSlash: always`. Ya nos pasó una vez con un enlace
-                             * a una página que no existía; esto lo atrapa al guardar en
-                             * vez de en producción.
-                             */
-                            validation: (Rule) =>
-                              Rule.required().custom((value?: string) => {
-                                if (!value) return 'El enlace necesita un destino';
-                                if (/^https?:\/\//.test(value)) return true;
-                                if (/^#[a-z0-9-]+$/.test(value)) return true;
-                                if (!value.startsWith('/')) {
-                                  return 'Una ruta interna empieza por "/" (o usa una URL completa con https://)';
-                                }
-                                const [path] = value.split('#');
-                                if (!path.endsWith('/')) {
-                                  return 'Una ruta interna acaba en "/" — el sitio usa trailingSlash: always';
-                                }
-                                return true;
-                              }),
-                          }),
-                        ],
-                      },
-                    ],
-                  },
-                }),
-              ],
-              validation: (Rule) => Rule.required().min(1),
-            }),
-            defineField({
-              name: 'images',
-              title: 'Imágenes',
-              type: 'array',
-              of: [{ type: 'image', options: { hotspot: true } }],
-            }),
-          ],
-          preview: {
-            select: { title: 'title', body: 'body' },
-            prepare({ title, body }) {
-              /* `body` ya no es una cadena: hay que extraer el texto de los bloques para
-                 que la lista del Studio siga siendo legible. */
-              const text = Array.isArray(body)
-                ? body
-                    .filter((b: { _type?: string }) => b?._type === 'block')
-                    .flatMap((b: { children?: { text?: string }[] }) =>
-                      (b.children ?? []).map((c) => c.text ?? ''),
-                    )
-                    .join('')
-                : '';
-              return { title, subtitle: text.slice(0, 80) };
-            },
-          },
-        }),
-      ],
-    }),
+    sectionsField('sectionsBeforePricing', 'Secciones antes del precio', hasNoSections),
+    sectionsField('sectionsAfterPricing', 'Secciones después del precio', hasNoSections),
     defineField({
       name: 'faqs',
       title: 'FAQs',
@@ -263,22 +162,41 @@ export const servicePage = defineType({
       ],
     }),
     defineField({
-      name: 'images',
-      title: 'Imágenes',
-      description: 'Alt text EN y ES obligatorios en cada imagen.',
-      type: 'array',
+      name: 'testimonialsHeading',
+      title: 'Título de testimonios',
+      type: 'string',
       group: 'content',
-      of: [
-        defineArrayMember({
-          type: 'image',
-          options: { hotspot: true },
+      hidden: ({ document }) => hasNoSections(document?.pageType as string | undefined),
+    }),
+    defineField({ name: 'faqHeading', title: 'Título de FAQ', type: 'string', group: 'content', validation: (Rule) => Rule.required() }),
+    defineField({
+      name: 'pricing',
+      title: 'Bloque de precios',
+      description: 'La tabla sale de “Catálogo de precios”; aquí solo el texto que la rodea.',
+      type: 'object',
+      group: 'content',
+      hidden: ({ document }) => document?.pageType !== 'event',
+      fields: [
+        defineField({ name: 'heading', title: 'Título (H2)', type: 'string', validation: (Rule) => Rule.required() }),
+        defineField({ name: 'note', title: 'Nota bajo el título', type: 'text', rows: 2 }),
+        portableBodyField('afterTable', 'Texto después de la tabla'),
+        defineField({ name: 'addOns', title: 'Extras', type: 'text', rows: 2 }),
+        defineField({ name: 'ctaLabel', title: 'Texto del botón', type: 'string', validation: (Rule) => Rule.required() }),
+        defineField({ name: 'ctaMessage', title: 'Mensaje de WhatsApp prellenado', type: 'string', validation: (Rule) => Rule.required() }),
+        defineField({
+          name: 'portfolioLink',
+          title: 'Enlace secundario (opcional)',
+          type: 'object',
           fields: [
-            defineField({ name: 'altEN', title: 'Alt (EN)', type: 'string', validation: (Rule) => Rule.required() }),
-            defineField({ name: 'altES', title: 'Alt (ES)', type: 'string', validation: (Rule) => Rule.required() }),
+            defineField({ name: 'label', title: 'Texto', type: 'string' }),
+            defineField({ name: 'href', title: 'Destino', type: 'string' }),
           ],
         }),
       ],
     }),
+    finalCtaField,
+    breadcrumbsField,
+    heroField,
     defineField({
       name: 'testimonialRefs',
       title: 'Testimonios',
@@ -316,7 +234,7 @@ export const servicePage = defineType({
       language: 'language',
       city: 'city',
       service: 'service',
-      media: 'images.0',
+      media: 'hero.image',
     },
     prepare({ h1, language, city, service, media }) {
       return {
