@@ -137,7 +137,7 @@ const EN: HubPageContent = {
 
   hero: {
     eyebrow: 'Bilingual photography & video studio',
-    alt: 'Wonderlands Studio photography session in West Palm Beach, Florida',
+    alt: 'Worth Avenue clock tower by the ocean in Palm Beach, Florida',
   },
 };
 
@@ -258,7 +258,7 @@ const ES: HubPageContent = {
 
   hero: {
     eyebrow: 'Estudio bilingüe de fotografía y video',
-    alt: 'Sesión de fotografía de Wonderlands Studio en West Palm Beach, Florida',
+    alt: 'Torre del reloj de Worth Avenue frente al mar en Palm Beach, Florida',
   },
 };
 

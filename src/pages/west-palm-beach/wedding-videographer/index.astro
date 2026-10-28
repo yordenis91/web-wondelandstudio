@@ -11,6 +11,7 @@ import ServicePageTemplate from '../../../components/ServicePageTemplate.astro';
 import { WPB_WEDDING_VIDEOGRAPHER } from '../../../content/wpb-wedding-videographer.ts';
 import { getWeddingPricing, getWeddingOffers, weddingHighlight } from '../../../data/pricing.ts';
 import { TESTIMONIALS } from '../../../content/testimonials.ts';
+import { photo } from '../../../lib/images.ts';
 
 const lang = 'en' as const;
 const path = '/west-palm-beach/wedding-videographer/';
@@ -30,6 +31,6 @@ const path = '/west-palm-beach/wedding-videographer/';
   serviceType="Wedding Videography"
   areaServed="Palm Beach County, FL"
   relatedServicePath="/west-palm-beach/wedding-photographer/"
-  heroImage={{ src: '/hero-placeholder.svg', width: 1600, height: 900 }}
+  heroImage={photo('team-cinema')}
   utmCampaign="wpb-wedding-videographer-en"
 />

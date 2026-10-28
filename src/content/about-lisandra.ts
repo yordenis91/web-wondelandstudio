@@ -106,7 +106,7 @@ const EN: AboutPageContent = {
 
   hero: {
     eyebrow: 'Creative director & lead photographer',
-    alt: 'Portrait of Lisandra, creative director at Wonderlands Studio',
+    alt: 'Portrait of Lisandra, creative director at Wonderlands Studio, holding a Sony camera',
   },
 };
 
@@ -207,7 +207,7 @@ const ES: AboutPageContent = {
 
   hero: {
     eyebrow: 'Directora creativa y fotógrafa principal',
-    alt: 'Retrato de Lisandra, directora creativa de Wonderlands Studio',
+    alt: 'Retrato de Lisandra, directora creativa de Wonderlands Studio, con una cámara Sony',
   },
 };
 

@@ -5,6 +5,7 @@
  */
 import HubPageTemplate from '../../../components/HubPageTemplate.astro';
 import { HUB_WPB } from '../../../content/hub-wpb.ts';
+import { photo } from '../../../lib/images.ts';
 
 const lang = 'es' as const;
 const path = '/es/west-palm-beach/';
@@ -15,6 +16,6 @@ const path = '/es/west-palm-beach/';
   lang={lang}
   city="wpb"
   content={HUB_WPB[lang]}
-  heroImage={{ src: '/hero-placeholder.svg', width: 1600, height: 900 }}
+  heroImage={photo('clock-tower')}
   utmCampaign="wpb-hub-es"
 />

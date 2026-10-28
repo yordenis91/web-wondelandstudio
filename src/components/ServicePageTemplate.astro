@@ -22,6 +22,7 @@ import FAQ from './FAQ.astro';
 import CTAWhatsApp from './CTAWhatsApp.astro';
 
 import type { PageContent } from '../lib/pageContent.ts';
+import type { HeroImage } from '../lib/images.ts';
 import type { Lang, City } from '../i18n/routes.ts';
 import type { PricingEntry, TestimonialDoc } from '../lib/queries.ts';
 import { servicePageGraph, serviceId, type OfferInput } from '../lib/schema.ts';
@@ -47,7 +48,7 @@ interface Props {
   testimonials?: readonly TestimonialDoc[];
   /** Categoría de testimonio a mostrar (ej. 'wedding', 'maternity'). */
   testimonialCategory: string;
-  heroImage: { src: string; width: number; height: number };
+  heroImage: HeroImage;
   utmCampaign: string;
 }
 
@@ -105,6 +106,7 @@ const jsonLd = servicePageGraph({
       width: heroImage.width,
       height: heroImage.height,
     }}
+    sources={heroImage.sources}
   />
 
   <div class="container">

@@ -299,7 +299,7 @@ export const CONTENT: Readonly<Record<Lang, PageContent>> = {
     ],
     "hero": {
       "eyebrow": "Cinematic wedding films, bilingual crew",
-      "alt": "Still frame from a West Palm Beach wedding film during the ceremony"
+      "alt": "Lisandra and Rualy of Wonderlands Studio, with a photo camera and a cinema camera"
     }
   },
   "es": {
@@ -595,7 +595,7 @@ export const CONTENT: Readonly<Record<Lang, PageContent>> = {
     ],
     "hero": {
       "eyebrow": "Video cinematográfico de bodas, equipo bilingüe",
-      "alt": "Fotograma de un video de boda en West Palm Beach durante la ceremonia"
+      "alt": "Lisandra y Rualy de Wonderlands Studio, con una cámara de fotografía y una de cine"
     }
   }
 };

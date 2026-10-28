@@ -269,7 +269,7 @@ export const CONTENT: Readonly<Record<Lang, PageContent>> = {
     ],
     "hero": {
       "eyebrow": "Bilingual wedding photography and cinema",
-      "alt": "Bride and groom during golden hour portraits in West Palm Beach, Florida"
+      "alt": "Bride and groom sharing a quiet moment in a garden, she holds a white rose bouquet"
     }
   },
   "es": {
@@ -535,7 +535,7 @@ export const CONTENT: Readonly<Record<Lang, PageContent>> = {
     ],
     "hero": {
       "eyebrow": "Fotografía y video de bodas, bilingüe",
-      "alt": "Novios en sesión de retratos al atardecer en West Palm Beach, Florida"
+      "alt": "Novios en un momento íntimo en un jardín, ella sostiene un ramo de rosas blancas"
     }
   }
 };

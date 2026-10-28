@@ -114,7 +114,7 @@ const EN: HubPageContent = {
 
   hero: {
     eyebrow: 'Bilingual photography & video studio',
-    alt: 'Wonderlands Studio photography session in Port St. Lucie, Florida',
+    alt: 'Quinceañera in a light-blue gown holding a matching bouquet in a garden',
   },
 };
 
@@ -216,7 +216,7 @@ const ES: HubPageContent = {
 
   hero: {
     eyebrow: 'Estudio bilingüe de fotografía y video',
-    alt: 'Sesión de fotografía de Wonderlands Studio en Port St. Lucie, Florida',
+    alt: 'Quinceañera con vestido azul claro y un ramo a juego en un jardín',
   },
 };
 
