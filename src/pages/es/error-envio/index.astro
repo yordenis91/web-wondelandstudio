@@ -1,0 +1,60 @@
+---
+/**
+ * `/es/error-envio/` — ver `pages/error-envio/index.astro` para el resto de la nota.
+ */
+import ErrorLayout from '../../../components/ErrorLayout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import CTAWhatsApp from '../../../components/CTAWhatsApp.astro';
+
+const path = '/es/error-envio/';
+---
+
+<ErrorLayout
+  lang="es"
+  title="Mensaje No Enviado | Wonderlands Studio"
+  description="No pudimos enviar tu mensaje. Escríbenos por WhatsApp."
+>
+  <Header slot="header" path={path} />
+  <Footer slot="footer" path={path} />
+
+  <div class="container error-envio">
+    <span class="eyebrow">Mensaje no enviado</span>
+    <h1>Lo sentimos — tu mensaje no se envió</h1>
+    <p class="error-envio__intro">
+      Algo falló de nuestro lado y no recibimos tu mensaje. Escríbenos por WhatsApp
+      y te respondemos enseguida.
+    </p>
+
+    <CTAWhatsApp
+      label="Escríbenos por WhatsApp"
+      message="Hola Wonderlands Studio — el formulario de contacto no funcionó, así que les escribo por aquí."
+      location="send-error-page"
+      utm={{ source: 'site', medium: 'send-error', campaign: 'contact-form' }}
+      variant="fill"
+    />
+
+    <a class="error-envio__back" href="/es/contacto/">Volver a la página de contacto</a>
+  </div>
+</ErrorLayout>
+
+<style>
+  .error-envio {
+    padding-block: var(--space-12) var(--space-8);
+    max-width: 40rem;
+  }
+
+  .error-envio__intro {
+    color: var(--color-fg-muted);
+    font-size: var(--text-h5);
+    line-height: var(--leading-normal);
+    margin-bottom: var(--space-4);
+  }
+
+  .error-envio__back {
+    display: block;
+    margin-top: var(--space-4);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>
