@@ -1,0 +1,65 @@
+---
+/**
+ * `/send-error/` — a donde `worker-contact/` redirige cuando el aviso por correo no pudo
+ * enviarse. Sin esta página el visitante veía "gracias" aunque el mensaje se perdiera.
+ * Mismo tratamiento que `/thank-you/`: `ErrorLayout` (noindex, fuera del sitemap).
+ *
+ * No pide que reintente: si el correo falla, reintentar casi seguro vuelve a fallar. Le
+ * da la vía que sí funciona — WhatsApp — y deja claro que el mensaje NO llegó.
+ */
+import ErrorLayout from '../../components/ErrorLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import CTAWhatsApp from '../../components/CTAWhatsApp.astro';
+
+const path = '/send-error/';
+---
+
+<ErrorLayout
+  lang="en"
+  title="Message Not Sent | Wonderlands Studio"
+  description="We couldn't send your message. Please reach us on WhatsApp."
+>
+  <Header slot="header" path={path} />
+  <Footer slot="footer" path={path} />
+
+  <div class="container send-error">
+    <span class="eyebrow">Message not sent</span>
+    <h1>Sorry — your message didn't go through</h1>
+    <p class="send-error__intro">
+      Something failed on our side and we did not receive it. Please message us on
+      WhatsApp so we can answer you right away.
+    </p>
+
+    <CTAWhatsApp
+      label="Message us on WhatsApp"
+      message="Hi Wonderlands Studio — the contact form didn't work, so I'm writing here."
+      location="send-error-page"
+      utm={{ source: 'site', medium: 'send-error', campaign: 'contact-form' }}
+      variant="fill"
+    />
+
+    <a class="send-error__back" href="/contact/">Back to the contact page</a>
+  </div>
+</ErrorLayout>
+
+<style>
+  .send-error {
+    padding-block: var(--space-12) var(--space-8);
+    max-width: 40rem;
+  }
+
+  .send-error__intro {
+    color: var(--color-fg-muted);
+    font-size: var(--text-h5);
+    line-height: var(--leading-normal);
+    margin-bottom: var(--space-4);
+  }
+
+  .send-error__back {
+    display: block;
+    margin-top: var(--space-4);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>

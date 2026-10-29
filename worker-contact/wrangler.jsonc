@@ -4,6 +4,7 @@
   "main": "src/index.ts",
   "vars": {
     "FROM_EMAIL": "contact@wonderlandsstudio.com",
-    "SITE_URL": "https://wonderlandsstudio.com"
+    "SITE_URL": "https://wonderlandsstudio.com",
+    "PREVIEW_ORIGIN": "https://web-wondelandstudio.correosoyordenis.workers.dev"
   }
 }
