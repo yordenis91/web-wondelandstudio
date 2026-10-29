@@ -27,6 +27,7 @@
  *   SANITY_API_TOKEN=sk... node scripts/migrate-to-sanity.ts            # dry run
  *   SANITY_API_TOKEN=sk... node scripts/migrate-to-sanity.ts --apply    # escribe
  */
+import { createReadStream, existsSync as fileExists } from 'node:fs';
 import { createClient, type SanityClient } from '@sanity/client';
 
 import { getAllLocations, resolvedAddress, resolvedPhone } from '../src/data/business.ts';
@@ -44,6 +45,8 @@ import { getFamilyExtras } from '../src/data/familyExtrasPricing.ts';
 import { getSocialEventsPricing } from '../src/data/socialEventsPricing.ts';
 
 const APPLY = process.argv.includes('--apply');
+/** `--only=gallery` escribe solo las fotos de galería, sin tocar lo que ya existe y pudo editarse. */
+const ONLY = process.argv.find((a) => a.startsWith('--only='))?.split('=')[1];
 
 const projectId = process.env.SANITY_STUDIO_PROJECT_ID;
 const dataset = process.env.SANITY_STUDIO_DATASET ?? 'production';
@@ -426,6 +429,56 @@ function buildMatrixDocs() {
 }
 
 /* -------------------------------------------------------------------------- */
+/* galleryItem — fotos de trabajo del estudio, con alt EN/ES                    */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Las fotos de trabajo de `imagenes/` (no las de equipo, la torre ni el retrato de Lisandra:
+ * no son portafolio). El alt es el mismo texto que ya usa cada página, en los dos idiomas.
+ *
+ * `city` va vacía a propósito: es dónde se tomó la foto y eso no está en el código — que lo
+ * confirme Lisandra en el Studio, en vez de afirmar una ubicación que no se sabe. La
+ * quinceañera va sin `category` porque el schema solo ofrece bodas, marca y maternidad.
+ */
+const GALLERY: readonly {
+  readonly id: string;
+  readonly file: string;
+  readonly category?: 'weddings' | 'branding' | 'maternity';
+  readonly altEN: string;
+  readonly altES: string;
+}[] = [
+  { id: 'wedding', file: 'IMG-20260908-WA0038.jpg', category: 'weddings',
+    altEN: 'Bride and groom sharing a quiet moment in a garden, she holds a white rose bouquet',
+    altES: 'Novios en un momento íntimo en un jardín, ella sostiene un ramo de rosas blancas' },
+  { id: 'maternity', file: 'IMG-20260908-WA0039.jpg', category: 'maternity',
+    altEN: 'Editorial maternity photography session in Port St. Lucie, Florida',
+    altES: 'Sesión editorial de fotografía de embarazo en Port St. Lucie, Florida' },
+  { id: 'quinceanera', file: 'IMG-20260908-WA0040.jpg',
+    altEN: 'Quinceañera in a light-blue gown holding a matching bouquet in a garden',
+    altES: 'Quinceañera con vestido azul claro y un ramo a juego en un jardín' },
+  { id: 'brand-studio', file: 'IMG-20260910-WA0015.jpg', category: 'branding',
+    altEN: 'Woman seated on a wooden stool with a tablet during a brand photography session in studio',
+    altES: 'Mujer sentada en un taburete de madera con una tablet durante una sesión de fotografía de marca en estudio' },
+];
+
+/** Sube la foto (Sanity deduplica por contenido: repetirlo no crea otro asset) y arma el documento. */
+async function buildGalleryDoc(item: (typeof GALLERY)[number], upload: boolean) {
+  const path = `imagenes/${item.file}`;
+  if (!fileExists(path)) throw new Error(`Falta ${path} — las fotos originales no están en git.`);
+  const asset = upload
+    ? await client!.assets.upload('image', createReadStream(path), { filename: item.file })
+    : null;
+  return {
+    _id: `galleryItem.${item.id}`,
+    _type: 'galleryItem' as const,
+    altEN: item.altEN,
+    altES: item.altES,
+    ...(item.category ? { category: item.category } : {}),
+    ...(asset ? { image: { _type: 'image', asset: { _type: 'reference', _ref: asset._id } } } : {}),
+  };
+}
+
+/* -------------------------------------------------------------------------- */
 /* Runner                                                                       */
 /* -------------------------------------------------------------------------- */
 
@@ -435,7 +488,11 @@ async function main() {
   const testimonials = buildTestimonialDocs();
   const eventPages = buildEventPageDocs();
   const matrix = buildMatrixDocs();
-  const docs: { _id: string; _type: string }[] = [...locations, catalog, ...testimonials, ...eventPages, ...matrix];
+  const gallery = await Promise.all(GALLERY.map((item) => buildGalleryDoc(item, APPLY)));
+  const docs: { _id: string; _type: string }[] =
+    ONLY === 'gallery'
+      ? [...gallery]
+      : [...locations, catalog, ...testimonials, ...eventPages, ...matrix, ...gallery];
 
   console.log(`\n${APPLY ? 'APLICANDO' : 'DRY RUN'} — proyecto ${projectId}/${dataset}\n`);
 
@@ -445,6 +502,8 @@ async function main() {
         ? `${(doc as ReturnType<typeof buildLocationDocs>[number]).name}`
         : doc._type === 'servicePage'
           ? `${(doc as { h1: string }).h1}`
+          : doc._type === 'galleryItem'
+          ? `${(doc as { altEN: string }).altEN}`
           : doc._type === 'cityServiceMatrix'
           ? `${(doc as ReturnType<typeof buildMatrixDocs>[number]).status}`
           : doc._type === 'testimonial'
