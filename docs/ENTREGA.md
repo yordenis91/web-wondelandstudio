@@ -27,9 +27,8 @@ unos días.
 
 ## 2. Pendientes técnicos antes de apuntar el dominio
 
-- [ ] **Lighthouse limpio.** Última medición con LCP sobre 2 s en Home (EN y ES) y en el
-      hub de WPB (límite del proyecto: < 2 s en móvil). Hay que medir de nuevo con la
-      foto de boda ya puesta y, si sigue sobre el límite, aligerar la foto en móvil.
+- [x] **Lighthouse** (2026-10-28): las cinco rutas clave cumplen — puntuación 100, LCP
+      ≈ 1.3 s, CLS 0. Detalle en `docs/ENTREGA-RESUMEN.md`. Volver a medir tras el corte de DNS.
 - [ ] **Rich Results Test** de la home, una página de servicio y Pricing.
 - [ ] **Revisión en un teléfono real** de la vista previa de Cloudflare (menú, hero,
       formulario de contacto).
