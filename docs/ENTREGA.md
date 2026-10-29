@@ -46,28 +46,30 @@ versión EN sigue viviendo en `/` y la ES cambia de URL. Esa única regla ya est
 `/es/fotografo-y-videografo-bilingue-en-west-palm-beach-y-port-st-lucie/` a `/es/`).
 
 ### Antes de tocar nada
-1. **Averigua dónde está el dominio y dónde está el correo.** Entra a Hostinger y mira:
-   - ¿El dominio `wonderlandsstudio.com` está **registrado** en Hostinger o solo
-     alojado ahí?
-   - ¿Hay cuentas de **correo** con ese dominio (por ejemplo contact@...)? Si las hay, sus
-     registros **MX** hay que copiarlos tal cual; si se pierden, deja de llegar el correo.
+1. **Estado verificado el 2026-10-29:**
+   - El dominio **ya usa los nameservers de Cloudflare** (`aaden` y `stephane.ns.cloudflare.com`),
+     así que el paso de "añadir la zona y cambiar nameservers" ya está hecho.
+   - Pero sigue **sirviendo el WordPress** (PHP, `wp-content`), no el sitio nuevo.
+   - El **correo `@wonderlandsstudio.com` está en Hostinger** (MX `mx1` y `mx2.hostinger.com`, SPF
+     `include:_spf.mail.hostinger.com`). **No se tocan esos registros.**
 2. **Haz una copia de seguridad** del WordPress (Hostinger → Backups) y exporta la lista
    completa de registros DNS actuales (captura de pantalla vale).
 3. **No canceles el hosting de Hostinger todavía.** Se mantiene al menos 2–4 semanas como
    respaldo.
 
 ### El corte
-4. **Añade el dominio a Cloudflare** (Add a site → `wonderlandsstudio.com`, plan Free).
-   Cloudflare importa los registros que detecta; **compáralos con tu copia** y añade a
-   mano los que falten (sobre todo MX, SPF/DKIM y los de Resend para el formulario).
-5. **Cambia los nameservers** en el registrador (Hostinger, si ahí está registrado) por los
-   dos que te dé Cloudflare. Tarda desde minutos hasta unas horas.
+4. **Revisa la zona en Cloudflare** (DNS → Records): anota a dónde apuntan hoy el apex y `www`
+   (hacia el hosting de Hostinger) y confirma que los MX y el SPF de Hostinger están. Al cambiar
+   el apex al Worker en el paso 6 solo se reemplaza el registro web, nunca el correo.
+5. *(Ya hecho: los nameservers están en Cloudflare.)*
 6. **Conecta el dominio al Worker**: Cloudflare → Workers & Pages → `wonderlands-studio`
    → Settings → Domains & Routes → Add → Custom domain: `wonderlandsstudio.com`. Añade
    también `www.wonderlandsstudio.com` y haz que **redirija con 301 al dominio sin www**
    (el sitio declara el dominio sin www como canónico).
-7. **Verifica el dominio de Resend** (registros DNS que indica Resend) para que el
-   formulario envíe desde `contact@wonderlandsstudio.com`.
+7. **Verifica el dominio en Resend** (registros DNS que indica Resend, añadidos en Cloudflare)
+   para que el formulario envíe desde `contact@wonderlandsstudio.com`. **Sin esto el formulario
+   no entrega mensajes**: hoy esos registros no están en el DNS. Detalle en
+   `docs/CONTACT_FORM_SETUP.md`.
 
 ### Verificación el mismo día
 8. `curl -sI https://wonderlandsstudio.com/` responde 200 y el HTML ya trae los precios

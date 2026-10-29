@@ -61,14 +61,38 @@ El próximo `pnpm build` ya renderiza el formulario en `/contact/` y `/es/contac
 **Ya hecho** — el Worker vive en
 `https://wonderlands-contact-form.correosoyordenis.workers.dev`.
 
+## Verificar el dominio del remitente (obligatorio para producción)
+
+El Worker envía desde `FROM_EMAIL` (`contact@wonderlandsstudio.com`). Resend solo acepta ese
+remitente si el dominio está **verificado**; si no, rechaza cada envío con un 403 y los
+mensajes no llegan. Estado a 2026-10-29: en el DNS **no aparecen** los registros de Resend
+(`resend._domainkey` ni `send`), así que probablemente no está verificado.
+
+1. Resend → **Domains** → `wonderlandsstudio.com`: copia los registros que indica (DKIM y los de
+   `send`).
+2. Añádelos en **Cloudflare → DNS** de `wonderlandsstudio.com` (el dominio ya usa los
+   nameservers de Cloudflare). **No toques los MX de la raíz**: apuntan a Hostinger y es donde
+   vive el correo `@wonderlandsstudio.com`.
+3. Resend → **Verify**. Cuando salga *Verified*, envía un mensaje de prueba desde el
+   formulario y comprueba que llega a `NOTIFY_EMAIL`.
+
+## Redirección tras el envío
+
+El Worker devuelve al visitante al sitio desde el que envió (según el `Referer`), pero solo si
+es `SITE_URL` o `PREVIEW_ORIGIN` (vista previa en `workers.dev`, en `wrangler.jsonc`). Cualquier
+otro origen cae en `SITE_URL`, así que un `Referer` falsificado no abre una redirección
+abierta. Antes iba siempre a `SITE_URL`, que durante la migración sigue siendo el WordPress.
+
 ## Límites conocidos (v1)
 
-- **Sin reintento ni respaldo si Resend falla.** Si la llamada a Resend no responde
-  2xx (cuenta suspendida, límite alcanzado, typo en la API key), el Worker lo registra
-  en sus logs (Cloudflare dashboard → Workers → `wonderlands-contact-form` → Logs) pero
-  el visitante igual ve la página de gracias — el mensaje se pierde salvo que alguien
-  revise los logs. Si esto llega a ser un problema real, la mejora natural es escribir
-  cada envío a una tabla de D1 o un namespace de KV además de intentar el correo.
+- **Sin reintento ni respaldo si Resend falla**, pero ya no es silencioso: si Resend no
+  acepta el correo (cuenta suspendida, límite, typo en la API key, o **dominio del
+  remitente sin verificar**, el caso más probable), el Worker lo registra en sus logs
+  (Cloudflare dashboard → Workers → `wonderlands-contact-form` → Logs) y manda al visitante a
+  `/send-error/` (`/es/error-envio/`), que dice claramente que el mensaje NO llegó y le da el
+  WhatsApp. El mensaje igualmente se pierde: la vía de respaldo es el WhatsApp del visitante.
+  Si hace falta que no se pierda nada, la mejora natural es guardar cada envío en D1 o KV
+  además de intentar el correo.
 - **Sin CAPTCHA, solo honeypot.** Suficiente contra bots genéricos; si empieza a llegar
   spam más sofisticado, Cloudflare Turnstile se integra en el formulario sin backend
   propio (widget + un campo de verificación en el POST).

@@ -49,6 +49,11 @@ jobs:
           # que studio/.env (gitignored solo porque es config local, no por ser sensible).
           SANITY_STUDIO_PROJECT_ID: 74tin3nw
           SANITY_STUDIO_DATASET: production
+          # Los documentos con "." en el _id (servicePage.*, businessLocation.*,
+          # cityServiceMatrix.*) son privados: sin token el sync no los ve y falla. Token
+          # de solo lectura (rol Viewer) guardado como secreto del repo — nunca uno de
+          # escritura.
+          SANITY_API_TOKEN: ${{ secrets.SANITY_API_TOKEN }}
         run: pnpm run sanity:sync:apply
 
       - name: Validar que el sitio sigue construyendo bien
@@ -60,7 +65,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add src/data/business.ts src/content/testimonials.ts
+          git add src/data src/content
           if git diff --cached --quiet; then
             echo "Sin cambios de Sanity — nada que commitear."
             exit 0

@@ -1,7 +1,8 @@
 /**
  * Migra a Sanity lo que el schema actual puede representar sin pérdida:
- * `businessLocation` (2 docs), `pricingCatalog` (1 doc, singleton) y `testimonial`
- * (9 docs, `src/content/testimonials.ts`).
+ * `businessLocation` (2 docs), `pricingCatalog` (1 doc, singleton), `testimonial`
+ * (9 docs, `src/content/testimonials.ts`), las páginas de eventos `servicePage` (6 docs) y
+ * `cityServiceMatrix` (9 docs, de `SERVICE_MATRIX`).
  *
  * Deliberadamente NO migra `servicePage` todavía. Al revisar `studio/schemaTypes/servicePage.ts`
  * contra lo que las plantillas reales necesitan (`lib/pageContent.ts`), el schema no
@@ -30,7 +31,7 @@ import { createClient, type SanityClient } from '@sanity/client';
 
 import { getAllLocations, resolvedAddress, resolvedPhone } from '../src/data/business.ts';
 import { TESTIMONIALS } from '../src/content/testimonials.ts';
-import { ROUTES } from '../src/i18n/routes.ts';
+import { ROUTES, SERVICE_MATRIX } from '../src/i18n/routes.ts';
 import { EVENT_PAGES, eventPageToDoc } from './lib/service-pages.ts';
 import { WPB_WEDDING_PHOTOGRAPHER } from '../src/content/wpb-wedding-photographer.ts';
 import { WPB_WEDDING_VIDEOGRAPHER } from '../src/content/wpb-wedding-videographer.ts';
@@ -394,6 +395,37 @@ function buildEventPageDocs() {
 }
 
 /* -------------------------------------------------------------------------- */
+/* cityServiceMatrix — las 9 líneas servicio × ciudad de `SERVICE_MATRIX`       */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Un documento por entrada de `SERVICE_MATRIX` (hoy 9: 6 de WPB y 3 de PSL), con el
+ * `_id` derivado de ciudad + servicio, así `createOrReplace` es idempotente.
+ *
+ * `servicePageRef` solo se escribe si la entrada es `active` (el schema lo exige así) y
+ * apunta al documento en inglés. La referencia es débil, como las de `pricingCatalog`:
+ * `wpb-brand-photography` está `active` pero su `servicePage` todavía no existe en
+ * Sanity (el schema aún no la representa), y una referencia fuerte a un documento
+ * ausente haría fallar la escritura.
+ *
+ * Ojo: el sitio lee esta matriz de `src/i18n/routes.ts`, no de Sanity. Estos documentos
+ * hacen visible la matriz en el Studio, pero editarla allí todavía no cambia el sitio.
+ */
+function buildMatrixDocs() {
+  return SERVICE_MATRIX.map((entry) => ({
+    _id: `cityServiceMatrix.${entry.city}.${entry.service}`,
+    _type: 'cityServiceMatrix' as const,
+    city: entry.city,
+    service: entry.service,
+    status: entry.status,
+    adPriority: entry.adPriority,
+    fromPrice: entry.fromPrice,
+    hubAnchor: entry.hubAnchor,
+    ...(entry.routeId ? { servicePageRef: ref(servicePageId('en', entry.routeId)) } : {}),
+  }));
+}
+
+/* -------------------------------------------------------------------------- */
 /* Runner                                                                       */
 /* -------------------------------------------------------------------------- */
 
@@ -402,7 +434,8 @@ async function main() {
   const catalog = buildPricingCatalogDoc();
   const testimonials = buildTestimonialDocs();
   const eventPages = buildEventPageDocs();
-  const docs: { _id: string; _type: string }[] = [...locations, catalog, ...testimonials, ...eventPages];
+  const matrix = buildMatrixDocs();
+  const docs: { _id: string; _type: string }[] = [...locations, catalog, ...testimonials, ...eventPages, ...matrix];
 
   console.log(`\n${APPLY ? 'APLICANDO' : 'DRY RUN'} — proyecto ${projectId}/${dataset}\n`);
 
@@ -412,6 +445,8 @@ async function main() {
         ? `${(doc as ReturnType<typeof buildLocationDocs>[number]).name}`
         : doc._type === 'servicePage'
           ? `${(doc as { h1: string }).h1}`
+          : doc._type === 'cityServiceMatrix'
+          ? `${(doc as ReturnType<typeof buildMatrixDocs>[number]).status}`
           : doc._type === 'testimonial'
           ? `${(doc as ReturnType<typeof buildTestimonialDocs>[number]).author}`
           : `${(doc as ReturnType<typeof buildPricingCatalogDoc>).entries.length} colecciones/tiers, ${(doc as ReturnType<typeof buildPricingCatalogDoc>).entries.reduce((n, e) => n + e.appliesTo.length, 0)} referencias a página`;
